@@ -1,48 +1,17 @@
 // ============================================
-// TABS LAYOUT - Bottom tabs navigation
+// MAIN LAYOUT - Dashboard only (no tabs)
 // ============================================
 
-import { Tabs } from "expo-router";
-import { Text } from "react-native";
+import { Stack } from "expo-router";
 
-export default function TabsLayout() {
+export default function MainLayout() {
   return (
-    <Tabs
+    <Stack
       screenOptions={{
         headerShown: false,
-        tabBarStyle: {
-          backgroundColor: "white",
-          borderTopWidth: 1,
-          borderTopColor: "#E5E7EB",
-          height: 70,
-          paddingBottom: 10,
-          paddingTop: 10,
-        },
-        tabBarActiveTintColor: "#3B82F6",
-        tabBarInactiveTintColor: "#9CA3AF",
       }}
     >
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: "Dashboard",
-          tabBarIcon: ({ color }) => <Text style={{ fontSize: 24 }}>🏠</Text>,
-        }}
-      />
-      <Tabs.Screen
-        name="calendar"
-        options={{
-          title: "Calendar",
-          tabBarIcon: ({ color }) => <Text style={{ fontSize: 24 }}>📅</Text>,
-        }}
-      />
-      <Tabs.Screen
-        name="profile"
-        options={{
-          title: "Profile",
-          tabBarIcon: ({ color }) => <Text style={{ fontSize: 24 }}>👤</Text>,
-        }}
-      />
-    </Tabs>
+      <Stack.Screen name="index" />
+    </Stack>
   );
 }

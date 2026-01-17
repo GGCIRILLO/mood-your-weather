@@ -7,7 +7,7 @@ import { View, Text, ScrollView, Pressable } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { storageService } from "@/services/storage.service";
-import { ACTIVITY_SUGGESTIONS } from "@/utils/constants";
+import { ACTIVITY_SUGGESTIONS, WEATHER_TYPE_TO_EMOJI } from "@/utils/constants";
 import { format } from "date-fns";
 import { it } from "date-fns/locale";
 import type { MoodEntry } from "@/types";
@@ -44,8 +44,8 @@ export default function MoodAnalysisScreen() {
     sentimentScore > 0.3
       ? "Positivo"
       : sentimentScore < -0.3
-      ? "Negativo"
-      : "Neutrale";
+        ? "Negativo"
+        : "Neutrale";
   const sentimentEmoji =
     sentimentScore > 0.3 ? "😊" : sentimentScore < -0.3 ? "😔" : "😐";
 
@@ -64,9 +64,9 @@ export default function MoodAnalysisScreen() {
         {/* Hero Section */}
         <View className="px-6 py-8 items-center">
           <View className="flex-row gap-4 mb-6">
-            {entry.emojis.map((emoji, index) => (
+            {entry.emojis.map((weatherType, index) => (
               <Text key={index} className="text-6xl">
-                {emoji}
+                {WEATHER_TYPE_TO_EMOJI[weatherType] || "☁️"}
               </Text>
             ))}
           </View>
@@ -120,8 +120,8 @@ export default function MoodAnalysisScreen() {
                   entry.intensity > 70
                     ? "bg-red-500"
                     : entry.intensity > 40
-                    ? "bg-yellow-500"
-                    : "bg-green-500"
+                      ? "bg-yellow-500"
+                      : "bg-green-500"
                 }`}
                 style={{ width: `${entry.intensity}%` }}
               />

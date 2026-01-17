@@ -37,6 +37,7 @@ import {
 } from "phosphor-react-native";
 import { MoodSphere } from "@/components/dashboard/MoodSphere";
 import { images } from "assets";
+import { router } from "expo-router";
 
 export default function Dashboard() {
   const insets = useSafeAreaInsets();
@@ -206,6 +207,7 @@ export default function Dashboard() {
                 paddingHorizontal: 16,
                 borderRadius: 9999,
               }}
+              onPress={() => router.push("mood-entry")}
             >
               <PlusCircleIcon size={20} color="white" weight="bold" />
               <Text className="text-white font-bold ml-1">Log Mood</Text>

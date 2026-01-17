@@ -6,6 +6,7 @@ import { View, Text, ScrollView, Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useState } from "react";
 import { useMoodEntries } from "@/hooks/storage/useStorage";
+import { WEATHER_TYPE_TO_EMOJI } from "@/utils/constants";
 import {
   format,
   startOfMonth,
@@ -57,6 +58,9 @@ export default function CalendarScreen() {
               const dayEntries = getEntriesForDay(day);
               const hasEntry = dayEntries.length > 0;
               const dominantEmoji = hasEntry ? dayEntries[0].emojis[0] : null;
+              const displayEmoji = dominantEmoji
+                ? WEATHER_TYPE_TO_EMOJI[dominantEmoji] || "☁️"
+                : null;
 
               return (
                 <View key={index} className="w-[14.28%] aspect-square p-1">
@@ -66,8 +70,8 @@ export default function CalendarScreen() {
                       hasEntry ? "bg-blue-100" : "bg-gray-50"
                     }`}
                   >
-                    {hasEntry && dominantEmoji ? (
-                      <Text className="text-2xl">{dominantEmoji}</Text>
+                    {hasEntry && displayEmoji ? (
+                      <Text className="text-2xl">{displayEmoji}</Text>
                     ) : (
                       <Text className="text-gray-400 text-sm">
                         {format(day, "d")}

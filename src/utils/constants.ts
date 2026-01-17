@@ -3,20 +3,36 @@
 // ============================================
 
 /**
- * Weather emoji mapping with metadata
+ * Weather type mapping with metadata (backend-compatible)
  */
 export const MOOD_EMOJIS = [
-  { emoji: "☀️", label: "Sunny", sentiment: 1.0, intensity: 80 },
-  { emoji: "⛅", label: "Partly Cloudy", sentiment: 0.5, intensity: 60 },
-  { emoji: "☁️", label: "Cloudy", sentiment: 0.0, intensity: 40 },
-  { emoji: "🌧️", label: "Rainy", sentiment: -0.5, intensity: 50 },
-  { emoji: "⛈️", label: "Stormy", sentiment: -0.8, intensity: 90 },
-  { emoji: "🌈", label: "Rainbow", sentiment: 0.9, intensity: 70 },
-  { emoji: "🌙", label: "Moon", sentiment: 0.3, intensity: 30 },
-  { emoji: "⚡", label: "Lightning", sentiment: 0.6, intensity: 85 },
-  { emoji: "❄️", label: "Snow", sentiment: -0.3, intensity: 45 },
-  { emoji: "🌪️", label: "Tornado", sentiment: -0.9, intensity: 95 },
+  { emoji: "sunny", label: "Sunny", sentiment: 1.0, intensity: 80 },
+  { emoji: "partly", label: "Partly Cloudy", sentiment: 0.5, intensity: 60 },
+  { emoji: "cloudy", label: "Cloudy", sentiment: 0.0, intensity: 40 },
+  { emoji: "rainy", label: "Rainy", sentiment: -0.5, intensity: 50 },
+  { emoji: "stormy", label: "Stormy", sentiment: -0.8, intensity: 90 },
+  { emoji: "rainbow", label: "Rainbow", sentiment: 0.9, intensity: 70 },
+  { emoji: "moon", label: "Moon", sentiment: 0.3, intensity: 30 },
+  { emoji: "lightning", label: "Lightning", sentiment: 0.6, intensity: 85 },
+  { emoji: "snowy", label: "Snow", sentiment: -0.3, intensity: 45 },
+  { emoji: "tornado", label: "Tornado", sentiment: -0.9, intensity: 95 },
 ] as const;
+
+/**
+ * Convert weather type to display emoji
+ */
+export const WEATHER_TYPE_TO_EMOJI: Record<string, string> = {
+  sunny: "☀️",
+  partly: "⛅",
+  cloudy: "☁️",
+  rainy: "🌧️",
+  stormy: "⛈️",
+  rainbow: "🌈",
+  moon: "🌙",
+  lightning: "⚡",
+  snowy: "❄️",
+  tornado: "🌪️",
+};
 
 /**
  * Onboarding slides content

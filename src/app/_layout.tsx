@@ -1,5 +1,5 @@
 import "../global.css";
-import { Slot } from "expo-router";
+import { Stack } from "expo-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
@@ -18,7 +18,13 @@ export default function Layout() {
   return (
     <QueryClientProvider client={queryClient}>
       <GestureHandlerRootView style={{ flex: 1 }}>
-        <Slot />
+        <Stack
+          screenOptions={{
+            headerShown: false,
+            animation: "slide_from_right",
+            animationDuration: 300,
+          }}
+        />
       </GestureHandlerRootView>
     </QueryClientProvider>
   );

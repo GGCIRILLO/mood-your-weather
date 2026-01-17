@@ -1,67 +1,74 @@
-// ============================================
-// MOOD ENTRY CANVAS - Drag & Drop interface
-// ============================================
-
-import { useState } from "react";
-import {
-  View,
-  Text,
-  ScrollView,
-  Pressable,
-  TextInput,
-  Alert,
-  Dimensions,
-} from "react-native";
+import React, { useState } from "react";
+import { View, Pressable, Alert, StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { LinearGradient } from "expo-linear-gradient";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
-  withSpring,
   withSequence,
+  withRepeat,
   withTiming,
+  Easing,
 } from "react-native-reanimated";
-import {
-  Gesture,
-  GestureDetector,
-  GestureHandlerRootView,
-} from "react-native-gesture-handler";
-import { MOOD_EMOJIS } from "@/utils/constants";
+import { ArrowLeft } from "phosphor-react-native";
 import { storageService } from "@/services/storage.service";
 import { useCurrentUser } from "@/hooks/storage/useStorage";
-import type { MoodEmojiType } from "@/types";
-import Slider from "@react-native-community/slider";
+import { InsightBubble } from "@/components/mood-entry/InsightBubble";
+import { ConcentricRings } from "@/components/mood-entry/ConcentricRings";
+import { WeatherDisplay } from "@/components/mood-entry/WeatherDisplay";
+import { WeatherSelector } from "@/components/mood-entry/WeatherSelector";
+import { BottomActionBar } from "@/components/mood-entry/BottomActionBar";
 
-const { width: SCREEN_WIDTH } = Dimensions.get("window");
-const EMOJI_SIZE = 60;
+type WeatherType = "sunny" | "cloudy" | "rainy" | "stormy" | "snowy";
 
 export default function MoodEntryScreen() {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const { user } = useCurrentUser();
-  const [selectedEmojis, setSelectedEmojis] = useState<MoodEmojiType[]>([]);
+
+  const [selectedWeather, setSelectedWeather] = useState<WeatherType[]>([
+    "sunny",
+  ]);
   const [intensity, setIntensity] = useState(50);
   const [note, setNote] = useState("");
   const [showNoteInput, setShowNoteInput] = useState(false);
   const [saving, setSaving] = useState(false);
 
-  const dropZoneScale = useSharedValue(1);
+  const pulseScale = useSharedValue(1);
+  const ring1Opacity = useSharedValue(0.1);
 
-  const handleEmojiSelect = (emoji: MoodEmojiType) => {
-    if (selectedEmojis.includes(emoji)) {
-      setSelectedEmojis(selectedEmojis.filter((e) => e !== emoji));
-    } else if (selectedEmojis.length < 3) {
-      setSelectedEmojis([...selectedEmojis, emoji]);
-      // Animate drop zone
-      dropZoneScale.value = withSequence(withSpring(1.1), withSpring(1));
+  useState(() => {
+    pulseScale.value = withRepeat(
+      withSequence(
+        withTiming(1.05, { duration: 2000, easing: Easing.inOut(Easing.ease) }),
+        withTiming(1, { duration: 2000, easing: Easing.inOut(Easing.ease) })
+      ),
+      -1,
+      false
+    );
+
+    ring1Opacity.value = withRepeat(
+      withSequence(
+        withTiming(0.3, { duration: 2000, easing: Easing.inOut(Easing.ease) }),
+        withTiming(0.1, { duration: 2000, easing: Easing.inOut(Easing.ease) })
+      ),
+      -1,
+      false
+    );
+  });
+
+  const handleWeatherToggle = (weather: WeatherType) => {
+    if (selectedWeather.includes(weather)) {
+      if (selectedWeather.length > 1) {
+        setSelectedWeather(selectedWeather.filter((w) => w !== weather));
+      }
+    } else if (selectedWeather.length < 2) {
+      setSelectedWeather([...selectedWeather, weather]);
     }
   };
 
   const handleSave = async () => {
-    if (selectedEmojis.length === 0) {
-      Alert.alert("Attenzione", "Seleziona almeno un'emoji per il tuo mood");
-      return;
-    }
-
     if (!user) {
       Alert.alert("Errore", "User non trovato");
       return;
@@ -73,7 +80,7 @@ export default function MoodEntryScreen() {
       id: `entry-${Date.now()}`,
       userId: user.id,
       timestamp: new Date().toISOString(),
-      emojis: selectedEmojis,
+      emojis: selectedWeather as any,
       intensity,
       note: note.trim() || undefined,
     };
@@ -84,133 +91,150 @@ export default function MoodEntryScreen() {
     router.push(`/mood-analysis?id=${entry.id}`);
   };
 
-  const dropZoneStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: dropZoneScale.value }],
+  const pulseStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: pulseScale.value }],
   }));
 
+  const getMoodAnalysis = () => {
+    if (selectedWeather.length === 2) {
+      if (
+        selectedWeather.includes("sunny") &&
+        selectedWeather.includes("cloudy")
+      ) {
+        return "Mixed emotions - hopeful yet cautious. Like sunshine breaking through clouds.";
+      }
+      if (
+        selectedWeather.includes("sunny") &&
+        selectedWeather.includes("rainy")
+      ) {
+        return "Bittersweet feeling - joy with underlying sadness. A rainbow might appear.";
+      }
+      return "Complex emotions blending together. Take time to understand yourself.";
+    }
+
+    switch (selectedWeather[0]) {
+      case "sunny":
+        return "Bright and positive energy! You're feeling optimistic and energized.";
+      case "cloudy":
+        return "Neutral, contemplative mood. Not necessarily bad, just thoughtful.";
+      case "rainy":
+        return "Feeling down or melancholic. It's okay to have rainy days.";
+      case "stormy":
+        return "Intense emotions, possibly anger or frustration. Strong feelings need acknowledgment.";
+      case "snowy":
+        return "Cool, calm, peaceful. A serene state of mind.";
+      default:
+        return "Exploring your emotional landscape...";
+    }
+  };
+
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <SafeAreaView className="flex-1 bg-blue-50">
+    <View style={styles.container}>
+      <LinearGradient colors={["#0A0F1E", "#131A2E"]} style={styles.gradient}>
+        {/* Background Blur Blobs */}
+        <View style={styles.blueBlob} />
+        <View style={styles.purpleBlob} />
+
         {/* Header */}
-        <View className="flex-row items-center justify-between px-4 py-4">
-          <Pressable onPress={() => router.back()}>
-            <Text className="text-3xl">✖️</Text>
-          </Pressable>
-          <Text className="text-gray-900 text-lg font-bold">
-            Come ti senti?
-          </Text>
-          <Pressable onPress={handleSave} disabled={saving}>
-            <Text
-              className={`text-base font-semibold ${
-                saving ? "text-gray-400" : "text-blue-500"
-              }`}
-            >
-              {saving ? "Salvataggio..." : "Salva"}
-            </Text>
+        <View
+          style={{
+            paddingTop: insets.top + 16,
+            paddingBottom: 16,
+            paddingHorizontal: 16,
+            flexDirection: "row",
+            alignItems: "center",
+          }}
+        >
+          <Pressable onPress={() => router.back()} style={styles.backButton}>
+            <ArrowLeft size={24} color="rgba(255,255,255,0.8)" weight="bold" />
           </Pressable>
         </View>
 
-        <ScrollView className="flex-1">
-          {/* Drop Zone */}
-          <Animated.View
-            style={[dropZoneStyle, { minHeight: 200 }]}
-            className="mx-6 my-8 bg-white rounded-3xl p-8 items-center justify-center shadow-lg"
-          >
-            {selectedEmojis.length === 0 ? (
-              <View className="items-center">
-                <Text className="text-6xl mb-4">☁️</Text>
-                <Text className="text-gray-500 text-center">
-                  Seleziona emoji qui sotto per{"\n"}esprimere come ti senti
-                </Text>
-              </View>
-            ) : (
-              <View className="flex-row flex-wrap justify-center gap-4">
-                {selectedEmojis.map((emoji, index) => (
-                  <Pressable
-                    key={index}
-                    onPress={() => handleEmojiSelect(emoji)}
-                  >
-                    <Text className="text-6xl">{emoji}</Text>
-                  </Pressable>
-                ))}
-              </View>
-            )}
-          </Animated.View>
+        {/* Main Canvas Area */}
+        <View style={styles.mainCanvas}>
+          {/* Floating Insight Bubble */}
+          <InsightBubble />
 
-          {/* Emoji Picker */}
-          <View className="px-6 mb-6">
-            <Text className="text-gray-900 text-lg font-bold mb-4">
-              Seleziona emoji ({selectedEmojis.length}/3)
-            </Text>
-            <View className="flex-row flex-wrap gap-3">
-              {MOOD_EMOJIS.map((item) => (
-                <Pressable
-                  key={item.emoji}
-                  onPress={() => handleEmojiSelect(item.emoji as MoodEmojiType)}
-                  className={`w-16 h-16 rounded-2xl items-center justify-center ${
-                    selectedEmojis.includes(item.emoji as MoodEmojiType)
-                      ? "bg-blue-500"
-                      : "bg-white"
-                  } shadow`}
-                >
-                  <Text className="text-3xl">{item.emoji}</Text>
-                </Pressable>
-              ))}
-            </View>
+          {/* Central Creation Core (Drop Zone) */}
+          <View style={styles.dropZone}>
+            {/* Concentric Rings */}
+            <ConcentricRings ring1Opacity={ring1Opacity} />
+
+            {/* Active Weather Display */}
+            <WeatherDisplay
+              selectedWeather={selectedWeather}
+              pulseStyle={pulseStyle}
+            />
           </View>
 
-          {/* Intensity Slider */}
-          <View className="px-6 mb-6">
-            <Text className="text-gray-900 text-lg font-bold mb-2">
-              Intensità: {intensity}%
-            </Text>
-            <View className="bg-white rounded-2xl p-4 shadow">
-              <Slider
-                value={intensity}
-                onValueChange={setIntensity}
-                minimumValue={0}
-                maximumValue={100}
-                step={5}
-                minimumTrackTintColor="#3B82F6"
-                maximumTrackTintColor="#E5E7EB"
-                thumbTintColor="#3B82F6"
-              />
-              <View className="flex-row justify-between mt-2">
-                <Text className="text-gray-500 text-sm">Lieve</Text>
-                <Text className="text-gray-500 text-sm">Intenso</Text>
-              </View>
-            </View>
-          </View>
+          {/* Weather Selection Grid */}
+          <WeatherSelector
+            selectedWeather={selectedWeather}
+            onWeatherToggle={handleWeatherToggle}
+          />
+        </View>
 
-          {/* Notes Section */}
-          <View className="px-6 mb-8">
-            <Pressable
-              onPress={() => setShowNoteInput(!showNoteInput)}
-              className="flex-row items-center justify-between mb-3"
-            >
-              <Text className="text-gray-900 text-lg font-bold">
-                Note (opzionale)
-              </Text>
-              <Text className="text-2xl">{showNoteInput ? "🔽" : "▶️"}</Text>
-            </Pressable>
-
-            {showNoteInput && (
-              <View className="bg-white rounded-2xl p-4 shadow">
-                <TextInput
-                  value={note}
-                  onChangeText={setNote}
-                  placeholder="Scrivi qui i tuoi pensieri..."
-                  placeholderTextColor="#9CA3AF"
-                  multiline
-                  numberOfLines={4}
-                  className="text-gray-900 text-base"
-                  style={{ minHeight: 100, textAlignVertical: "top" }}
-                />
-              </View>
-            )}
-          </View>
-        </ScrollView>
-      </SafeAreaView>
-    </GestureHandlerRootView>
+        {/* Bottom Action Bar */}
+        <BottomActionBar
+          intensity={intensity}
+          onIntensityChange={setIntensity}
+          showNoteInput={showNoteInput}
+          onToggleNoteInput={() => setShowNoteInput(!showNoteInput)}
+          note={note}
+          onNoteChange={setNote}
+          onSave={handleSave}
+          saving={saving}
+          moodAnalysis={getMoodAnalysis()}
+          bottomInset={insets.bottom}
+        />
+      </LinearGradient>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  gradient: {
+    flex: 1,
+  },
+  blueBlob: {
+    position: "absolute",
+    top: "20%",
+    right: -80,
+    width: 256,
+    height: 256,
+    backgroundColor: "rgba(19, 91, 236, 0.15)",
+    borderRadius: 9999,
+  },
+  purpleBlob: {
+    position: "absolute",
+    bottom: "33%",
+    left: -40,
+    width: 320,
+    height: 320,
+    backgroundColor: "rgba(168, 85, 247, 0.1)",
+    borderRadius: 9999,
+  },
+  backButton: {
+    width: 48,
+    height: 48,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 24,
+  },
+  mainCanvas: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  dropZone: {
+    position: "relative",
+    alignItems: "center",
+    justifyContent: "center",
+    width: 288,
+    height: 288,
+    marginTop: -60,
+  },
+});

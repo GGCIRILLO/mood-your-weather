@@ -214,6 +214,7 @@ export default function Dashboard() {
             </Pressable>
 
             <Pressable
+              onPress={() => router.push("/mood-entry")}
               style={{
                 backgroundColor: "rgba(0,0,0,0.4)",
                 borderWidth: 1,

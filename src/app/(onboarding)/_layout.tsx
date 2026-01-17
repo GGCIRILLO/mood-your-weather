@@ -1,0 +1,17 @@
+// ============================================
+// ONBOARDING GROUP LAYOUT - No header/footer
+// ============================================
+
+import { Stack } from "expo-router";
+
+export default function OnboardingLayout() {
+  return (
+    <Stack
+      screenOptions={{
+        headerShown: false,
+        animation: "fade",
+        gestureEnabled: false, // Disable back gesture during onboarding
+      }}
+    />
+  );
+}

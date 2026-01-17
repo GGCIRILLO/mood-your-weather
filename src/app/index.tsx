@@ -1,36 +1,79 @@
-import React from "react";
-import { Text, View } from "react-native";
+// ============================================
+// APP ENTRY POINT - Check onboarding/auth
+// ============================================
 
-import { Link } from "@/tw";
+import { useEffect, useState } from "react";
+import { View, Text, ActivityIndicator, Pressable, Alert } from "react-native";
+import { useRouter } from "expo-router";
+import { useOnboarding, useCurrentUser } from "@/hooks/storage/useStorage";
+import { storageService } from "@/services/storage.service";
 
-export default function Page() {
+export default function Index() {
+  const router = useRouter();
+  const { onboarding, loading: onboardingLoading } = useOnboarding();
+  const { user, loading: userLoading } = useCurrentUser();
+  const [resetting, setResetting] = useState(false);
+
+  useEffect(() => {
+    if (!onboardingLoading && !userLoading) {
+      handleNavigation();
+    }
+  }, [onboarding, user, onboardingLoading, userLoading]);
+
+  const handleNavigation = () => {
+    // Check onboarding first
+    if (!onboarding.completed) {
+      router.replace("/(onboarding)/splash");
+      return;
+    }
+
+    // Check authentication
+    if (!user) {
+      router.replace("/(auth)/login");
+      return;
+    }
+
+    // User is onboarded and authenticated
+    router.replace("/(tabs)/");
+  };
+
+  const handleResetStorage = async () => {
+    Alert.alert(
+      "Reset Storage",
+      "Vuoi cancellare tutti i dati e rifare l'onboarding?",
+      [
+        { text: "Annulla", style: "cancel" },
+        {
+          text: "Reset",
+          style: "destructive",
+          onPress: async () => {
+            setResetting(true);
+            await storageService.clearAll();
+            // Force reload by navigating to splash
+            router.replace("/(onboarding)/splash");
+          },
+        },
+      ]
+    );
+  };
+
+  // Show loading screen with reset button for dev
   return (
-    <View className="flex-1">
-      <View className="py-12 md:py-24 lg:py-32 xl:py-48">
-        <View className="px-4 md:px-6">
-          <View className="flex flex-col items-center gap-4 text-center">
-            <Text
-              role="heading"
-              className="text-3xl text-center native:text-5xl font-bold sm:text-4xl md:text-5xl lg:text-6xl font-rounded"
-            >
-              Welcome to Project ACME
-            </Text>
-            <Text className="mx-auto max-w-175 text-lg text-center text-gray-500 md:text-xl dark:text-gray-400">
-              Discover and collaborate on acme. Explore our services now.
-            </Text>
+    <View className="flex-1 items-center justify-center bg-blue-50">
+      <ActivityIndicator size="large" color="#3B82F6" />
+      <Text className="text-gray-600 mt-4">
+        {resetting ? "Resetting..." : "Loading..."}
+      </Text>
 
-            <View className="gap-4">
-              <Link
-                suppressHighlighting
-                className="flex h-9 items-center justify-center overflow-hidden rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-gray-50 web:shadow ios:shadow transition-colors hover:bg-gray-900/90 active:bg-gray-400/90 web:focus-visible:outline-none web:focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50 dark:bg-gray-50 dark:text-gray-900 dark:hover:bg-gray-50/90 dark:focus-visible:ring-gray-300"
-                href="/"
-              >
-                Explore
-              </Link>
-            </View>
-          </View>
-        </View>
-      </View>
+      {/* Dev Reset Button - Long press per mostrare */}
+      <Pressable
+        onLongPress={handleResetStorage}
+        className="absolute bottom-12 px-6 py-3 bg-red-100 rounded-full active:bg-red-200"
+      >
+        <Text className="text-red-600 text-sm font-medium">
+          🔄 Reset Storage (long press)
+        </Text>
+      </Pressable>
     </View>
   );
 }

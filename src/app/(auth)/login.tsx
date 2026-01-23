@@ -14,7 +14,7 @@ import { useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
 import { CloudIcon, EyeIcon, EyeSlashIcon } from "phosphor-react-native";
-import { mockAuthService } from "@/services/mock-auth";
+import { signIn } from "@/services/auth.service";
 
 export default function LoginScreen() {
   const router = useRouter();
@@ -32,13 +32,13 @@ export default function LoginScreen() {
     }
 
     setLoading(true);
-    const response = await mockAuthService.login(email, password);
+    const response = await signIn(email, password);
     setLoading(false);
 
     if (response.success) {
       router.replace("/(tabs)/");
     } else {
-      Alert.alert("Errore", response.error?.message || "Login fallito");
+      Alert.alert("Errore", response.error || "Login fallito");
     }
   };
 

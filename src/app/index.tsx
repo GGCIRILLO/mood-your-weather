@@ -5,20 +5,21 @@
 import { useEffect, useState } from "react";
 import { View, Text, ActivityIndicator, Pressable, Alert } from "react-native";
 import { useRouter } from "expo-router";
-import { useOnboarding, useCurrentUser } from "@/hooks/storage/useStorage";
+import { useOnboarding } from "@/hooks/storage/useStorage";
 import { storageService } from "@/services/storage.service";
+import { useAuth } from "@/contexts/authContext";
 
 export default function Index() {
   const router = useRouter();
   const { onboarding, loading: onboardingLoading } = useOnboarding();
-  const { user, loading: userLoading } = useCurrentUser();
+  const { user, loading: authLoading } = useAuth();
   const [resetting, setResetting] = useState(false);
 
   useEffect(() => {
-    if (!onboardingLoading && !userLoading) {
+    if (!onboardingLoading && !authLoading) {
       handleNavigation();
     }
-  }, [onboarding, user, onboardingLoading, userLoading]);
+  }, [onboarding, user, onboardingLoading, authLoading]);
 
   const handleNavigation = () => {
     // Check onboarding first
@@ -53,7 +54,7 @@ export default function Index() {
             router.replace("/(onboarding)/splash");
           },
         },
-      ]
+      ],
     );
   };
 

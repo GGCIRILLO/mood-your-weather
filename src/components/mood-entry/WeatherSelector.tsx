@@ -1,13 +1,13 @@
 import { View, Text, Pressable, StyleSheet } from "react-native";
 import {
-  Sun,
-  Cloud,
-  CloudRain,
-  CloudLightning,
-  CloudSnow,
+  SunIcon,
+  CloudSunIcon,
+  CloudIcon,
+  CloudRainIcon,
+  CloudLightningIcon,
 } from "phosphor-react-native";
 
-type WeatherType = "sunny" | "cloudy" | "rainy" | "stormy" | "snowy";
+type WeatherType = "sunny" | "partly" | "cloudy" | "rainy" | "stormy";
 
 interface WeatherSelectorProps {
   selectedWeather: WeatherType[];
@@ -17,28 +17,28 @@ interface WeatherSelectorProps {
 const weatherOptions = [
   {
     type: "sunny" as WeatherType,
-    icon: <Sun size={24} color="#fbbf24" weight="fill" />,
+    icon: <SunIcon size={24} color="#fbbf24" weight="fill" />,
     color: "#fbbf24",
   },
   {
-    type: "cloudy" as WeatherType,
-    icon: <Cloud size={24} color="#ffffff" weight="fill" />,
+    type: "partly" as WeatherType,
+    icon: <CloudSunIcon size={24} color="#ffffff" weight="fill" />,
     color: "#ffffff",
   },
   {
+    type: "cloudy" as WeatherType,
+    icon: <CloudIcon size={24} color="#9ca3af" weight="fill" />,
+    color: "#9ca3af",
+  },
+  {
     type: "rainy" as WeatherType,
-    icon: <CloudRain size={24} color="#60a5fa" weight="fill" />,
+    icon: <CloudRainIcon size={24} color="#60a5fa" weight="fill" />,
     color: "#60a5fa",
   },
   {
     type: "stormy" as WeatherType,
-    icon: <CloudLightning size={24} color="#a78bfa" weight="fill" />,
+    icon: <CloudLightningIcon size={24} color="#a78bfa" weight="fill" />,
     color: "#a78bfa",
-  },
-  {
-    type: "snowy" as WeatherType,
-    icon: <CloudSnow size={24} color="#e0f2fe" weight="fill" />,
-    color: "#e0f2fe",
   },
 ];
 

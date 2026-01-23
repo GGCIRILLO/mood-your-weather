@@ -1,14 +1,14 @@
 import { View, StyleSheet } from "react-native";
 import Animated from "react-native-reanimated";
 import {
-  Sun,
-  Cloud,
-  CloudRain,
-  CloudLightning,
-  CloudSnow,
+  CloudSunIcon,
+  CloudIcon,
+  CloudRainIcon,
+  CloudLightningIcon,
+  SunIcon,
 } from "phosphor-react-native";
 
-type WeatherType = "sunny" | "cloudy" | "rainy" | "stormy" | "snowy";
+type WeatherType = "sunny" | "partly" | "cloudy" | "rainy" | "stormy";
 
 interface WeatherDisplayProps {
   selectedWeather: WeatherType[];
@@ -17,29 +17,29 @@ interface WeatherDisplayProps {
 
 const weatherIcons = {
   sunny: {
-    Component: Sun,
+    Component: SunIcon,
     color: "#fbbf24",
     glowColor: "rgba(251, 191, 36, 0.2)",
   },
-  cloudy: {
-    Component: Cloud,
+  partly: {
+    Component: CloudSunIcon,
     color: "#ffffff",
     glowColor: "rgba(255, 255, 255, 0.2)",
   },
+  cloudy: {
+    Component: CloudIcon,
+    color: "#9ca3af",
+    glowColor: "rgba(156, 163, 175, 0.2)",
+  },
   rainy: {
-    Component: CloudRain,
+    Component: CloudRainIcon,
     color: "#60a5fa",
     glowColor: "rgba(96, 165, 250, 0.2)",
   },
   stormy: {
-    Component: CloudLightning,
+    Component: CloudLightningIcon,
     color: "#a78bfa",
     glowColor: "rgba(167, 139, 250, 0.2)",
-  },
-  snowy: {
-    Component: CloudSnow,
-    color: "#e0f2fe",
-    glowColor: "rgba(224, 242, 254, 0.2)",
   },
 };
 

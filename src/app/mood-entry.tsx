@@ -11,7 +11,7 @@ import Animated, {
   withTiming,
   Easing,
 } from "react-native-reanimated";
-import { ArrowLeft } from "phosphor-react-native";
+import { ArrowLeftIcon } from "phosphor-react-native";
 import { storageService } from "@/services/storage.service";
 import { useCurrentUser } from "@/hooks/storage/useStorage";
 import { InsightBubble } from "@/components/mood-entry/InsightBubble";
@@ -20,7 +20,7 @@ import { WeatherDisplay } from "@/components/mood-entry/WeatherDisplay";
 import { WeatherSelector } from "@/components/mood-entry/WeatherSelector";
 import { BottomActionBar } from "@/components/mood-entry/BottomActionBar";
 
-type WeatherType = "sunny" | "cloudy" | "rainy" | "stormy" | "snowy";
+type WeatherType = "sunny" | "partly" | "cloudy" | "rainy" | "stormy";
 
 export default function MoodEntryScreen() {
   const router = useRouter();
@@ -99,15 +99,27 @@ export default function MoodEntryScreen() {
     if (selectedWeather.length === 2) {
       if (
         selectedWeather.includes("sunny") &&
-        selectedWeather.includes("cloudy")
+        selectedWeather.includes("partly")
       ) {
-        return "Mixed emotions - hopeful yet cautious. Like sunshine breaking through clouds.";
+        return "Mostly positive with minor clouds - optimistic with slight hesitation.";
       }
       if (
-        selectedWeather.includes("sunny") &&
+        selectedWeather.includes("partly") &&
+        selectedWeather.includes("cloudy")
+      ) {
+        return "Between light and shadow - seeking balance between hope and caution.";
+      }
+      if (
+        selectedWeather.includes("cloudy") &&
         selectedWeather.includes("rainy")
       ) {
-        return "Bittersweet feeling - joy with underlying sadness. A rainbow might appear.";
+        return "Transitioning to melancholy - emotions shifting towards sadness.";
+      }
+      if (
+        selectedWeather.includes("rainy") &&
+        selectedWeather.includes("stormy")
+      ) {
+        return "Intensifying distress - difficult emotions building in strength.";
       }
       return "Complex emotions blending together. Take time to understand yourself.";
     }
@@ -115,14 +127,14 @@ export default function MoodEntryScreen() {
     switch (selectedWeather[0]) {
       case "sunny":
         return "Bright and positive energy! You're feeling optimistic and energized.";
+      case "partly":
+        return "Mostly positive with some clouds - hopeful but with minor concerns.";
       case "cloudy":
         return "Neutral, contemplative mood. Not necessarily bad, just thoughtful.";
       case "rainy":
         return "Feeling down or melancholic. It's okay to have rainy days.";
       case "stormy":
         return "Intense emotions, possibly anger or frustration. Strong feelings need acknowledgment.";
-      case "snowy":
-        return "Cool, calm, peaceful. A serene state of mind.";
       default:
         return "Exploring your emotional landscape...";
     }
@@ -146,7 +158,11 @@ export default function MoodEntryScreen() {
           }}
         >
           <Pressable onPress={() => router.back()} style={styles.backButton}>
-            <ArrowLeft size={24} color="rgba(255,255,255,0.8)" weight="bold" />
+            <ArrowLeftIcon
+              size={24}
+              color="rgba(255,255,255,0.8)"
+              weight="bold"
+            />
           </Pressable>
         </View>
 

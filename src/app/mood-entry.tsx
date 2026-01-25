@@ -12,8 +12,7 @@ import Animated, {
   Easing,
 } from "react-native-reanimated";
 import { ArrowLeftIcon } from "phosphor-react-native";
-import { storageService } from "@/services/storage.service";
-import { useCurrentUser } from "@/hooks/storage/useStorage";
+import { createMood } from "@/services/mood.service";
 import { InsightBubble } from "@/components/mood-entry/InsightBubble";
 import { ConcentricRings } from "@/components/mood-entry/ConcentricRings";
 import { WeatherDisplay } from "@/components/mood-entry/WeatherDisplay";
@@ -25,7 +24,6 @@ type WeatherType = "sunny" | "partly" | "cloudy" | "rainy" | "stormy";
 export default function MoodEntryScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const { user } = useCurrentUser();
 
   const [selectedWeather, setSelectedWeather] = useState<WeatherType[]>([
     "sunny",
@@ -42,53 +40,57 @@ export default function MoodEntryScreen() {
     pulseScale.value = withRepeat(
       withSequence(
         withTiming(1.05, { duration: 2000, easing: Easing.inOut(Easing.ease) }),
-        withTiming(1, { duration: 2000, easing: Easing.inOut(Easing.ease) })
+        withTiming(1, { duration: 2000, easing: Easing.inOut(Easing.ease) }),
       ),
       -1,
-      false
+      false,
     );
 
     ring1Opacity.value = withRepeat(
       withSequence(
         withTiming(0.3, { duration: 2000, easing: Easing.inOut(Easing.ease) }),
-        withTiming(0.1, { duration: 2000, easing: Easing.inOut(Easing.ease) })
+        withTiming(0.1, { duration: 2000, easing: Easing.inOut(Easing.ease) }),
       ),
       -1,
-      false
+      false,
     );
   });
 
-  const handleWeatherToggle = (weather: WeatherType) => {
-    if (selectedWeather.includes(weather)) {
-      if (selectedWeather.length > 1) {
-        setSelectedWeather(selectedWeather.filter((w) => w !== weather));
-      }
-    } else if (selectedWeather.length < 2) {
+  const handleWeatherAdd = (weather: WeatherType) => {
+    console.log("Adding weather:", weather, "Current:", selectedWeather);
+    // Aggiungi se non presente e meno di 2
+    if (!selectedWeather.includes(weather) && selectedWeather.length < 2) {
       setSelectedWeather([...selectedWeather, weather]);
+      console.log("Weather added successfully");
+    } else {
+      console.log("Cannot add: already exists or limit reached");
+    }
+  };
+
+  const handleWeatherRemove = (weather: WeatherType) => {
+    // Rimuovi se ci sono almeno 1 emoji rimanente
+    if (selectedWeather.length > 1) {
+      setSelectedWeather(selectedWeather.filter((w) => w !== weather));
     }
   };
 
   const handleSave = async () => {
-    if (!user) {
-      Alert.alert("Errore", "User non trovato");
-      return;
-    }
-
     setSaving(true);
 
-    const entry = {
-      id: `entry-${Date.now()}`,
-      userId: user.id,
-      timestamp: new Date().toISOString(),
-      emojis: selectedWeather as any,
-      intensity,
-      note: note.trim() || undefined,
-    };
+    try {
+      const createdMood = await createMood({
+        emojis: selectedWeather as any,
+        intensity,
+        note: note.trim() || undefined,
+      });
 
-    await storageService.saveMoodEntry(entry);
-
-    setSaving(false);
-    router.push(`/mood-analysis?id=${entry.id}`);
+      setSaving(false);
+      router.push(`/mood-analysis?id=${createdMood.id}`);
+    } catch (error: any) {
+      setSaving(false);
+      Alert.alert("Errore", error.message || "Impossibile salvare il mood");
+      console.error("Save mood error:", error);
+    }
   };
 
   const pulseStyle = useAnimatedStyle(() => ({
@@ -96,32 +98,8 @@ export default function MoodEntryScreen() {
   }));
 
   const getMoodAnalysis = () => {
-    if (selectedWeather.length === 2) {
-      if (
-        selectedWeather.includes("sunny") &&
-        selectedWeather.includes("partly")
-      ) {
-        return "Mostly positive with minor clouds - optimistic with slight hesitation.";
-      }
-      if (
-        selectedWeather.includes("partly") &&
-        selectedWeather.includes("cloudy")
-      ) {
-        return "Between light and shadow - seeking balance between hope and caution.";
-      }
-      if (
-        selectedWeather.includes("cloudy") &&
-        selectedWeather.includes("rainy")
-      ) {
-        return "Transitioning to melancholy - emotions shifting towards sadness.";
-      }
-      if (
-        selectedWeather.includes("rainy") &&
-        selectedWeather.includes("stormy")
-      ) {
-        return "Intensifying distress - difficult emotions building in strength.";
-      }
-      return "Complex emotions blending together. Take time to understand yourself.";
+    if (selectedWeather.length >= 2) {
+      return `Complex emotions blending ${selectedWeather.length} feelings together. Your emotional landscape is rich and nuanced.`;
     }
 
     switch (selectedWeather[0]) {
@@ -180,13 +158,15 @@ export default function MoodEntryScreen() {
             <WeatherDisplay
               selectedWeather={selectedWeather}
               pulseStyle={pulseStyle}
+              onWeatherRemove={handleWeatherRemove}
+              onWeatherAdd={handleWeatherAdd}
             />
           </View>
 
           {/* Weather Selection Grid */}
           <WeatherSelector
             selectedWeather={selectedWeather}
-            onWeatherToggle={handleWeatherToggle}
+            onWeatherAdd={handleWeatherAdd}
           />
         </View>
 

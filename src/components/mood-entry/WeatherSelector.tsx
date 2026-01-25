@@ -1,4 +1,11 @@
-import { View, Text, Pressable, StyleSheet } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withSpring,
+  runOnJS,
+} from "react-native-reanimated";
+import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import {
   SunIcon,
   CloudSunIcon,
@@ -6,70 +13,111 @@ import {
   CloudRainIcon,
   CloudLightningIcon,
 } from "phosphor-react-native";
+import { scheduleOnRN } from "react-native-worklets";
 
 type WeatherType = "sunny" | "partly" | "cloudy" | "rainy" | "stormy";
 
 interface WeatherSelectorProps {
   selectedWeather: WeatherType[];
-  onWeatherToggle: (weather: WeatherType) => void;
+  onWeatherAdd: (weather: WeatherType) => void;
 }
 
 const weatherOptions = [
   {
     type: "sunny" as WeatherType,
-    icon: <SunIcon size={24} color="#fbbf24" weight="fill" />,
+    icon: SunIcon,
     color: "#fbbf24",
   },
   {
     type: "partly" as WeatherType,
-    icon: <CloudSunIcon size={24} color="#ffffff" weight="fill" />,
+    icon: CloudSunIcon,
     color: "#ffffff",
   },
   {
     type: "cloudy" as WeatherType,
-    icon: <CloudIcon size={24} color="#9ca3af" weight="fill" />,
+    icon: CloudIcon,
     color: "#9ca3af",
   },
   {
     type: "rainy" as WeatherType,
-    icon: <CloudRainIcon size={24} color="#60a5fa" weight="fill" />,
+    icon: CloudRainIcon,
     color: "#60a5fa",
   },
   {
     type: "stormy" as WeatherType,
-    icon: <CloudLightningIcon size={24} color="#a78bfa" weight="fill" />,
+    icon: CloudLightningIcon,
     color: "#a78bfa",
   },
 ];
 
 export function WeatherSelector({
   selectedWeather,
-  onWeatherToggle,
+  onWeatherAdd,
 }: WeatherSelectorProps) {
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>Tap to select (max 2)</Text>
+      <Text style={styles.label}>Drag to center (max 2)</Text>
       <View style={styles.grid}>
-        {weatherOptions.map((weather) => (
-          <Pressable
-            key={weather.type}
-            onPress={() => onWeatherToggle(weather.type)}
-            style={styles.itemContainer}
-          >
-            <View
-              style={[
-                styles.weatherButton,
-                selectedWeather.includes(weather.type) && {
-                  backgroundColor: "rgba(255,255,255,0.1)",
-                  borderColor: weather.color,
-                  borderWidth: 2,
-                },
-              ]}
-            >
-              {weather.icon}
-            </View>
-          </Pressable>
-        ))}
+        {weatherOptions.map((weather) => {
+          const Icon = weather.icon;
+          const translateX = useSharedValue(0);
+          const translateY = useSharedValue(0);
+          const scale = useSharedValue(1);
+          const isSelected = selectedWeather.includes(weather.type);
+
+          const gesture = Gesture.Pan()
+            .onStart(() => {
+              scale.value = withSpring(1.2);
+            })
+            .onUpdate((event) => {
+              translateX.value = event.translationX;
+              translateY.value = event.translationY;
+            })
+            .onEnd((event) => {
+              // Verifica che sia trascinato VERSO L'ALTO (translationY negativo)
+              // e che la distanza verticale sia significativa (almeno 200px)
+              const isUpward = event.translationY < -200;
+              const horizontalDistance = Math.abs(event.translationX);
+
+              // Deve essere trascinato verso l'alto e non troppo lateralmente
+              if (isUpward && horizontalDistance < 150) {
+                scheduleOnRN(onWeatherAdd, weather.type);
+              }
+
+              // Reset posizione
+              translateX.value = withSpring(0);
+              translateY.value = withSpring(0);
+              scale.value = withSpring(1);
+            });
+
+          const animatedStyle = useAnimatedStyle(() => ({
+            transform: [
+              { translateX: translateX.value },
+              { translateY: translateY.value },
+              { scale: scale.value },
+            ] as any,
+          }));
+
+          return (
+            <GestureDetector key={weather.type} gesture={gesture}>
+              <Animated.View style={[styles.itemContainer, animatedStyle]}>
+                <View
+                  style={[
+                    styles.weatherButton,
+                    isSelected && {
+                      backgroundColor: "rgba(255,255,255,0.15)",
+                      borderColor: weather.color,
+                      borderWidth: 2,
+                      padding: 4,
+                    },
+                  ]}
+                >
+                  <Icon size={24} color={weather.color} weight="fill" />
+                </View>
+              </Animated.View>
+            </GestureDetector>
+          );
+        })}
       </View>
     </View>
   );

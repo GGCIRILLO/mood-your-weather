@@ -21,19 +21,14 @@ export interface OnboardingState {
 }
 
 /**
- * Weather types for mood tracking (backend-compatible strings)
+ * Weather types for mood tracking
  */
 export type MoodEmojiType =
   | "sunny" // Sunny - positive, energetic
   | "partly" // Partly cloudy - neutral, balanced
   | "cloudy" // Cloudy - calm, reflective
   | "rainy" // Rainy - sad, melancholic
-  | "stormy" // Stormy - anxious, stressed
-  | "rainbow" // Rainbow - hopeful, optimistic
-  | "moon" // Moon - peaceful, restful
-  | "lightning" // Lightning - energized, excited
-  | "snowy" // Snow - cold, isolated
-  | "tornado"; // Tornado - chaotic, overwhelmed
+  | "stormy"; // Stormy - anxious, stressed
 
 /**
  * Single mood entry

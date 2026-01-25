@@ -63,6 +63,7 @@ export function BottomActionBar({
           paddingBottom: bottomInset + 32,
           paddingTop: 24,
           paddingHorizontal: 24,
+          zIndex: 100,
         },
       ]}
     >

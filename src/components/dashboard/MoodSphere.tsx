@@ -60,30 +60,30 @@ export function MoodSphere({ mood = "sunny", size = 192 }: MoodSphereProps) {
     scale.value = withRepeat(
       withSequence(
         withTiming(1.02, { duration: 3000, easing: Easing.inOut(Easing.ease) }),
-        withTiming(1, { duration: 3000, easing: Easing.inOut(Easing.ease) })
+        withTiming(1, { duration: 3000, easing: Easing.inOut(Easing.ease) }),
       ),
       -1,
-      false
+      false,
     );
 
     // Float animation (translateY)
     translateY.value = withRepeat(
       withSequence(
         withTiming(-10, { duration: 4000, easing: Easing.inOut(Easing.ease) }),
-        withTiming(0, { duration: 4000, easing: Easing.inOut(Easing.ease) })
+        withTiming(0, { duration: 4000, easing: Easing.inOut(Easing.ease) }),
       ),
       -1,
-      false
+      false,
     );
 
     // Glow pulse
     glowOpacity.value = withRepeat(
       withSequence(
         withTiming(0.6, { duration: 3000, easing: Easing.inOut(Easing.ease) }),
-        withTiming(0.4, { duration: 3000, easing: Easing.inOut(Easing.ease) })
+        withTiming(0.4, { duration: 3000, easing: Easing.inOut(Easing.ease) }),
       ),
       -1,
-      false
+      false,
     );
   }, []);
 

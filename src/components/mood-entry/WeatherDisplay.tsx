@@ -1,4 +1,4 @@
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Pressable } from "react-native";
 import Animated from "react-native-reanimated";
 import {
   CloudSunIcon,
@@ -13,6 +13,8 @@ type WeatherType = "sunny" | "partly" | "cloudy" | "rainy" | "stormy";
 interface WeatherDisplayProps {
   selectedWeather: WeatherType[];
   pulseStyle: any;
+  onWeatherRemove: (weather: WeatherType) => void;
+  onWeatherAdd: (weather: WeatherType) => void;
 }
 
 const weatherIcons = {
@@ -46,49 +48,55 @@ const weatherIcons = {
 export function WeatherDisplay({
   selectedWeather,
   pulseStyle,
+  onWeatherRemove,
+  onWeatherAdd,
 }: WeatherDisplayProps) {
-  const renderSingleWeather = (type: WeatherType) => {
+  const renderWeatherIcon = (type: WeatherType, index: number) => {
     const weather = weatherIcons[type];
     const WeatherIcon = weather.Component;
+    const size = selectedWeather.length === 1 ? 96 : 60;
+    const glowSize = selectedWeather.length === 1 ? 140 : 96;
 
     return (
-      <View style={styles.singleContainer}>
-        <View style={[styles.glow, { backgroundColor: weather.glowColor }]} />
-        <WeatherIcon size={96} color={weather.color} weight="fill" />
-      </View>
-    );
-  };
-
-  const renderDoubleWeather = () => {
-    const weather1 = weatherIcons[selectedWeather[0]];
-    const weather2 = weatherIcons[selectedWeather[1]];
-    const Icon1 = weather1.Component;
-    const Icon2 = weather2.Component;
-
-    return (
-      <View style={styles.doubleContainer}>
-        <View style={[styles.glow, { backgroundColor: weather1.glowColor }]} />
-        <Icon1
-          size={72}
-          color={weather1.color}
-          weight="fill"
-          style={styles.icon1}
+      <Pressable
+        key={`${type}-${index}`}
+        onPress={() => onWeatherRemove(type)}
+        style={[
+          styles.iconWrapper,
+          selectedWeather.length > 1 && {
+            marginHorizontal: 4,
+          },
+        ]}
+      >
+        <View
+          style={[
+            styles.glow,
+            {
+              backgroundColor: weather.glowColor,
+              width: glowSize,
+              height: glowSize,
+              borderRadius: glowSize / 2,
+            },
+          ]}
         />
-        <Icon2
-          size={60}
-          color={weather2.color}
-          weight="fill"
-          style={styles.icon2}
-        />
-      </View>
+        <WeatherIcon size={size} color={weather.color} weight="fill" />
+      </Pressable>
     );
   };
 
   return (
     <Animated.View style={[styles.container, pulseStyle]}>
-      {selectedWeather.length === 1
-        ? renderSingleWeather(selectedWeather[0])
-        : renderDoubleWeather()}
+      <View style={styles.iconsContainer}>
+        {selectedWeather.length === 0 ? (
+          <View style={styles.placeholder}>
+            <View style={styles.placeholderCircle} />
+          </View>
+        ) : (
+          selectedWeather.map((weather, index) =>
+            renderWeatherIcon(weather, index),
+          )
+        )}
+      </View>
     </Animated.View>
   );
 }
@@ -96,34 +104,40 @@ export function WeatherDisplay({
 const styles = StyleSheet.create({
   container: {
     zIndex: 10,
-  },
-  singleContainer: {
-    position: "relative",
+    minWidth: 200,
+    minHeight: 200,
     alignItems: "center",
     justifyContent: "center",
   },
-  doubleContainer: {
+  iconsContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    alignItems: "center",
+    justifyContent: "center",
+    maxWidth: 250,
+  },
+  iconWrapper: {
     position: "relative",
     alignItems: "center",
     justifyContent: "center",
-    width: 96,
-    height: 96,
   },
   glow: {
     position: "absolute",
-    width: 128,
-    height: 128,
+    width: 96,
+    height: 96,
     borderRadius: 9999,
-    opacity: 0.8,
+    opacity: 0.6,
   },
-  icon1: {
-    position: "absolute",
-    zIndex: 10,
+  placeholder: {
+    alignItems: "center",
+    justifyContent: "center",
   },
-  icon2: {
-    position: "absolute",
-    right: -16,
-    top: 8,
-    zIndex: 20,
+  placeholderCircle: {
+    width: 96,
+    height: 96,
+    borderRadius: 48,
+    borderWidth: 2,
+    borderColor: "rgba(255,255,255,0.2)",
+    borderStyle: "dashed",
   },
 });

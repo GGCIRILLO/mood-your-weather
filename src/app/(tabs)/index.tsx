@@ -2,6 +2,7 @@
 // DASHBOARD HUB - Main immersive screen
 // ============================================
 
+import { useEffect, useCallback } from "react";
 import {
   View,
   Text,
@@ -9,9 +10,11 @@ import {
   Pressable,
   ImageBackground,
   StyleSheet,
+  ActivityIndicator,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useFocusEffect } from "@react-navigation/native";
 import {
   User,
   Gear,
@@ -38,9 +41,58 @@ import {
 import { MoodSphere } from "@/components/dashboard/MoodSphere";
 import { images } from "assets";
 import { router } from "expo-router";
+import { useRecentMoods } from "@/hooks/api/useMoods";
+import type { MoodEmojiType } from "@/types";
+
+// Mappa emoji a icone
+const EMOJI_TO_ICON: Record<MoodEmojiType, any> = {
+  sunny: SunIcon,
+  partly: CloudSun,
+  cloudy: CloudIcon,
+  rainy: CloudRainIcon,
+  stormy: CloudLightningIcon,
+};
+
+// Mappa emoji a colori
+const EMOJI_TO_COLOR: Record<MoodEmojiType, string> = {
+  sunny: "#fbbf24",
+  partly: "#94a3b8",
+  cloudy: "#6b7280",
+  rainy: "#3b82f6",
+  stormy: "#4b5563",
+};
 
 export default function Dashboard() {
   const insets = useSafeAreaInsets();
+  const { moods, loading, error, refetch } = useRecentMoods(7);
+
+  // Ricarica i mood solo quando la schermata diventa visibile
+  useFocusEffect(
+    useCallback(() => {
+      refetch();
+    }, [refetch]),
+  );
+
+  // Ottieni il mood più recente
+  const latestMood = moods[0];
+  const currentMoodEmoji = (latestMood?.emojis[0] || "sunny") as
+    | "sunny"
+    | "partly"
+    | "cloudy"
+    | "rainy"
+    | "stormy";
+
+  // Giorni della settimana
+  const getDayLabel = (index: number) => {
+    const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+    const today = new Date().getDay();
+    const dayIndex = (today - (6 - index) + 7) % 7;
+    return days[dayIndex];
+  };
+
+  const isToday = (index: number) => {
+    return index === moods.length - 1;
+  };
 
   return (
     <View className="flex-1 bg-[#111722]">
@@ -64,6 +116,7 @@ export default function Dashboard() {
       <ScrollView
         className="flex-1"
         contentContainerStyle={{ paddingBottom: insets.bottom + 24 }}
+        showsVerticalScrollIndicator={false}
       >
         {/* Top App Bar */}
         <View
@@ -124,7 +177,11 @@ export default function Dashboard() {
 
         {/* 3D Mood Sphere Area */}
         <View className="flex-1 items-center justify-center py-8">
-          <MoodSphere mood="sunny" size={192} />
+          {loading ? (
+            <ActivityIndicator size="large" color="white" />
+          ) : (
+            <MoodSphere mood={currentMoodEmoji} size={192} />
+          )}
         </View>
 
         {/* Today's Emotional Forecast Card */}
@@ -158,32 +215,44 @@ export default function Dashboard() {
                     Current Mood
                   </Text>
                   <Text className="text-white text-2xl font-bold leading-tight">
-                    Radiant Clarity
+                    {latestMood
+                      ? `${latestMood.emojis[0].charAt(0).toUpperCase()}${latestMood.emojis[0].slice(1)} • ${latestMood.intensity}%`
+                      : "No mood logged yet"}
                   </Text>
                 </View>
-                <Sun size={32} color="#fbbf24" weight="fill" />
+                {latestMood && (
+                  <Sun
+                    size={32}
+                    color={EMOJI_TO_COLOR[latestMood.emojis[0]]}
+                    weight="fill"
+                  />
+                )}
               </View>
 
               {/* Details */}
-              <View className="gap-3">
-                <View className="flex-row items-center gap-2">
-                  <ThermometerSimpleIcon
-                    size={20}
-                    color="rgba(255,255,255,0.7)"
-                    weight="bold"
-                  />
-                  <Text className="text-white text-lg font-medium">
-                    28°C • UV Index High
-                  </Text>
+              {latestMood && (
+                <View className="gap-3">
+                  <View className="flex-row items-center gap-2">
+                    <ThermometerSimpleIcon
+                      size={20}
+                      color="rgba(255,255,255,0.7)"
+                      weight="bold"
+                    />
+                    <Text className="text-white text-lg font-medium">
+                      Intensity: {latestMood.intensity}%
+                    </Text>
+                  </View>
+
+                  {latestMood.note && (
+                    <>
+                      <View className="h-px w-full bg-white/10" />
+                      <Text className="text-white/90 text-base font-medium leading-relaxed italic">
+                        "{latestMood.note}"
+                      </Text>
+                    </>
+                  )}
                 </View>
-
-                <View className="h-px w-full bg-white/10" />
-
-                <Text className="text-white/90 text-base font-medium leading-relaxed italic">
-                  "You are shining bright today. Hold onto this warmth and let
-                  it guide you."
-                </Text>
-              </View>
+              )}
             </View>
           </View>
         </View>
@@ -271,65 +340,50 @@ export default function Dashboard() {
             contentContainerStyle={{ paddingRight: 24, gap: 16 }}
             className="pb-4"
           >
-            {/* Day 1 - Stormy */}
-            <View className="items-center gap-2">
-              <View style={[styles.dayCircle, { backgroundColor: "#4b5563" }]}>
-                <CloudLightningIcon size={28} color="white" weight="fill" />
-              </View>
-              <Text className="text-xs text-white/80 font-medium">Mon</Text>
-            </View>
+            {loading ? (
+              <ActivityIndicator size="small" color="white" />
+            ) : moods.length > 0 ? (
+              moods.map((mood, index) => {
+                const Icon = EMOJI_TO_ICON[mood.emojis[0]];
+                const color = EMOJI_TO_COLOR[mood.emojis[0]];
+                const dayLabel = getDayLabel(index);
+                const today = isToday(index);
 
-            {/* Day 2 - Rainy */}
-            <View className="items-center gap-2">
-              <View style={[styles.dayCircle, { backgroundColor: "#3b82f6" }]}>
-                <CloudRainIcon size={28} color="white" weight="fill" />
+                return (
+                  <View key={mood.id} className="items-center gap-2">
+                    <View
+                      style={[
+                        styles.dayCircle,
+                        { backgroundColor: color },
+                        today && styles.todayRing,
+                      ]}
+                    >
+                      <Icon size={28} color="white" weight="fill" />
+                    </View>
+                    <Text
+                      className={`text-xs ${today ? "text-white font-bold" : "text-white/80 font-medium"}`}
+                    >
+                      {today ? "Today" : dayLabel}
+                    </Text>
+                  </View>
+                );
+              })
+            ) : (
+              <View className="items-center gap-2">
+                <View
+                  style={[
+                    styles.dayCircle,
+                    { backgroundColor: "rgba(255,255,255,0.05)" },
+                  ]}
+                  className="border-2 border-white/10"
+                >
+                  <Text className="text-white/30 text-xl">?</Text>
+                </View>
+                <Text className="text-xs text-white/50 font-medium">
+                  No moods yet
+                </Text>
               </View>
-              <Text className="text-xs text-white/80 font-medium">Tue</Text>
-            </View>
-
-            {/* Day 3 - Cloudy */}
-            <View className="items-center gap-2">
-              <View style={[styles.dayCircle, { backgroundColor: "#6b7280" }]}>
-                <CloudIcon size={28} color="white" weight="fill" />
-              </View>
-              <Text className="text-xs text-white/80 font-medium">Wed</Text>
-            </View>
-
-            {/* Day 4 - Today (Sunny) with ring */}
-            <View className="items-center gap-2">
-              <View
-                style={[
-                  styles.dayCircle,
-                  styles.todayRing,
-                  { backgroundColor: "#fbbf24" },
-                ]}
-              >
-                <SunIcon size={28} color="white" weight="fill" />
-              </View>
-              <Text className="text-xs text-white font-bold">Today</Text>
-            </View>
-
-            {/* Day 5 - Partly cloudy */}
-            <View className="items-center gap-2 opacity-60">
-              <View style={[styles.dayCircle, { backgroundColor: "#94a3b8" }]}>
-                <CloudSun size={28} color="white" weight="fill" />
-              </View>
-              <Text className="text-xs text-white/50 font-medium">Fri</Text>
-            </View>
-
-            {/* Day 6 - Future empty */}
-            <View className="items-center gap-2 opacity-60">
-              <View
-                style={[
-                  styles.dayCircle,
-                  { backgroundColor: "rgba(255,255,255,0.05)" },
-                ]}
-                className="border-2 border-white/10"
-              >
-                <Text className="text-white/30 text-xl">?</Text>
-              </View>
-              <Text className="text-xs text-white/50 font-medium">Sat</Text>
-            </View>
+            )}
           </ScrollView>
         </View>
       </ScrollView>

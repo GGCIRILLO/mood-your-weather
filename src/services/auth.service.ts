@@ -1,5 +1,5 @@
 import {
-  createUserWithEmailAndPassword,
+  signInWithCustomToken,
   signInWithEmailAndPassword,
   signOut,
   sendPasswordResetEmail,
@@ -8,20 +8,47 @@ import {
 } from "firebase/auth";
 import { auth } from "../config/firebaseConfig";
 
-// Registrazione nuovo utente
-export const signUp = async (email: string, password: string) => {
+// Base URL per le API
+const API_BASE_URL = "http://127.0.0.1:8000";
+
+// Registrazione nuovo utente tramite API
+export const signUp = async (
+  email: string,
+  password: string,
+  name?: string,
+) => {
   try {
-    const userCredential = await createUserWithEmailAndPassword(
-      auth,
-      email,
-      password,
-    );
+    // Chiamata API per registrazione
+    const response = await fetch(`${API_BASE_URL}/auth/register`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email,
+        password,
+        name: name || email.split("@")[0], // Usa parte email se name non fornito
+      }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.detail || "Registration failed");
+    }
+
+    const data = await response.json();
+
+    // Autentica con Firebase usando il custom token ricevuto
+    const userCredential = await signInWithCustomToken(auth, data.token);
     const user = userCredential.user;
-    console.log("User registered:", user.uid);
+
     return { success: true, user };
   } catch (error: any) {
-    console.error("Sign up error:", error.code, error.message);
-    return { success: false, error: getErrorMessage(error.code) };
+    console.error("Sign up error:", error.message);
+    return {
+      success: false,
+      error: error.message || "Errore di registrazione",
+    };
   }
 };
 

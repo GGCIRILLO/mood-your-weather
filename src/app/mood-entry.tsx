@@ -85,7 +85,7 @@ export default function MoodEntryScreen() {
       });
 
       setSaving(false);
-      router.push(`/mood-analysis?id=${createdMood.id}`);
+      router.back();
     } catch (error: any) {
       setSaving(false);
       Alert.alert("Errore", error.message || "Impossibile salvare il mood");

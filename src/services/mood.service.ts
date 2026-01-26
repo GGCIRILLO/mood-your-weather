@@ -1,16 +1,42 @@
 import { auth } from "../config/firebaseConfig";
 import type { MoodEntry, MoodEmojiType } from "../types";
+import { storageService } from "./storage.service";
 
 // Base URL per le API
 const API_BASE_URL = "http://127.0.0.1:8000";
 
 /**
  * Helper per ottenere il token ID dell'utente corrente
+ * Usa AsyncStorage come fallback se Firebase fallisce
  */
 const getAuthToken = async (): Promise<string | null> => {
   const user = auth.currentUser;
-  if (!user) return null;
-  return await user.getIdToken();
+  if (!user) {
+    console.warn("⚠️ Nessun utente autenticato");
+    return null;
+  }
+
+  try {
+    // Prova prima con Firebase
+    const token = await user.getIdToken();
+    console.log("✅ Token ottenuto da Firebase");
+    // Aggiorna il token salvato
+    await storageService.saveAuthToken(token);
+    return token;
+  } catch (error) {
+    console.warn(
+      "⚠️ Errore getIdToken da Firebase, uso fallback AsyncStorage:",
+      error,
+    );
+    // Fallback: usa token salvato in AsyncStorage
+    const savedToken = await storageService.getAuthToken();
+    if (savedToken) {
+      console.log("✅ Token recuperato da AsyncStorage (fallback)");
+      return savedToken;
+    }
+    console.error("❌ Nessun token disponibile (né Firebase né AsyncStorage)");
+    return null;
+  }
 };
 
 /**

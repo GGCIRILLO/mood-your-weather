@@ -3,7 +3,6 @@ import { Stack } from "expo-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { AuthProvider } from "@/contexts/authContext";
-import { DropProvider } from "react-native-reanimated-dnd";
 
 // Create QueryClient instance
 const queryClient = new QueryClient({
@@ -21,15 +20,13 @@ export default function Layout() {
     <AuthProvider>
       <QueryClientProvider client={queryClient}>
         <GestureHandlerRootView style={{ flex: 1 }}>
-          <DropProvider>
-            <Stack
-              screenOptions={{
-                headerShown: false,
-                animation: "slide_from_right",
-                animationDuration: 300,
-              }}
-            />
-          </DropProvider>
+          <Stack
+            screenOptions={{
+              headerShown: false,
+              animation: "slide_from_right",
+              animationDuration: 300,
+            }}
+          />
         </GestureHandlerRootView>
       </QueryClientProvider>
     </AuthProvider>

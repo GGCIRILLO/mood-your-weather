@@ -37,12 +37,14 @@ import {
   CloudRainIcon,
   CloudIcon,
   SunIcon,
+  Shuffle,
 } from "phosphor-react-native";
 import { MoodSphere } from "@/components/dashboard/MoodSphere";
 import { images } from "assets";
 import { router } from "expo-router";
 import { useRecentMoods } from "@/hooks/api/useMoods";
 import type { MoodEmojiType } from "@/types";
+import { useAuth } from "@/contexts/authContext";
 
 // Mappa emoji a icone
 const EMOJI_TO_ICON: Record<MoodEmojiType, any> = {
@@ -64,7 +66,17 @@ const EMOJI_TO_COLOR: Record<MoodEmojiType, string> = {
 
 export default function Dashboard() {
   const insets = useSafeAreaInsets();
+  const { user } = useAuth();
   const { moods, loading, error, refetch } = useRecentMoods(7);
+
+  // Nome utente
+  const userName = user?.displayName || user?.email?.split("@")[0] || "Alex";
+  const greeting =
+    new Date().getHours() < 12
+      ? "Good Morning"
+      : new Date().getHours() < 18
+        ? "Good Afternoon"
+        : "Good Evening";
 
   // Ricarica i mood solo quando la schermata diventa visibile
   useFocusEffect(
@@ -84,14 +96,21 @@ export default function Dashboard() {
 
   // Giorni della settimana
   const getDayLabel = (index: number) => {
-    const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-    const today = new Date().getDay();
-    const dayIndex = (today - (6 - index) + 7) % 7;
-    return days[dayIndex];
+    const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    const today = new Date();
+    const moodDate = new Date(moods[index].timestamp);
+    return days[moodDate.getDay()];
   };
 
   const isToday = (index: number) => {
-    return index === moods.length - 1;
+    if (!moods[index]) return false;
+    const today = new Date();
+    const moodDate = new Date(moods[index].timestamp);
+    return (
+      today.getDate() === moodDate.getDate() &&
+      today.getMonth() === moodDate.getMonth() &&
+      today.getFullYear() === moodDate.getFullYear()
+    );
   };
 
   return (
@@ -131,9 +150,12 @@ export default function Dashboard() {
         >
           <View className="flex-row items-center gap-3">
             {/* Profile Avatar */}
-            <View className="size-10 rounded-full bg-white/10 items-center justify-center">
+            <Pressable
+              onPress={() => router.push("/profile")}
+              className="size-10 rounded-full bg-white/10 items-center justify-center"
+            >
               <UserIcon size={24} color="white" weight="bold" />
-            </View>
+            </Pressable>
           </View>
 
           {/* Settings Button */}
@@ -145,7 +167,6 @@ export default function Dashboard() {
         {/* Greeting */}
         <View className="px-6 pt-2 pb-4">
           <Text
-            //className="text-white text-[32px] font-bold leading-tight tracking-tight"
             style={{
               textShadowColor: "rgba(0,0,0,0.3)",
               textShadowOffset: { width: 0, height: 2 },
@@ -158,7 +179,7 @@ export default function Dashboard() {
               zIndex: 10,
             }}
           >
-            Good Morning, Alex
+            {greeting}, {userName}
           </Text>
           <Text
             style={{
@@ -216,16 +237,31 @@ export default function Dashboard() {
                   </Text>
                   <Text className="text-white text-2xl font-bold leading-tight">
                     {latestMood
-                      ? `${latestMood.emojis[0].charAt(0).toUpperCase()}${latestMood.emojis[0].slice(1)} • ${latestMood.intensity}%`
+                      ? latestMood.emojis
+                          .map((emoji, i) => {
+                            return (
+                              (i > 0 ? " + " : "") +
+                              `${emoji.charAt(0).toUpperCase()}${emoji.slice(1)}`
+                            );
+                          })
+                          .join("")
                       : "No mood logged yet"}
                   </Text>
                 </View>
                 {latestMood && (
-                  <Sun
-                    size={32}
-                    color={EMOJI_TO_COLOR[latestMood.emojis[0]]}
-                    weight="fill"
-                  />
+                  <View className="flex-row gap-2">
+                    {latestMood.emojis.map((emoji, i) => {
+                      const Icon = EMOJI_TO_ICON[emoji];
+                      return (
+                        <Icon
+                          key={i}
+                          size={32}
+                          color={EMOJI_TO_COLOR[emoji]}
+                          weight="fill"
+                        />
+                      );
+                    })}
+                  </View>
                 )}
               </View>
 
@@ -343,23 +379,41 @@ export default function Dashboard() {
             {loading ? (
               <ActivityIndicator size="small" color="white" />
             ) : moods.length > 0 ? (
-              moods.map((mood, index) => {
-                const Icon = EMOJI_TO_ICON[mood.emojis[0]];
-                const color = EMOJI_TO_COLOR[mood.emojis[0]];
-                const dayLabel = getDayLabel(index);
-                const today = isToday(index);
+              // Inverti l'ordine per mostrare dal più vecchio (sinistra) al più recente (destra)
+              [...moods].reverse().map((mood, index) => {
+                const hasMultipleEmojis = mood.emojis.length > 1;
+                const Icon = hasMultipleEmojis
+                  ? Shuffle
+                  : EMOJI_TO_ICON[mood.emojis[0]];
+                const originalIndex = moods.length - 1 - index;
+                const dayLabel = getDayLabel(originalIndex);
+                const today = isToday(originalIndex);
 
                 return (
                   <View key={mood.id} className="items-center gap-2">
-                    <View
-                      style={[
-                        styles.dayCircle,
-                        { backgroundColor: color },
-                        today && styles.todayRing,
-                      ]}
-                    >
-                      <Icon size={28} color="white" weight="fill" />
-                    </View>
+                    {hasMultipleEmojis ? (
+                      <LinearGradient
+                        colors={[
+                          EMOJI_TO_COLOR[mood.emojis[0]],
+                          EMOJI_TO_COLOR[mood.emojis[1]],
+                        ]}
+                        start={{ x: 0, y: 0 }}
+                        end={{ x: 0, y: 1 }}
+                        style={[styles.dayCircle, today && styles.todayRing]}
+                      >
+                        <Icon size={28} color="white" weight="fill" />
+                      </LinearGradient>
+                    ) : (
+                      <View
+                        style={[
+                          styles.dayCircle,
+                          { backgroundColor: EMOJI_TO_COLOR[mood.emojis[0]] },
+                          today && styles.todayRing,
+                        ]}
+                      >
+                        <Icon size={28} color="white" weight="fill" />
+                      </View>
+                    )}
                     <Text
                       className={`text-xs ${today ? "text-white font-bold" : "text-white/80 font-medium"}`}
                     >

@@ -5,13 +5,13 @@
 import { View, Text, ScrollView, Pressable, Alert } from "react-native";
 import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useCurrentUser } from "@/hooks/storage/useStorage";
-import { mockAuthService } from "@/services/mock-auth";
+import { useAuth } from "@/contexts/authContext";
+import { logout as authLogout } from "@/services/auth.service";
 import { storageService } from "@/services/storage.service";
 
 export default function ProfileScreen() {
   const router = useRouter();
-  const { user, logout } = useCurrentUser();
+  const { user } = useAuth();
 
   const handleLogout = async () => {
     Alert.alert("Logout", "Sei sicuro di voler uscire?", [
@@ -20,8 +20,12 @@ export default function ProfileScreen() {
         text: "Logout",
         style: "destructive",
         onPress: async () => {
-          await logout();
-          router.replace("/(auth)/login");
+          const result = await authLogout();
+          if (result.success) {
+            router.replace("/(auth)/login");
+          } else {
+            Alert.alert("Errore", "Impossibile effettuare il logout");
+          }
         },
       },
     ]);
@@ -34,7 +38,7 @@ export default function ProfileScreen() {
         text: "Reset",
         onPress: async () => {
           await storageService.resetOnboarding();
-          await logout();
+          await authLogout();
           router.replace("/(onboarding)/splash");
         },
       },
@@ -55,12 +59,12 @@ export default function ProfileScreen() {
             router.replace("/(onboarding)/splash");
           },
         },
-      ]
+      ],
     );
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-blue-50">
+    <View className="flex-1 bg-blue-50">
       <ScrollView className="flex-1 px-4">
         {/* Header */}
         <View className="py-6 items-center">
@@ -68,7 +72,7 @@ export default function ProfileScreen() {
             <Text className="text-5xl">👤</Text>
           </View>
           <Text className="text-gray-900 text-2xl font-bold">
-            {user?.name || "User"}
+            {user?.displayName || user?.email?.split("@")[0] || "User"}
           </Text>
           <Text className="text-gray-600 text-base mt-1">
             {user?.email || "email@example.com"}
@@ -184,6 +188,6 @@ export default function ProfileScreen() {
           </Pressable>
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }

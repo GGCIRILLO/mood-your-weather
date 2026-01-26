@@ -1,6 +1,6 @@
-import React, { createContext, useState, useEffect, useContext } from 'react';
-import type { User } from 'firebase/auth';
-import { onAuthStateChange } from '../services/auth.service';
+import React, { createContext, useState, useEffect, useContext } from "react";
+import type { User } from "firebase/auth";
+import { onAuthStateChange } from "../services/auth.service";
 
 interface AuthContextType {
   user: User | null;
@@ -9,20 +9,28 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType>({
   user: null,
-  loading: true
+  loading: true,
 });
 
 interface AuthProviderProps {
   children: React.ReactNode;
 }
 
-export function AuthProvider({ children }: AuthProviderProps): React.JSX.Element {
+export function AuthProvider({
+  children,
+}: AuthProviderProps): React.JSX.Element {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+
     // Listener per cambiamenti auth state
     const unsubscribe = onAuthStateChange((user) => {
+      if (user) {
+        console.log("✅ Utente autenticato rilevato:", user.uid, user.email);
+      } else {
+        console.log("⚠️ Nessun utente autenticato");
+      }
       setUser(user);
       setLoading(false);
     });

@@ -7,6 +7,7 @@ import {
   User,
 } from "firebase/auth";
 import { auth } from "../config/firebaseConfig";
+import { storageService } from "./storage.service";
 
 // Base URL per le API
 const API_BASE_URL = "http://127.0.0.1:8000";
@@ -38,9 +39,18 @@ export const signUp = async (
 
     const data = await response.json();
 
+
     // Autentica con Firebase usando il custom token ricevuto
     const userCredential = await signInWithCustomToken(auth, data.token);
     const user = userCredential.user;
+
+    // Salva il token in AsyncStorage come fallback
+    try {
+      const idToken = await user.getIdToken();
+      await storageService.saveAuthToken(idToken);
+    } catch (tokenError) {
+      console.warn("⚠️ Impossibile salvare token dopo signup:", tokenError);
+    }
 
     return { success: true, user };
   } catch (error: any) {
@@ -55,16 +65,53 @@ export const signUp = async (
 // Login utente esistente
 export const signIn = async (email: string, password: string) => {
   try {
+    // Prima controlla se c'è già un utente autenticato in cache
+    const currentUser = auth.currentUser;
+    if (currentUser && currentUser.email === email) {
+
+      // Verifica se ha ancora un token valido
+      try {
+        const token = await currentUser.getIdToken();
+        await storageService.saveAuthToken(token);
+        return { success: true, user: currentUser };
+      } catch (tokenError) {
+        console.log("⚠️ Token esistente scaduto, procedo con login normale");
+      }
+    }
+
+    // Login normale con Firebase
     const userCredential = await signInWithEmailAndPassword(
       auth,
       email,
       password,
     );
     const user = userCredential.user;
-    console.log("User logged in:", user.uid);
+
+    // Salva il token in AsyncStorage come fallback
+    try {
+      const idToken = await user.getIdToken();
+      await storageService.saveAuthToken(idToken);
+    } catch (tokenError) {
+      console.warn("Impossibile salvare token dopo login:", tokenError);
+    }
+
     return { success: true, user };
   } catch (error: any) {
     console.error("Sign in error:", error.code, error.message);
+
+    // Se il problema è di rete, prova a usare l'utente già autenticato se esiste
+    if (error.code === "auth/network-request-failed") {
+      const currentUser = auth.currentUser;
+      if (currentUser) {
+        return { success: true, user: currentUser };
+      }
+
+      return {
+        success: false,
+        error: "Impossibile connettersi. Controlla la connessione internet.",
+      };
+    }
+
     return { success: false, error: getErrorMessage(error.code) };
   }
 };
@@ -73,6 +120,7 @@ export const signIn = async (email: string, password: string) => {
 export const logout = async () => {
   try {
     await signOut(auth);
+    await storageService.removeAuthToken();
     console.log("User logged out");
     return { success: true };
   } catch (error: any) {
@@ -112,6 +160,8 @@ const getErrorMessage = (errorCode: string): string => {
       return "Password errata";
     case "auth/too-many-requests":
       return "Troppi tentativi. Riprova più tardi";
+    case "auth/network-request-failed":
+      return "Errore di connessione. Controlla la rete e riprova";
     default:
       return "Errore di autenticazione";
   }

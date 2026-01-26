@@ -1,6 +1,12 @@
-import { useState, useEffect, useCallback, useMemo } from "react";
-import { getMoods } from "@/services/mood.service";
-import type { MoodEntry } from "@/types";
+import { useMemo } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  getMoods,
+  createMood,
+  updateMood,
+  deleteMood,
+} from "@/services/mood.service";
+import type { MoodEntry, MoodEmojiType } from "@/types";
 
 /**
  * Hook per recuperare i mood entries dell'utente
@@ -11,48 +17,31 @@ export const useMoods = (params?: {
   limit?: number;
   autoFetch?: boolean;
 }) => {
-  const [moods, setMoods] = useState<MoodEntry[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [hasMore, setHasMore] = useState(false);
-  const [total, setTotal] = useState(0);
+  const { startDate, endDate, limit = 50, autoFetch = true } = params || {};
 
-  const fetchMoods = useCallback(async () => {
-    setLoading(true);
-    setError(null);
-
-    try {
+  const { data, isLoading, error, refetch } = useQuery({
+    queryKey: ["moods", { startDate, endDate, limit }],
+    queryFn: async () => {
       const result = await getMoods({
-        startDate: params?.startDate,
-        endDate: params?.endDate,
-        limit: params?.limit || 50,
+        startDate,
+        endDate,
+        limit,
         offset: 0,
       });
-
-      setMoods(result.items);
-      setHasMore(result.hasMore);
-      setTotal(result.total);
-    } catch (err: any) {
-      setError(err.message || "Failed to fetch moods");
-      console.error("Fetch moods error:", err);
-    } finally {
-      setLoading(false);
-    }
-  }, [params?.startDate, params?.endDate, params?.limit]);
-
-  useEffect(() => {
-    if (params?.autoFetch !== false) {
-      fetchMoods();
-    }
-  }, [fetchMoods, params?.autoFetch]);
+      return result;
+    },
+    enabled: autoFetch,
+    staleTime: 2 * 60 * 1000, // 2 minuti - moods possono essere cached
+    gcTime: 5 * 60 * 1000, // 5 minuti garbage collection
+  });
 
   return {
-    moods,
-    loading,
-    error,
-    hasMore,
-    total,
-    refetch: fetchMoods,
+    moods: data?.items || [],
+    loading: isLoading,
+    error: error?.message || null,
+    hasMore: data?.hasMore || false,
+    total: data?.total || 0,
+    refetch,
   };
 };
 
@@ -74,6 +63,82 @@ export const useRecentMoods = (limit: number = 7) => {
     startDate,
     endDate,
     limit,
-    autoFetch: false, // Disabilitato - usa refetch manualmente
+    autoFetch: true, // Con useQuery il fetching è gestito meglio
+  });
+};
+
+/**
+ * Hook per creare un nuovo mood entry
+ */
+export const useCreateMood = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (moodData: {
+      emojis: MoodEmojiType[];
+      intensity: number;
+      note?: string;
+      location?: { lat: number; lon: number };
+    }) => {
+      return await createMood(moodData);
+    },
+    onSuccess: () => {
+      // Invalida tutte le query moods per ricaricare i dati aggiornati
+      queryClient.invalidateQueries({ queryKey: ["moods"] });
+      console.log("✅ Mood creato con successo");
+    },
+    onError: (error: any) => {
+      console.error("❌ Errore creazione mood:", error.message);
+    },
+  });
+};
+
+/**
+ * Hook per aggiornare un mood entry esistente
+ */
+export const useUpdateMood = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({
+      entryId,
+      updateData,
+    }: {
+      entryId: string;
+      updateData: {
+        emojis?: MoodEmojiType[];
+        intensity?: number;
+        note?: string;
+      };
+    }) => {
+      return await updateMood(entryId, updateData);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["moods"] });
+      console.log("✅ Mood aggiornato con successo");
+    },
+    onError: (error: any) => {
+      console.error("❌ Errore aggiornamento mood:", error.message);
+    },
+  });
+};
+
+/**
+ * Hook per eliminare un mood entry
+ */
+export const useDeleteMood = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (entryId: string) => {
+      return await deleteMood(entryId);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["moods"] });
+      console.log("✅ Mood eliminato con successo");
+    },
+    onError: (error: any) => {
+      console.error("❌ Errore eliminazione mood:", error.message);
+    },
   });
 };

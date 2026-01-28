@@ -39,6 +39,7 @@ import {
   SunIcon,
   Shuffle,
   Medal,
+  Moon,
 } from "phosphor-react-native";
 import { MoodSphere } from "@/components/dashboard/MoodSphere";
 import { images } from "assets";
@@ -374,7 +375,7 @@ export default function Dashboard() {
           </View>
         </View>
 
-        {/* Goals Button - Separate Section */}
+        {/* Goals & Practice Buttons - Same Row */}
         <View className="px-4 mb-6">
           <View className="flex-row gap-3">
             <Pressable
@@ -397,6 +398,28 @@ export default function Dashboard() {
             >
               <Medal size={20} color="white" weight="bold" />
               <Text className="text-white font-bold ml-1">Goals</Text>
+            </Pressable>
+
+            <Pressable
+              onPress={() => router.push("/guided-practices")}
+              style={{
+                backgroundColor: "rgba(19,91,236,0.2)",
+                borderWidth: 1,
+                borderColor: "rgba(19,91,236,0.3)",
+                shadowColor: "#135bec",
+                shadowOffset: { width: 0, height: 0 },
+                shadowOpacity: 0.4,
+                shadowRadius: 15,
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
+                paddingVertical: 12,
+                paddingHorizontal: 16,
+                borderRadius: 9999,
+              }}
+            >
+              <Moon size={20} color="#135bec" weight="fill" />
+              <Text style={{ color: "#135bec", fontWeight: "bold", marginLeft: 4 }}>Practice</Text>
             </Pressable>
           </View>
         </View>

@@ -38,6 +38,7 @@ import {
   CloudIcon,
   SunIcon,
   Shuffle,
+  Medal,
 } from "phosphor-react-native";
 import { MoodSphere } from "@/components/dashboard/MoodSphere";
 import { images } from "assets";
@@ -69,8 +70,16 @@ export default function Dashboard() {
   const { user } = useAuth();
   const { moods, loading, error, refetch } = useRecentMoods(7);
 
-  // Nome utente
-  const userName = user?.displayName || user?.email?.split("@")[0] || "Alex";
+  // Nome utente - extract first name intelligently
+  const extractFirstName = (email: string | undefined) => {
+    if (!email) return "Friend";
+    const username = email.split("@")[0];
+    // Take only text before first dot or number
+    const firstName = username.split(/[\.0-9]/)[0];
+    // Capitalize first letter
+    return firstName.charAt(0).toUpperCase() + firstName.slice(1);
+  };
+  const userName = user?.displayName || extractFirstName(user?.email);
   const greeting =
     new Date().getHours() < 12
       ? "Good Morning"
@@ -238,13 +247,13 @@ export default function Dashboard() {
                   <Text className="text-white text-2xl font-bold leading-tight">
                     {latestMood
                       ? latestMood.emojis
-                          .map((emoji, i) => {
-                            return (
-                              (i > 0 ? " + " : "") +
-                              `${emoji.charAt(0).toUpperCase()}${emoji.slice(1)}`
-                            );
-                          })
-                          .join("")
+                        .map((emoji, i) => {
+                          return (
+                            (i > 0 ? " + " : "") +
+                            `${emoji.charAt(0).toUpperCase()}${emoji.slice(1)}`
+                          );
+                        })
+                        .join("")
                       : "No mood logged yet"}
                   </Text>
                 </View>
@@ -309,8 +318,9 @@ export default function Dashboard() {
                 alignItems: "center",
                 justifyContent: "center",
                 paddingVertical: 12,
-                paddingHorizontal: 16,
+                paddingHorizontal: 8,
                 borderRadius: 9999,
+                flex: 1,
               }}
               onPress={() => router.push("mood-entry")}
             >
@@ -332,8 +342,9 @@ export default function Dashboard() {
                 alignItems: "center",
                 justifyContent: "center",
                 paddingVertical: 12,
-                paddingHorizontal: 16,
+                paddingHorizontal: 8,
                 borderRadius: 9999,
+                flex: 1,
               }}
             >
               <NotePencilIcon size={20} color="white" weight="bold" />
@@ -359,6 +370,33 @@ export default function Dashboard() {
             >
               <ChartLineUpIcon size={20} color="white" weight="bold" />
               <Text className="text-white font-bold ml-1">Insights</Text>
+            </Pressable>
+          </View>
+        </View>
+
+        {/* Goals Button - Separate Section */}
+        <View className="px-4 mb-6">
+          <View className="flex-row gap-3">
+            <Pressable
+              onPress={() => router.push("/challenges-gamification")}
+              style={{
+                backgroundColor: "rgba(0,0,0,0.4)",
+                borderWidth: 1,
+                borderColor: "rgba(255,255,255,0.1)",
+                shadowColor: "#000",
+                shadowOffset: { width: 0, height: 4 },
+                shadowOpacity: 0.3,
+                shadowRadius: 8,
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
+                paddingVertical: 12,
+                paddingHorizontal: 16,
+                borderRadius: 9999,
+              }}
+            >
+              <Medal size={20} color="white" weight="bold" />
+              <Text className="text-white font-bold ml-1">Goals</Text>
             </Pressable>
           </View>
         </View>
@@ -440,8 +478,8 @@ export default function Dashboard() {
             )}
           </ScrollView>
         </View>
-      </ScrollView>
-    </View>
+      </ScrollView >
+    </View >
   );
 }
 

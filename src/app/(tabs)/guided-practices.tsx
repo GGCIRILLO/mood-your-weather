@@ -13,6 +13,8 @@ export default function GuidedPracticesScreen() {
     const [activeFilter, setActiveFilter] = useState("All");
     const [sliderValue, setSliderValue] = useState(80);
     const [journalNotes, setJournalNotes] = useState("");
+    const [isShuffleOn, setIsShuffleOn] = useState(false);
+    const [isRepeatOn, setIsRepeatOn] = useState(false);
 
     // Breathing animation
     const breatheAnim = useRef(new Animated.Value(1)).current;
@@ -263,13 +265,21 @@ export default function GuidedPracticesScreen() {
 
                             {/* Controls */}
                             <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingHorizontal: 16 }}>
-                                <Pressable><Shuffle size={28} color="rgba(255,255,255,0.6)" /></Pressable>
-                                <Pressable><SkipBack size={36} color="rgba(255,255,255,0.8)" weight="fill" /></Pressable>
+                                <Pressable onPress={() => setIsShuffleOn(!isShuffleOn)}>
+                                    <Shuffle size={28} color={isShuffleOn ? "#38bdf8" : "rgba(255,255,255,0.6)"} />
+                                </Pressable>
+                                <Pressable onPress={() => console.log("Previous track")}>
+                                    <SkipBack size={36} color="rgba(255,255,255,0.8)" weight="fill" />
+                                </Pressable>
                                 <Pressable onPress={() => setCurrentScreen('reflection')} style={{ width: 64, height: 64, borderRadius: 32, backgroundColor: "white", alignItems: "center", justifyContent: "center", shadowColor: "white", shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.3, shadowRadius: 30 }}>
                                     <Pause size={36} color="#0b1121" weight="fill" />
                                 </Pressable>
-                                <Pressable><SkipForward size={36} color="rgba(255,255,255,0.8)" weight="fill" /></Pressable>
-                                <Pressable><Repeat size={28} color="rgba(255,255,255,0.6)" /></Pressable>
+                                <Pressable onPress={() => console.log("Next track")}>
+                                    <SkipForward size={36} color="rgba(255,255,255,0.8)" weight="fill" />
+                                </Pressable>
+                                <Pressable onPress={() => setIsRepeatOn(!isRepeatOn)}>
+                                    <Repeat size={28} color={isRepeatOn ? "#38bdf8" : "rgba(255,255,255,0.6)"} />
+                                </Pressable>
                             </View>
                         </View>
                     </View>

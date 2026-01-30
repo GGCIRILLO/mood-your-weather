@@ -45,13 +45,13 @@ const EMOJI_TO_ICON: Record<MoodEmojiType, any> = {
   stormy: CloudLightningIcon,
 };
 
-// Mappa emoji a colori
+// Mappa emoji a colori (matching MoodSphere colors - darker tones)
 const EMOJI_TO_COLOR: Record<MoodEmojiType, string> = {
-  sunny: "#fbbf24",
-  partly: "#94a3b8",
-  cloudy: "#6b7280",
-  rainy: "#3b82f6",
-  stormy: "#4b5563",
+  sunny: "#D97706", // Amber
+  partly: "#c9c9c9ff", // Light gray
+  cloudy: "#6B7280", // Dark gray
+  rainy: "#2564eb69", // Dark blue
+  stormy: "#6D28D9", // Dark purple
 };
 
 export default function Dashboard() {
@@ -105,12 +105,20 @@ export default function Dashboard() {
     );
   };
 
+  // Background mapping per mood
+  const moodBackgrounds = {
+    sunny: images.db_bg_sunny,
+    cloudy: images.db_bg_cloudy,
+    rainy: images.db_bg_rainy,
+    stormy: images.db_bg_stormy,
+    partly: images.db_bg_partly,
+  };
+
   return (
     <View className="flex-1 bg-[#111722]">
-      {/* Background Weather Layer */}
+      {/* Background Weather Layer - Synced with mood */}
       <ImageBackground
-        // "sunny" | "cloudy" | "rainy" | "stormy" | "partly"
-        source={images.db_bg_sunny}
+        source={moodBackgrounds[currentMoodEmoji]}
         className="absolute inset-0"
         resizeMode="cover"
       >

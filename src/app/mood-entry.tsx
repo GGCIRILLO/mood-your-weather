@@ -57,13 +57,9 @@ export default function MoodEntryScreen() {
   });
 
   const handleWeatherAdd = (weather: WeatherType) => {
-    console.log("Adding weather:", weather, "Current:", selectedWeather);
     // Aggiungi se non presente e meno di 2
     if (!selectedWeather.includes(weather) && selectedWeather.length < 2) {
       setSelectedWeather([...selectedWeather, weather]);
-      console.log("Weather added successfully");
-    } else {
-      console.log("Cannot add: already exists or limit reached");
     }
   };
 

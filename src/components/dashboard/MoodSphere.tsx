@@ -1,7 +1,3 @@
-// ============================================
-// MOOD SPHERE - Animated 3D sphere with glow
-// ============================================
-
 import React, { useEffect } from "react";
 import { View, StyleSheet } from "react-native";
 import Animated, {
@@ -27,29 +23,29 @@ export function MoodSphere({ mood = "sunny", size = 192 }: MoodSphereProps) {
 
   const moodColors = {
     sunny: {
-      center: "#ffd700",
-      middle: "#ffb700",
-      edge: "#ff8c00",
-    },
-    cloudy: {
-      center: "#b0c4de",
-      middle: "#87a0b8",
-      edge: "#6c8199",
-    },
-    rainy: {
-      center: "#4a90e2",
-      middle: "#357abd",
-      edge: "#2563a8",
-    },
-    stormy: {
-      center: "#4b5563",
-      middle: "#374151",
-      edge: "#1f2937",
+      center: "#F59E0B", // Warm yellow
+      middle: "#D97706", // Amber
+      edge: "#B45309", // Dark amber
     },
     partly: {
-      center: "#fbbf24",
-      middle: "#f59e0b",
-      edge: "#d97706",
+      center: "#E5E7EB", // Light gray
+      middle: "#D1D5DB", // Medium light gray
+      edge: "#9CA3AF", // Medium gray
+    },
+    cloudy: {
+      center: "#9CA3AF", // Medium gray
+      middle: "#6B7280", // Dark gray
+      edge: "#4B5563", // Very dark gray
+    },
+    rainy: {
+      center: "#2564eb69", // Medium blue (darker)
+      middle: "#2564eb6e", // Dark blue
+      edge: "#1e40af6d", // Very dark blue
+    },
+    stormy: {
+      center: "#7C3AED", // Medium purple (darker)
+      middle: "#6D28D9", // Dark purple
+      edge: "#5B21B6", // Very dark purple
     },
   };
 

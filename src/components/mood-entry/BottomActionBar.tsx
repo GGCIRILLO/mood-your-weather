@@ -5,13 +5,14 @@ import Animated, {
   Easing,
 } from "react-native-reanimated";
 import {
-  Sliders,
-  NotePencil,
-  Microphone,
-  CheckCircle,
+  NotePencilIcon,
+  CheckCircleIcon,
+  MicrophoneIcon,
+  SlidersIcon,
 } from "phosphor-react-native";
 import Slider from "@react-native-community/slider";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import Voice from "@react-native-voice/voice";
 
 interface BottomActionBarProps {
   intensity: number;
@@ -38,6 +39,61 @@ export function BottomActionBar({
   moodAnalysis,
   bottomInset,
 }: BottomActionBarProps) {
+  const [isRecording, setIsRecording] = useState(false);
+
+  useEffect(() => {
+    // Set up voice recognition callbacks
+    Voice.onSpeechStart = () => {
+      console.log("Speech started");
+      setIsRecording(true);
+    };
+
+    Voice.onSpeechEnd = () => {
+      console.log("Speech ended");
+      setIsRecording(false);
+    };
+
+    Voice.onSpeechResults = (event) => {
+      if (event.value && event.value.length > 0) {
+        const transcribedText = event.value[0];
+        // Append to existing note with a space
+        onNoteChange(note ? `${note} ${transcribedText}` : transcribedText);
+      }
+    };
+
+    Voice.onSpeechError = (error) => {
+      console.error("Speech recognition error:", error);
+      setIsRecording(false);
+    };
+
+    // Cleanup on unmount
+    return () => {
+      Voice.destroy().then(Voice.removeAllListeners);
+    };
+  }, [note, onNoteChange]);
+
+  const handleMicPress = async () => {
+    try {
+      if (isRecording) {
+        // Stop recording
+        await Voice.stop();
+        setIsRecording(false);
+      } else {
+        // Start recording - first ensure note input is open
+        if (!showNoteInput) {
+          onToggleNoteInput();
+        }
+        
+        // Start voice recognition
+        await Voice.start("en-US");
+        setIsRecording(true);
+      }
+    } catch (error) {
+      console.error("Voice recognition error:", error);
+      setIsRecording(false);
+    }
+  };
+
   const noteInputHeight = useAnimatedStyle(() => {
     return {
       maxHeight: withTiming(showNoteInput ? 120 : 0, {
@@ -79,7 +135,7 @@ export function BottomActionBar({
       <View style={styles.sliderContainer}>
         <View style={styles.sliderHeader}>
           <View style={styles.sliderLabelContainer}>
-            <Sliders size={16} color="white" weight="bold" />
+            <SlidersIcon size={16} color="white" weight="bold" />
             <Text style={styles.sliderLabel}>Intensity</Text>
           </View>
           <Text style={styles.intensityValue}>{intensity}%</Text>
@@ -100,11 +156,21 @@ export function BottomActionBar({
       {/* Action Buttons */}
       <View style={styles.buttonContainer}>
         <Pressable onPress={onToggleNoteInput} style={styles.iconButton}>
-          <NotePencil size={24} color="white" weight="bold" />
+          <NotePencilIcon size={24} color="white" weight="bold" />
         </Pressable>
 
-        <Pressable style={styles.iconButton}>
-          <Microphone size={24} color="white" weight="bold" />
+        <Pressable 
+          onPress={handleMicPress} 
+          style={[
+            styles.iconButton,
+            isRecording && styles.recordingButton
+          ]}
+        >
+          <MicrophoneIcon 
+            size={24} 
+            color={isRecording ? "#ef4444" : "white"} 
+            weight="bold" 
+          />
         </Pressable>
 
         <Pressable
@@ -115,7 +181,7 @@ export function BottomActionBar({
           <Text style={styles.confirmButtonText}>
             {saving ? "Saving..." : "Log Mood"}
           </Text>
-          <CheckCircle size={20} color="white" weight="fill" />
+          <CheckCircleIcon size={20} color="white" weight="fill" />
         </Pressable>
       </View>
 
@@ -212,6 +278,14 @@ const styles = StyleSheet.create({
     borderColor: "rgba(255,255,255,0.05)",
     alignItems: "center",
     justifyContent: "center",
+  },
+  recordingButton: {
+    backgroundColor: "#ef444420",
+    borderColor: "#ef4444",
+    shadowColor: "#ef4444",
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.6,
+    shadowRadius: 12,
   },
   confirmButton: {
     flex: 1,

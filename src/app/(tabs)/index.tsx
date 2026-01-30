@@ -16,17 +16,6 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useFocusEffect } from "@react-navigation/native";
 import {
-  User,
-  Gear,
-  Sun,
-  ThermometerSimple,
-  PlusCircle,
-  NotePencil,
-  ChartLineUp,
-  CloudRain,
-  Cloud,
-  CloudSun,
-  CloudLightning,
   UserIcon,
   GearIcon,
   ThermometerSimpleIcon,
@@ -37,19 +26,20 @@ import {
   CloudRainIcon,
   CloudIcon,
   SunIcon,
-  Shuffle,
+  CloudSunIcon,
+  ShuffleIcon,
 } from "phosphor-react-native";
 import { MoodSphere } from "@/components/dashboard/MoodSphere";
 import { images } from "assets";
 import { router } from "expo-router";
+import { useAuth } from "@/contexts/authContext";
 import { useRecentMoods } from "@/hooks/api/useMoods";
 import type { MoodEmojiType } from "@/types";
-import { useAuth } from "@/contexts/authContext";
 
 // Mappa emoji a icone
 const EMOJI_TO_ICON: Record<MoodEmojiType, any> = {
   sunny: SunIcon,
-  partly: CloudSun,
+  partly: CloudSunIcon,
   cloudy: CloudIcon,
   rainy: CloudRainIcon,
   stormy: CloudLightningIcon,
@@ -78,11 +68,13 @@ export default function Dashboard() {
         ? "Good Afternoon"
         : "Good Evening";
 
-  // Ricarica i mood solo quando la schermata diventa visibile
+  // Ricarica i mood solo quando la schermata diventa visibile E l'utente è autenticato
   useFocusEffect(
     useCallback(() => {
-      refetch();
-    }, [refetch]),
+      if (user) {
+        refetch();
+      }
+    }, [refetch, user]),
   );
 
   // Ottieni il mood più recente
@@ -200,6 +192,20 @@ export default function Dashboard() {
         <View className="flex-1 items-center justify-center py-8">
           {loading ? (
             <ActivityIndicator size="large" color="white" />
+          ) : error ? (
+            <View className="items-center px-6">
+              <Text className="text-red-400 text-lg font-bold mb-2">
+                Error loading moods
+              </Text>
+              <Text className="text-white/70 text-sm text-center">
+                {error}
+              </Text>
+              {!user && (
+                <Text className="text-yellow-400 text-sm text-center mt-2">
+                  Please make sure you're logged in
+                </Text>
+              )}
+            </View>
           ) : (
             <MoodSphere mood={currentMoodEmoji} size={192} />
           )}
@@ -383,7 +389,7 @@ export default function Dashboard() {
               [...moods].reverse().map((mood, index) => {
                 const hasMultipleEmojis = mood.emojis.length > 1;
                 const Icon = hasMultipleEmojis
-                  ? Shuffle
+                  ? ShuffleIcon
                   : EMOJI_TO_ICON[mood.emojis[0]];
                 const originalIndex = moods.length - 1 - index;
                 const dayLabel = getDayLabel(originalIndex);

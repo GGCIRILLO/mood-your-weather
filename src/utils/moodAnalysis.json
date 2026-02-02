@@ -1,0 +1,504 @@
+{
+  "mood_data": [
+    {
+      "id": "sunny_single",
+      "emojis": ["sunny"],
+      "image_key": "db_bg_sunny",
+      "mood_name": "Radiant Clarity",
+      "intensity_levels": [
+        {
+          "range": [0, 30],
+          "title": "Light Serenity",
+          "description": "You feel peaceful and calm. A soft light guides you without being blinding.",
+          "activities": [
+            {
+              "id": "act_sun_01",
+              "name": "Slow Walk",
+              "description": "Take a gentle stroll in a park.",
+              "image_url": "https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?auto=format&fit=crop&w=800&q=80"
+            },
+            {
+              "id": "act_sun_02",
+              "name": "Mindful Reading",
+              "description": "Read a few pages of an inspiring book.",
+              "image_url": "https://images.unsplash.com/photo-1544716278-ca65b688750e?auto=format&fit=crop&w=800&q=80"
+            }
+          ]
+        },
+        {
+          "range": [31, 70],
+          "title": "Positive Energy",
+          "description": "You feel motivated and confident. Perfect time to make progress.",
+          "activities": [
+            {
+              "id": "act_sun_03",
+              "name": "Personal Project",
+              "description": "Dedicate time to a hobby you love.",
+              "image_url": "https://images.unsplash.com/photo-1499750310159-5b5f10e37852?auto=format&fit=crop&w=800&q=80"
+            },
+            {
+              "id": "act_sun_04",
+              "name": "Outdoor Exercise",
+              "description": "Go for a run or do yoga outside.",
+              "image_url": "https://images.unsplash.com/photo-1552674605-46d50bd48cb3?auto=format&fit=crop&w=800&q=80"
+            }
+          ]
+        },
+        {
+          "range": [71, 100],
+          "title": "Total Euphoria",
+          "description": "Invincible and full of life. Be careful not to burn out!",
+          "activities": [
+            {
+              "id": "act_sun_05",
+              "name": "Social Gathering",
+              "description": "Organize a spontaneous meetup.",
+              "image_url": "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=800&q=80"
+            },
+            {
+              "id": "act_sun_06",
+              "name": "Creative Explosion",
+              "description": "Start a bold new adventure.",
+              "image_url": "https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=800&q=80"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "partly_single",
+      "emojis": ["partly"],
+      "image_key": "db_bg_partly",
+      "mood_name": "Variable Balance",
+      "intensity_levels": [
+        {
+          "range": [0, 100],
+          "title": "Flux State",
+          "description": "Ups and downs, but manageable. You feel adaptable.",
+          "activities": [
+            {
+              "id": "act_part_01",
+              "name": "To-Do List",
+              "description": "Write down tasks to create order.",
+              "image_url": "https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?auto=format&fit=crop&w=800&q=80"
+            },
+            {
+              "id": "act_part_02",
+              "name": "Brain Games",
+              "description": "Solve a puzzle to focus your mind.",
+              "image_url": "https://images.unsplash.com/photo-1585325701950-b7f58c9903f2?auto=format&fit=crop&w=800&q=80"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cloudy_single",
+      "emojis": ["cloudy"],
+      "image_key": "cloudy",
+      "mood_name": "Muffled Introspection",
+      "intensity_levels": [
+        {
+          "range": [0, 50],
+          "title": "Reflective Calm",
+          "description": "Withdrawn comfortably. A quiet day inside.",
+          "activities": [
+            {
+              "id": "act_cld_01",
+              "name": "Movie Night",
+              "description": "Watch a favorite movie.",
+              "image_url": "https://images.unsplash.com/photo-1517604611440-4ec4804245e8?auto=format&fit=crop&w=800&q=80"
+            },
+            {
+              "id": "act_cld_02",
+              "name": "Doodling",
+              "description": "Draw without a specific goal.",
+              "image_url": "https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=800&q=80"
+            }
+          ]
+        },
+        {
+          "range": [51, 100],
+          "title": "Total Overcast",
+          "description": "Disconnected from the outside. The fog feels thick.",
+          "activities": [
+            {
+              "id": "act_cld_03",
+              "name": "Extra Sleep",
+              "description": "Take a nap to recharge.",
+              "image_url": "https://images.unsplash.com/photo-1520206441497-6a9a67d1269e?auto=format&fit=crop&w=800&q=80"
+            },
+            {
+              "id": "act_cld_04",
+              "name": "Comfort Food",
+              "description": "Order a warm, comforting meal.",
+              "image_url": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rainy_single",
+      "emojis": ["rainy"],
+      "image_key": "db_bg_rainy",
+      "mood_name": "Fluid Melancholy",
+      "intensity_levels": [
+        {
+          "range": [0, 50],
+          "title": "Sweet Nostalgia",
+          "description": "A poetic sadness that allows you to slow down.",
+          "activities": [
+            {
+              "id": "act_rain_01",
+              "name": "Photo Review",
+              "description": "Look through old photos.",
+              "image_url": "https://images.unsplash.com/photo-1531346878377-a51349593da4?auto=format&fit=crop&w=800&q=80"
+            },
+            {
+              "id": "act_rain_02",
+              "name": "Free Writing",
+              "description": "Write whatever comes to mind.",
+              "image_url": "https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=800&q=80"
+            }
+          ]
+        },
+        {
+          "range": [51, 100],
+          "title": "Emotional Downpour",
+          "description": "Sadness is heavy. Seek shelter and comfort.",
+          "activities": [
+            {
+              "id": "act_rain_03",
+              "name": "Seek Support",
+              "description": "Call a friend just to talk.",
+              "image_url": "https://images.unsplash.com/photo-1516321497487-e288fb19713f?auto=format&fit=crop&w=800&q=80"
+            },
+            {
+              "id": "act_rain_04",
+              "name": "Digital Detox",
+              "description": "Turn off screens and rest.",
+              "image_url": "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=800&q=80"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "stormy_single",
+      "emojis": ["stormy"],
+      "image_key": "db_bg_stormy",
+      "mood_name": "Inner Turbulence",
+      "intensity_levels": [
+        {
+          "range": [0, 50],
+          "title": "Latent Irritation",
+          "description": "Something is bothering you beneath the surface.",
+          "activities": [
+            {
+              "id": "act_stm_01",
+              "name": "Breathing",
+              "description": "Try the 4-7-8 breathing technique.",
+              "image_url": "https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=800&q=80"
+            },
+            {
+              "id": "act_stm_02",
+              "name": "Power Walk",
+              "description": "Walk fast to burn adrenaline.",
+              "image_url": "https://images.unsplash.com/photo-1456014387291-6f8f199d2b28?auto=format&fit=crop&w=800&q=80"
+            }
+          ]
+        },
+        {
+          "range": [51, 100],
+          "title": "Perfect Storm",
+          "description": "Overwhelmed by chaos. Find a safe anchor.",
+          "activities": [
+            {
+              "id": "act_stm_03",
+              "name": "Sensory Isolation",
+              "description": "Sit in a dark, quiet room.",
+              "image_url": "https://images.unsplash.com/photo-1511296179755-e44c0230e953?auto=format&fit=crop&w=800&q=80"
+            },
+            {
+              "id": "act_stm_04",
+              "name": "Grounding",
+              "description": "Use the 5-4-3-2-1 technique.",
+              "image_url": "https://images.unsplash.com/photo-1447752875204-b2f9798aa7e1?auto=format&fit=crop&w=800&q=80"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sunny_partly",
+      "emojis": ["sunny", "partly"],
+      "image_key": "sunny_partly",
+      "mood_name": "Cautious Optimism",
+      "intensity_levels": [
+        {
+          "range": [0, 100],
+          "title": "Promising Day",
+          "description": "Some doubts, but the sun prevails. Ready with reservations.",
+          "activities": [
+            {
+              "id": "act_sp_01",
+              "name": "Weekly Plan",
+              "description": "Organize your week.",
+              "image_url": "https://images.unsplash.com/photo-1506784983877-45594efa4cbe?auto=format&fit=crop&w=800&q=80"
+            },
+            {
+              "id": "act_sp_02",
+              "name": "New Recipe",
+              "description": "Cook something new.",
+              "image_url": "https://images.unsplash.com/photo-1556910103-1c02745a30bf?auto=format&fit=crop&w=800&q=80"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sunny_cloudy",
+      "emojis": ["sunny", "cloudy"],
+      "image_key": "sunny_cloudy",
+      "mood_name": "Gentle Confusion",
+      "intensity_levels": [
+        {
+          "range": [0, 100],
+          "title": "Silver Lining",
+          "description": "You feel confused but hopeful. The light is filtering through.",
+          "activities": [
+            {
+              "id": "act_sc_01",
+              "name": "Declutter",
+              "description": "Clean one small area of your home.",
+              "image_url": "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?auto=format&fit=crop&w=800&q=80"
+            },
+            {
+              "id": "act_sc_02",
+              "name": "Meditate",
+              "description": "Focus on clarity amidst thoughts.",
+              "image_url": "https://images.unsplash.com/photo-1593811167562-9cef47bfc4d7?auto=format&fit=crop&w=800&q=80"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sunny_rainy",
+      "emojis": ["sunny", "rainy"],
+      "image_key": "sunny_rainy",
+      "mood_name": "Bittersweet Hope",
+      "intensity_levels": [
+        {
+          "range": [0, 100],
+          "title": "Rainbow",
+          "description": "Laughing through tears. Healing is happening.",
+          "activities": [
+            {
+              "id": "act_sr_01",
+              "name": "Gratitude Journal",
+              "description": "Write 3 things you are thankful for.",
+              "image_url": "https://images.unsplash.com/photo-1517842645318-0590042742e4?auto=format&fit=crop&w=800&q=80"
+            },
+            {
+              "id": "act_sr_02",
+              "name": "Gardening",
+              "description": "Tend to plants to connect with growth.",
+              "image_url": "https://images.unsplash.com/photo-1416838375725-e63474ed1556?auto=format&fit=crop&w=800&q=80"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sunny_stormy",
+      "emojis": ["sunny", "stormy"],
+      "image_key": "sunny_stormy",
+      "mood_name": "Chaotic Energy",
+      "intensity_levels": [
+        {
+          "range": [0, 100],
+          "title": "Frenzy",
+          "description": "High voltage. Excitement mixed with anxiety.",
+          "activities": [
+            {
+              "id": "act_ss_01",
+              "name": "Spring Cleaning",
+              "description": "Channel energy into cleaning.",
+              "image_url": "https://images.unsplash.com/photo-1581578014440-b30f299a4699?auto=format&fit=crop&w=800&q=80"
+            },
+            {
+              "id": "act_ss_02",
+              "name": "Slow Speech",
+              "description": "Consciously speak slower than you feel.",
+              "image_url": "https://images.unsplash.com/photo-1573497620053-242192f72725?auto=format&fit=crop&w=800&q=80"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "partly_cloudy_double",
+      "emojis": ["partly", "cloudy"],
+      "image_key": "partly_cloudy",
+      "mood_name": "Drifting Thoughts",
+      "intensity_levels": [
+        {
+          "range": [0, 100],
+          "title": "Hazy Day",
+          "description": "Not quite sad, but definitely not clear. A neutral grey.",
+          "activities": [
+            {
+              "id": "act_pc_01",
+              "name": "Light Stretching",
+              "description": "Move your body gently.",
+              "image_url": "https://images.unsplash.com/photo-1566355811342-83564c785d9b?auto=format&fit=crop&w=800&q=80"
+            },
+            {
+              "id": "act_pc_02",
+              "name": "Audiobook",
+              "description": "Listen to a story to distract the mind.",
+              "image_url": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=800&q=80"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "partly_rainy",
+      "emojis": ["partly", "rainy"],
+      "image_key": "partly_rainy",
+      "mood_name": "Passing Showers",
+      "intensity_levels": [
+        {
+          "range": [0, 100],
+          "title": "Intermittent Gloom",
+          "description": "Small waves of sadness that come and go quickly.",
+          "activities": [
+            {
+              "id": "act_pr_01",
+              "name": "Warm Tea",
+              "description": "Drink something warm and soothing.",
+              "image_url": "https://images.unsplash.com/photo-1544787219-6f47d4679430?auto=format&fit=crop&w=800&q=80"
+            },
+            {
+              "id": "act_pr_02",
+              "name": "Short Nap",
+              "description": "Rest for 20 minutes to reset.",
+              "image_url": "https://images.unsplash.com/photo-1520206441497-6a9a67d1269e?auto=format&fit=crop&w=800&q=80"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "partly_stormy",
+      "emojis": ["partly", "stormy"],
+      "image_key": "partly_stormy",
+      "mood_name": "Unsettled Calm",
+      "intensity_levels": [
+        {
+          "range": [0, 100],
+          "title": "Distant Thunder",
+          "description": "You are okay, but feel a storm brewing nearby. Alertness.",
+          "activities": [
+            {
+              "id": "act_ps_01",
+              "name": "Plan B",
+              "description": "Prepare for a potential stressful event.",
+              "image_url": "https://images.unsplash.com/photo-1506784983877-45594efa4cbe?auto=format&fit=crop&w=800&q=80"
+            },
+            {
+              "id": "act_ps_02",
+              "name": "Rhythmic Music",
+              "description": "Listen to drums or bass-heavy music.",
+              "image_url": "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=800&q=80"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cloudy_rainy",
+      "emojis": ["cloudy", "rainy"],
+      "image_key": "cloudy_rainy",
+      "mood_name": "Deep Melancholy",
+      "intensity_levels": [
+        {
+          "range": [0, 100],
+          "title": "Heavy Blanket",
+          "description": "Consistent low energy. No sun in sight today.",
+          "activities": [
+            {
+              "id": "act_cr_01",
+              "name": "Journaling",
+              "description": "Write about what feels heavy.",
+              "image_url": "https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=800&q=80"
+            },
+            {
+              "id": "act_cr_02",
+              "name": "Candle Light",
+              "description": "Light a candle for atmosphere.",
+              "image_url": "https://images.unsplash.com/photo-1603006949290-749e1e920364?auto=format&fit=crop&w=800&q=80"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cloudy_stormy",
+      "emojis": ["cloudy", "stormy"],
+      "image_key": "cloudy_stormy",
+      "mood_name": "Oppressive Pressure",
+      "intensity_levels": [
+        {
+          "range": [0, 100],
+          "title": "Suffocation",
+          "description": "Trapped, with a held-back explosion imminent.",
+          "activities": [
+            {
+              "id": "act_cs_01",
+              "name": "Neck Massage",
+              "description": "Release physical tension.",
+              "image_url": "https://images.unsplash.com/photo-1544161515396-5cfa2c6de585?auto=format&fit=crop&w=800&q=80"
+            },
+            {
+              "id": "act_cs_02",
+              "name": "Fresh Air",
+              "description": "Step outside immediately.",
+              "image_url": "https://images.unsplash.com/photo-1536640712-4d4c36ff0d74?auto=format&fit=crop&w=800&q=80"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rainy_stormy",
+      "emojis": ["rainy", "stormy"],
+      "image_key": "rainy_stormy",
+      "mood_name": "Deep Crisis",
+      "intensity_levels": [
+        {
+          "range": [0, 100],
+          "title": "Hurricane",
+          "description": "Acute pain and agitation. Everything feels wrong.",
+          "activities": [
+            {
+              "id": "act_rs_01",
+              "name": "Deep Breathing",
+              "description": "Focus solely on your breath.",
+              "image_url": "https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=800&q=80"
+            },
+            {
+              "id": "act_rs_02",
+              "name": "White Noise",
+              "description": "Listen to rain sounds to soothe.",
+              "image_url": "https://images.unsplash.com/photo-1515694346937-94d85e41e6f0?auto=format&fit=crop&w=800&q=80"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

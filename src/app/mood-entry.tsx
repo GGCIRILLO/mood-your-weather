@@ -72,13 +72,16 @@ export default function MoodEntryScreen() {
 
   const handleSave = async () => {
     try {
-      await createMood({
+      const newMood = await createMood({
         emojis: selectedWeather as any,
         intensity,
         note: note.trim() || undefined,
       });
 
-      router.back();
+      router.replace({
+        pathname: "/mood-analysis",
+        params: { entry: JSON.stringify(newMood) },
+      });
     } catch (error: any) {
       Alert.alert("Errore", error.message || "Impossibile salvare il mood");
       console.error("Save mood error:", error);

@@ -35,15 +35,27 @@ export default function Dashboard() {
 
   // Ottieni il mood più recente
   const latestMood = moods[0];
+  
+  // Check if latest mood is from today
+  const isLatestMoodToday = latestMood ? (() => {
+    const today = new Date();
+    const moodDate = new Date(latestMood.timestamp); // Assuming ISO string
+    return (
+      today.getDate() === moodDate.getDate() &&
+      today.getMonth() === moodDate.getMonth() &&
+      today.getFullYear() === moodDate.getFullYear()
+    );
+  })() : false;
+
   const currentMoodEmoji = (latestMood?.emojis[0] || "sunny") as MoodEmojiType;
-
-
+  
+  const bgSource = !isLatestMoodToday ? MOOD_BACKGROUNDS.partly : MOOD_BACKGROUNDS[currentMoodEmoji];
 
   return (
     <View className="flex-1 bg-[#111722]">
       {/* Background Weather Layer - Synced with mood */}
       <ImageBackground
-        source={MOOD_BACKGROUNDS[currentMoodEmoji]}
+        source={bgSource}
         className="absolute inset-0"
         resizeMode="cover"
       >
@@ -71,9 +83,13 @@ export default function Dashboard() {
           error={error}
           user={user}
           currentMoodEmoji={currentMoodEmoji}
+          isEmpty={!isLatestMoodToday}
         />
 
-        <EmotionalForecastCard latestMood={latestMood} />
+        <EmotionalForecastCard 
+          latestMood={latestMood} 
+          isEmpty={!isLatestMoodToday}
+        />
 
         <QuickActionButtons />
 

@@ -42,7 +42,7 @@ export const DashboardGreeting = ({ userName }: DashboardGreetingProps) => {
           zIndex: 10,
         }}
       >
-        The sky is clearing up.
+        What's your weather today?
       </Text>
     </View>
   );

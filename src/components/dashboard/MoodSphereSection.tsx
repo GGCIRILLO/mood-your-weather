@@ -7,8 +7,9 @@ import { MoodEmojiType } from "@/types";
 interface MoodSphereSectionProps {
   loading: boolean;
   error: string | null;
-  user: any; // Using any to avoid conflict between App User type and Firebase User type
+  user: any;
   currentMoodEmoji: MoodEmojiType;
+  isEmpty?: boolean;
 }
 
 export const MoodSphereSection = ({
@@ -16,6 +17,7 @@ export const MoodSphereSection = ({
   error,
   user,
   currentMoodEmoji,
+  isEmpty = false,
 }: MoodSphereSectionProps) => {
   return (
     <View className="flex-1 items-center justify-center py-8">
@@ -34,7 +36,7 @@ export const MoodSphereSection = ({
           )}
         </View>
       ) : (
-        <MoodSphere mood={currentMoodEmoji} size={192} />
+        <MoodSphere mood={currentMoodEmoji} size={192} isEmpty={isEmpty} />
       )}
     </View>
   );

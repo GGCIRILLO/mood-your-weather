@@ -1,4 +1,3 @@
-
 import {
   SunIcon,
   CloudSunIcon,
@@ -18,11 +17,11 @@ export const EMOJI_TO_ICON: Record<MoodEmojiType, any> = {
 };
 
 export const EMOJI_TO_COLOR: Record<MoodEmojiType, string> = {
-  sunny: "#D97706", // Amber
-  partly: "#c9c9c9ff", // Light gray
-  cloudy: "#6B7280", // Dark gray
-  rainy: "#2564eb69", // Dark blue
-  stormy: "#6D28D9", // Dark purple
+  sunny: "#fbbf24", // Amber 400
+  partly: "#ffffff", // White
+  cloudy: "#9ca3af", // Gray 400
+  rainy: "#60a5fa", // Blue 400
+  stormy: "#a78bfa", // Purple 400
 };
 
 export const MOOD_BACKGROUNDS = {

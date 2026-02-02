@@ -7,10 +7,8 @@ import {
   User,
 } from "firebase/auth";
 import { auth } from "../config/firebaseConfig";
+import { API_BASE_URL } from "../config/api";
 import { storageService } from "./storage.service";
-
-// Base URL per le API
-const API_BASE_URL = "http://127.0.0.1:8000";
 
 // Registrazione nuovo utente tramite API
 export const signUp = async (

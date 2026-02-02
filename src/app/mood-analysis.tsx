@@ -50,7 +50,7 @@ export default function MoodAnalysisScreen() {
     sentimentScore > 0.3 ? "😊" : sentimentScore < -0.3 ? "😔" : "😐";
 
   return (
-    <SafeAreaView className="flex-1 bg-blue-50">
+    <View className="flex-1 bg-blue-50">
       {/* Header */}
       <View className="flex-row items-center justify-between px-4 py-4">
         <Pressable onPress={() => router.back()}>
@@ -197,7 +197,7 @@ export default function MoodAnalysisScreen() {
           </Pressable>
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 

@@ -21,7 +21,7 @@
               "id": "act_sun_02",
               "name": "Mindful Reading",
               "description": "Read a few pages of an inspiring book.",
-              "image_url": "https://images.unsplash.com/photo-1544716278-ca65b688750e?auto=format&fit=crop&w=800&q=80"
+              "image_url": "https://images.unsplash.com/photo-1718975592728-7b594fb035b8?auto=format&fit=crop&w=800&q=80"
             }
           ]
         },
@@ -34,13 +34,13 @@
               "id": "act_sun_03",
               "name": "Personal Project",
               "description": "Dedicate time to a hobby you love.",
-              "image_url": "https://images.unsplash.com/photo-1499750310159-5b5f10e37852?auto=format&fit=crop&w=800&q=80"
+              "image_url": "https://images.unsplash.com/photo-1768055105012-4c53791b2877?auto=format&fit=crop&w=800&q=80"
             },
             {
               "id": "act_sun_04",
               "name": "Outdoor Exercise",
               "description": "Go for a run or do yoga outside.",
-              "image_url": "https://images.unsplash.com/photo-1552674605-46d50bd48cb3?auto=format&fit=crop&w=800&q=80"
+              "image_url": "https://images.unsplash.com/photo-1622214628506-f55f72b92b46?auto=format&fit=crop&w=800&q=80"
             }
           ]
         },
@@ -59,7 +59,7 @@
               "id": "act_sun_06",
               "name": "Creative Explosion",
               "description": "Start a bold new adventure.",
-              "image_url": "https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=800&q=80"
+              "image_url": "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=800&q=80"
             }
           ]
         }
@@ -86,7 +86,7 @@
               "id": "act_part_02",
               "name": "Brain Games",
               "description": "Solve a puzzle to focus your mind.",
-              "image_url": "https://images.unsplash.com/photo-1585325701950-b7f58c9903f2?auto=format&fit=crop&w=800&q=80"
+              "image_url": "https://images.unsplash.com/photo-1588591795084-1770cb3be374?auto=format&fit=crop&w=800&q=80"
             }
           ]
         }
@@ -107,7 +107,7 @@
               "id": "act_cld_01",
               "name": "Movie Night",
               "description": "Watch a favorite movie.",
-              "image_url": "https://images.unsplash.com/photo-1517604611440-4ec4804245e8?auto=format&fit=crop&w=800&q=80"
+              "image_url": "https://images.unsplash.com/photo-1535016120720-40c646be5580?auto=format&fit=crop&w=800&q=80"
             },
             {
               "id": "act_cld_02",
@@ -126,7 +126,7 @@
               "id": "act_cld_03",
               "name": "Extra Sleep",
               "description": "Take a nap to recharge.",
-              "image_url": "https://images.unsplash.com/photo-1520206441497-6a9a67d1269e?auto=format&fit=crop&w=800&q=80"
+              "image_url": "https://images.unsplash.com/photo-1429117237875-aa29229d99f0?auto=format&fit=crop&w=800&q=80"
             },
             {
               "id": "act_cld_04",
@@ -153,7 +153,7 @@
               "id": "act_rain_01",
               "name": "Photo Review",
               "description": "Look through old photos.",
-              "image_url": "https://images.unsplash.com/photo-1531346878377-a51349593da4?auto=format&fit=crop&w=800&q=80"
+              "image_url": "https://images.unsplash.com/photo-1533158307587-828f0a76ef46?auto=format&fit=crop&w=800&q=80"
             },
             {
               "id": "act_rain_02",
@@ -205,7 +205,7 @@
               "id": "act_stm_02",
               "name": "Power Walk",
               "description": "Walk fast to burn adrenaline.",
-              "image_url": "https://images.unsplash.com/photo-1456014387291-6f8f199d2b28?auto=format&fit=crop&w=800&q=80"
+              "image_url": "https://images.unsplash.com/photo-1541659403003-a58d37b4c697?auto=format&fit=crop&w=800&q=80"
             }
           ]
         },
@@ -218,13 +218,13 @@
               "id": "act_stm_03",
               "name": "Sensory Isolation",
               "description": "Sit in a dark, quiet room.",
-              "image_url": "https://images.unsplash.com/photo-1511296179755-e44c0230e953?auto=format&fit=crop&w=800&q=80"
+              "image_url": "https://images.unsplash.com/photo-1534330207526-8e81f10ec6fc?auto=format&fit=crop&w=800&q=80"
             },
             {
               "id": "act_stm_04",
               "name": "Grounding",
               "description": "Use the 5-4-3-2-1 technique.",
-              "image_url": "https://images.unsplash.com/photo-1447752875204-b2f9798aa7e1?auto=format&fit=crop&w=800&q=80"
+              "image_url": "https://images.unsplash.com/photo-1565283577614-ed7cd51667d4?auto=format&fit=crop&w=800&q=80"
             }
           ]
         }
@@ -251,7 +251,7 @@
               "id": "act_sp_02",
               "name": "New Recipe",
               "description": "Cook something new.",
-              "image_url": "https://images.unsplash.com/photo-1556910103-1c02745a30bf?auto=format&fit=crop&w=800&q=80"
+              "image_url": "https://images.unsplash.com/photo-1466637574441-749b8f19452f?auto=format&fit=crop&w=800&q=80"
             }
           ]
         }
@@ -272,7 +272,7 @@
               "id": "act_sc_01",
               "name": "Declutter",
               "description": "Clean one small area of your home.",
-              "image_url": "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?auto=format&fit=crop&w=800&q=80"
+              "image_url": "https://images.unsplash.com/photo-1567113463300-102a7eb3cb26?auto=format&fit=crop&w=800&q=80"
             },
             {
               "id": "act_sc_02",
@@ -299,13 +299,13 @@
               "id": "act_sr_01",
               "name": "Gratitude Journal",
               "description": "Write 3 things you are thankful for.",
-              "image_url": "https://images.unsplash.com/photo-1517842645318-0590042742e4?auto=format&fit=crop&w=800&q=80"
+              "image_url": "https://images.unsplash.com/photo-1550592704-6c76defa9985?auto=format&fit=crop&w=800&q=80"
             },
             {
               "id": "act_sr_02",
               "name": "Gardening",
               "description": "Tend to plants to connect with growth.",
-              "image_url": "https://images.unsplash.com/photo-1416838375725-e63474ed1556?auto=format&fit=crop&w=800&q=80"
+              "image_url": "https://images.unsplash.com/photo-1611843467160-25afb8df1074?auto=format&fit=crop&w=800&q=80"
             }
           ]
         }
@@ -326,13 +326,13 @@
               "id": "act_ss_01",
               "name": "Spring Cleaning",
               "description": "Channel energy into cleaning.",
-              "image_url": "https://images.unsplash.com/photo-1581578014440-b30f299a4699?auto=format&fit=crop&w=800&q=80"
+              "image_url": "https://images.unsplash.com/photo-1585421514284-efb74c2b69ba?auto=format&fit=crop&w=800&q=80"
             },
             {
               "id": "act_ss_02",
               "name": "Slow Speech",
               "description": "Consciously speak slower than you feel.",
-              "image_url": "https://images.unsplash.com/photo-1573497620053-242192f72725?auto=format&fit=crop&w=800&q=80"
+              "image_url": "https://images.unsplash.com/photo-1576269075902-eeadd51fb4cd?auto=format&fit=crop&w=800&q=80"
             }
           ]
         }
@@ -353,7 +353,7 @@
               "id": "act_pc_01",
               "name": "Light Stretching",
               "description": "Move your body gently.",
-              "image_url": "https://images.unsplash.com/photo-1566355811342-83564c785d9b?auto=format&fit=crop&w=800&q=80"
+              "image_url": "https://images.unsplash.com/photo-1445384763658-0400939829cd?auto=format&fit=crop&w=800&q=80"
             },
             {
               "id": "act_pc_02",
@@ -380,13 +380,13 @@
               "id": "act_pr_01",
               "name": "Warm Tea",
               "description": "Drink something warm and soothing.",
-              "image_url": "https://images.unsplash.com/photo-1544787219-6f47d4679430?auto=format&fit=crop&w=800&q=80"
+              "image_url": "https://images.unsplash.com/photo-1558160074-4d7d8bdf4256?auto=format&fit=crop&w=800&q=80"
             },
             {
               "id": "act_pr_02",
               "name": "Short Nap",
               "description": "Rest for 20 minutes to reset.",
-              "image_url": "https://images.unsplash.com/photo-1520206441497-6a9a67d1269e?auto=format&fit=crop&w=800&q=80"
+              "image_url": "https://images.unsplash.com/photo-1750155583790-8869869f1003?auto=format&fit=crop&w=800&q=80"
             }
           ]
         }
@@ -440,7 +440,7 @@
               "id": "act_cr_02",
               "name": "Candle Light",
               "description": "Light a candle for atmosphere.",
-              "image_url": "https://images.unsplash.com/photo-1603006949290-749e1e920364?auto=format&fit=crop&w=800&q=80"
+              "image_url": "https://images.unsplash.com/photo-1640095889747-2090ee12fa7d?auto=format&fit=crop&w=800&q=80"
             }
           ]
         }
@@ -461,13 +461,13 @@
               "id": "act_cs_01",
               "name": "Neck Massage",
               "description": "Release physical tension.",
-              "image_url": "https://images.unsplash.com/photo-1544161515396-5cfa2c6de585?auto=format&fit=crop&w=800&q=80"
+              "image_url": "https://images.unsplash.com/photo-1639162906614-0603b0ae95fd?auto=format&fit=crop&w=800&q=80"
             },
             {
               "id": "act_cs_02",
               "name": "Fresh Air",
               "description": "Step outside immediately.",
-              "image_url": "https://images.unsplash.com/photo-1536640712-4d4c36ff0d74?auto=format&fit=crop&w=800&q=80"
+              "image_url": "https://images.unsplash.com/photo-1493364391862-bb90969a4cc1?auto=format&fit=crop&w=800&q=80"
             }
           ]
         }

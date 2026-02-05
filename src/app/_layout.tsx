@@ -15,7 +15,11 @@ const queryClient = new QueryClient({
   },
 });
 
+import { usePushNotifications } from "@/hooks/usePushNotifications";
+
 export default function Layout() {
+  const { expoPushToken } = usePushNotifications();
+
   return (
     <AuthProvider>
       <QueryClientProvider client={queryClient}>

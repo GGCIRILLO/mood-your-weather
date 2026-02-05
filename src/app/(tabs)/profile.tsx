@@ -272,7 +272,7 @@ export default function ProfileScreen() {
         <View style={{ marginBottom: 40 }}>
           <Text style={{ color: "#94a3b8", fontSize: 12, fontWeight: "bold", textTransform: "uppercase", paddingHorizontal: 24, marginBottom: 12, letterSpacing: 1 }}>Data & Privacy</Text>
           <View style={{ backgroundColor: "#162032", marginHorizontal: 16, borderRadius: 20, borderWidth: 1, borderColor: "rgba(255,255,255,0.05)", overflow: "hidden" }}>
-            <Pressable style={{ padding: 16, flexDirection: "row", alignItems: "center", justifyContent: "space-between", borderBottomWidth: 1, borderBottomColor: "rgba(255,255,255,0.05)" }}>
+            <Pressable onPress={() => Alert.alert("Export Data", "Coming soon!")} style={{ padding: 16, flexDirection: "row", alignItems: "center", justifyContent: "space-between", borderBottomWidth: 1, borderBottomColor: "rgba(255,255,255,0.05)" }}>
               <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
                 <DownloadSimple size={24} color="#94a3b8" />
                 <Text style={{ color: "white", fontSize: 16, fontWeight: "500" }}>Export All Data</Text>
@@ -297,7 +297,7 @@ export default function ProfileScreen() {
 
         {/* Footer */}
         <View style={{ alignItems: "center", gap: 16, paddingBottom: 24 }}>
-          <View style={{ flexDirection: "row", spacing: -8 }}>
+          <View style={{ flexDirection: "row" }}>
             <View style={{ width: 32, height: 32, borderRadius: 16, backgroundColor: "#94a3b8", borderWidth: 2, borderColor: "#0b1121", marginLeft: 0 }} />
             <View style={{ width: 32, height: 32, borderRadius: 16, backgroundColor: "#cbd5e1", borderWidth: 2, borderColor: "#0b1121", marginLeft: -8 }} />
             <View style={{ width: 32, height: 32, borderRadius: 16, backgroundColor: "#e2e8f0", borderWidth: 2, borderColor: "#0b1121", marginLeft: -8 }} />

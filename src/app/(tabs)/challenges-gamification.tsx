@@ -2,7 +2,7 @@ import { View, Text, ScrollView, Pressable, ImageBackground } from "react-native
 import { LinearGradient } from "expo-linear-gradient";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { router } from "expo-router";
-import { Drop, Gear, Thermometer, CloudLightning, ShieldCheck, Cloud, ShareNetwork, House, Medal, User, Lock } from "phosphor-react-native";
+import { Drop, Thermometer, CloudLightning, ShieldCheck, Cloud, ShareNetwork, House, Medal, User, Lock } from "phosphor-react-native";
 import Slider from "@react-native-community/slider";
 import { useState } from "react";
 import { useAuth } from "@/contexts/authContext";
@@ -33,9 +33,7 @@ export default function ChallengesScreen() {
                             <Text style={{ color: "white", fontSize: 18, fontWeight: "bold" }}>Hello, {userName}</Text>
                         </View>
                     </View>
-                    <Pressable style={{ width: 40, height: 40, alignItems: "center", justifyContent: "center", borderRadius: 20, backgroundColor: "#162032", borderWidth: 1, borderColor: "#253550" }}>
-                        <Gear size={20} color="white" />
-                    </Pressable>
+
                 </View>
 
                 <View style={{ flexDirection: "column", gap: 24, paddingHorizontal: 16, paddingTop: 24 }}>

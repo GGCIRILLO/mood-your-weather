@@ -156,7 +156,7 @@ export default function MoodAnalysisScreen() {
 
           <View className="px-4 gap-6 pt-2">
             {/* Hero Section */}
-            <View className="relative w-full rounded-[2rem] overflow-hidden bg-slate-900 group">
+            <View className="relative w-full rounded-4xl overflow-hidden bg-slate-900 group">
               <ImageBackground
                 source={heroImage}
                 style={{ width: "100%", height: 350 }}
@@ -213,7 +213,7 @@ export default function MoodAnalysisScreen() {
                   return (
                     <View
                       key={index}
-                      className="flex-1 h-32 relative overflow-hidden bg-[#192233] p-5 rounded-[1.5rem] border border-slate-800 justify-end"
+                      className="flex-1 h-32 relative overflow-hidden bg-[#192233] p-5 rounded-3xl border border-slate-800 justify-end"
                     >
                       {/* Background Icon */}
                       <View className="absolute -right-4 -bottom-4 opacity-10">
@@ -230,7 +230,7 @@ export default function MoodAnalysisScreen() {
                 })}
 
                 {/* Intensity Card */}
-                <View className="flex-1 h-32 relative overflow-hidden bg-[#192233] p-5 rounded-[1.5rem] border border-slate-800 justify-end">
+                <View className="flex-1 h-32 relative overflow-hidden bg-[#192233] p-5 rounded-3xl border border-slate-800 justify-end">
                   {/* Background Number */}
                   <View className="absolute -right-2 -bottom-6 opacity-10">
                     <Text className="text-[100px] font-black text-white">
@@ -268,7 +268,7 @@ export default function MoodAnalysisScreen() {
                   return (
                     <View
                       key={act.id}
-                      className="w-[200px] bg-[#192233] p-4 rounded-2xl border border-slate-800 shadow-sm"
+                      className="w-50 bg-[#192233] p-4 rounded-2xl border border-slate-800 shadow-sm"
                     >
                       <View className="h-28 w-full rounded-xl overflow-hidden bg-slate-200 mb-3">
                         <Image

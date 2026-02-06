@@ -5,13 +5,11 @@ import Animated, {
   Easing,
 } from "react-native-reanimated";
 import {
-  Sliders,
-  NotePencil,
-  Microphone,
-  CheckCircle,
+  NotePencilIcon,
+  CheckCircleIcon,
+  SlidersIcon,
 } from "phosphor-react-native";
 import Slider from "@react-native-community/slider";
-import { useEffect } from "react";
 
 interface BottomActionBarProps {
   intensity: number;
@@ -79,7 +77,7 @@ export function BottomActionBar({
       <View style={styles.sliderContainer}>
         <View style={styles.sliderHeader}>
           <View style={styles.sliderLabelContainer}>
-            <Sliders size={16} color="white" weight="bold" />
+            <SlidersIcon size={16} color="white" weight="bold" />
             <Text style={styles.sliderLabel}>Intensity</Text>
           </View>
           <Text style={styles.intensityValue}>{intensity}%</Text>
@@ -100,11 +98,7 @@ export function BottomActionBar({
       {/* Action Buttons */}
       <View style={styles.buttonContainer}>
         <Pressable onPress={onToggleNoteInput} style={styles.iconButton}>
-          <NotePencil size={24} color="white" weight="bold" />
-        </Pressable>
-
-        <Pressable style={styles.iconButton}>
-          <Microphone size={24} color="white" weight="bold" />
+          <NotePencilIcon size={24} color="white" weight="bold" />
         </Pressable>
 
         <Pressable
@@ -115,7 +109,7 @@ export function BottomActionBar({
           <Text style={styles.confirmButtonText}>
             {saving ? "Saving..." : "Log Mood"}
           </Text>
-          <CheckCircle size={20} color="white" weight="fill" />
+          <CheckCircleIcon size={20} color="white" weight="fill" />
         </Pressable>
       </View>
 

@@ -1,13 +1,5 @@
 import { useCallback } from "react";
-import {
-  View,
-  ScrollView,
-  ImageBackground,
-  StyleSheet,
-  Pressable,
-  Text,
-} from "react-native";
-import { router } from "expo-router";
+import { View, ScrollView, ImageBackground, StyleSheet } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useFocusEffect } from "@react-navigation/native";
@@ -22,8 +14,8 @@ import { MoodSphereSection } from "@/components/dashboard/MoodSphereSection";
 import { EmotionalForecastCard } from "@/components/dashboard/EmotionalForecastCard";
 import { QuickActionButtons } from "@/components/dashboard/QuickActionButtons";
 import { RecentPatterns } from "@/components/dashboard/RecentPatterns";
+import { SecondaryActionButtons } from "@/components/dashboard/SecondaryActionButtons";
 import { MOOD_BACKGROUNDS } from "@/components/dashboard/constants";
-import { MedalIcon, MoonIcon } from "phosphor-react-native";
 
 export default function Dashboard() {
   const insets = useSafeAreaInsets();
@@ -106,52 +98,9 @@ export default function Dashboard() {
 
         <QuickActionButtons />
 
-        {/* Goals & Practice Buttons - Same Row */}
-        <View className="px-4 mb-6">
-          <View className="flex-row gap-3">
-            <Pressable
-              onPress={() => router.push("/challenges-gamification")}
-              className="bg-black/40 border border-white/10 flex-row items-center justify-center py-3 px-4 rounded-full shadow-lg"
-              style={{
-                shadowColor: "#000",
-                shadowOffset: { width: 0, height: 4 },
-                shadowOpacity: 0.3,
-                shadowRadius: 8,
-              }}
-            >
-              <MedalIcon size={20} color="white" weight="bold" />
-              <Text className="text-white font-bold ml-1">Goals</Text>
-            </Pressable>
-
-            <Pressable
-              onPress={() => router.push("/guided-practices")}
-              style={{
-                backgroundColor: "rgba(19,91,236,0.2)",
-                borderWidth: 1,
-                borderColor: "rgba(19,91,236,0.3)",
-                shadowColor: "#135bec",
-                shadowOffset: { width: 0, height: 0 },
-                shadowOpacity: 0.4,
-                shadowRadius: 15,
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "center",
-                paddingVertical: 12,
-                paddingHorizontal: 16,
-                borderRadius: 9999,
-              }}
-            >
-              <MoonIcon size={20} color="#135bec" weight="fill" />
-              <Text
-                style={{ color: "#135bec", fontWeight: "bold", marginLeft: 4 }}
-              >
-                Practice
-              </Text>
-            </Pressable>
-          </View>
-        </View>
-
         <RecentPatterns moods={moods} loading={loading} />
+
+        <SecondaryActionButtons />
       </ScrollView>
     </View>
   );

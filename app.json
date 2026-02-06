@@ -10,6 +10,10 @@
       "expo-router"
     ],
     "name": "mood-your-weather",
-    "slug": "mood-your-weather"
+    "slug": "mood-your-weather",
+    "android": {
+      "package": "com.moodyourweather.app",
+      "googleServicesFile": "./google-services.json"
+    }
   }
 }

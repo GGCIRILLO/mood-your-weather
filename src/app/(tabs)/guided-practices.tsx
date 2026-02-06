@@ -2,7 +2,7 @@ import { View, Text, ScrollView, Pressable, ImageBackground, TextInput, Animated
 import { LinearGradient } from "expo-linear-gradient";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { router } from "expo-router";
-import { CaretLeft, CloudLightning, CloudRain, Sun, Moon, Play, BookmarkSimple, Clock, House, Medal, User, X, CaretDown, DotsThree, Wind, Shuffle, SkipBack, SkipForward, Repeat, Pause, Cloud, ArrowRight, Quotes } from "phosphor-react-native";
+import { CaretLeft, CloudLightning, CloudRain, Sun, Moon, Play, BookmarkSimple, Clock, House, Medal, User, X, CaretDown, DotsThree, Wind, Shuffle, SkipBack, SkipForward, Repeat, Pause, Cloud, ArrowRight, Quotes, Tree } from "phosphor-react-native";
 import { useAuth } from "@/contexts/authContext";
 import { useState, useEffect, useRef } from "react";
 
@@ -61,9 +61,42 @@ export default function GuidedPracticesScreen() {
             image: "https://images.unsplash.com/photo-1515694346937-94d85e41e6f0?w=800",
             color: "#6366f1",
         },
+        {
+            id: 3,
+            title: "Forest Focus",
+            tag: "Focus Enhancement",
+            duration: "20 min",
+            type: "Focus",
+            description: "Immerse yourself in the sounds of a deep forest to heighten your concentration and block out distractions.",
+            icon: Tree,
+            image: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800",
+            color: "#10b981",
+        },
+        {
+            id: 4,
+            title: "Morning Mindfulness",
+            tag: "Daily Ritual",
+            duration: "10 min",
+            type: "Meditation",
+            description: "Start your day with intention and clarity. A gentle guided meditation to awaken your mind.",
+            icon: Sun,
+            image: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=800",
+            color: "#f59e0b",
+        },
+        {
+            id: 5,
+            title: "Deep Rest Body Scan",
+            tag: "Stress Relief",
+            duration: "25 min",
+            type: "Meditation",
+            description: "Systematically relax every part of your body. Perfect for releasing deep-seated tension.",
+            icon: Moon,
+            image: "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=800",
+            color: "#6366f1", // Indigo
+        },
     ];
 
-    const filters = ["All", "Anxiety", "Focus", "Sleep"];
+    const filters = ["All", "Anxiety", "Focus", "Sleep", "Meditation"];
 
     // SCREEN 1: DISCOVERY
     if (currentScreen === 'discovery') {
@@ -109,7 +142,11 @@ export default function GuidedPracticesScreen() {
 
                     {/* Practice Cards */}
                     <View style={{ paddingHorizontal: 16, paddingBottom: 100 }}>
-                        {practices.map((practice, index) => (
+                        {practices.filter(practice => {
+                            if (activeFilter === "All") return true;
+                            // Simple matching logic: check if tag or type contains the filter string
+                            return practice.tag.includes(activeFilter) || practice.type.includes(activeFilter);
+                        }).map((practice, index) => (
                             <View key={practice.id} style={{ marginBottom: 20, marginTop: index === 0 ? 0 : 10 }}>
                                 <View style={{ height: 550, borderRadius: 40, overflow: "hidden", backgroundColor: "#192233" }}>
                                     <ImageBackground source={{ uri: practice.image }} style={{ width: "100%", height: "100%" }} resizeMode="cover">

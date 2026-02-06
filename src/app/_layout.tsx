@@ -22,14 +22,14 @@ export default function Layout() {
   return (
     <AuthProvider>
       <QueryClientProvider client={queryClient}>
-        <GestureHandlerRootView style={{ flex: 1 }}>
-          <Stack
-            screenOptions={{
-              headerShown: false,
-              animation: "slide_from_right",
-              animationDuration: 300,
-            }}
-          />
+        <GestureHandlerRootView style={{ flex: 1 }}>          
+            <Stack
+              screenOptions={{
+                headerShown: false,
+                animation: "slide_from_right",
+                animationDuration: 300,
+              }}
+            />
         </GestureHandlerRootView>
       </QueryClientProvider>
     </AuthProvider>

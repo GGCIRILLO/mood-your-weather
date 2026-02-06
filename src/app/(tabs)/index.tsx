@@ -1,134 +1,61 @@
-// ============================================
-// DASHBOARD HUB - Main immersive screen
-// ============================================
-
-import { useEffect, useCallback } from "react";
-import {
-  View,
-  Text,
-  ScrollView,
-  Pressable,
-  ImageBackground,
-  StyleSheet,
-  ActivityIndicator,
-} from "react-native";
+import { useCallback } from "react";
+import { View, ScrollView, ImageBackground, StyleSheet } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useFocusEffect } from "@react-navigation/native";
-import {
-  User,
-  Gear,
-  Sun,
-  ThermometerSimple,
-  PlusCircle,
-  NotePencil,
-  ChartLineUp,
-  CloudRain,
-  Cloud,
-  CloudSun,
-  CloudLightning,
-  UserIcon,
-  GearIcon,
-  ThermometerSimpleIcon,
-  PlusCircleIcon,
-  NotePencilIcon,
-  ChartLineUpIcon,
-  CloudLightningIcon,
-  CloudRainIcon,
-  CloudIcon,
-  SunIcon,
-  Shuffle,
-  Medal,
-  Moon,
-} from "phosphor-react-native";
-import { MoodSphere } from "@/components/dashboard/MoodSphere";
-import { images } from "assets";
-import { router } from "expo-router";
+import { useAuth } from "@/contexts/authContext";
 import { useRecentMoods } from "@/hooks/api/useMoods";
 import type { MoodEmojiType } from "@/types";
-import { useAuth } from "@/contexts/authContext";
 
-// Mappa emoji a icone
-const EMOJI_TO_ICON: Record<MoodEmojiType, any> = {
-  sunny: SunIcon,
-  partly: CloudSun,
-  cloudy: CloudIcon,
-  rainy: CloudRainIcon,
-  stormy: CloudLightningIcon,
-};
-
-// Mappa emoji a colori
-const EMOJI_TO_COLOR: Record<MoodEmojiType, string> = {
-  sunny: "#fbbf24",
-  partly: "#94a3b8",
-  cloudy: "#6b7280",
-  rainy: "#3b82f6",
-  stormy: "#4b5563",
-};
+// Components
+import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
+import { DashboardGreeting } from "@/components/dashboard/DashboardGreeting";
+import { MoodSphereSection } from "@/components/dashboard/MoodSphereSection";
+import { EmotionalForecastCard } from "@/components/dashboard/EmotionalForecastCard";
+import { QuickActionButtons } from "@/components/dashboard/QuickActionButtons";
+import { RecentPatterns } from "@/components/dashboard/RecentPatterns";
+import { MOOD_BACKGROUNDS } from "@/components/dashboard/constants";
 
 export default function Dashboard() {
   const insets = useSafeAreaInsets();
   const { user } = useAuth();
   const { moods, loading, error, refetch } = useRecentMoods(7);
 
-  // Nome utente - extract first name intelligently
-  const extractFirstName = (email: string | undefined) => {
-    if (!email) return "Friend";
-    const username = email.split("@")[0];
-    // Take only text before first dot or number
-    const firstName = username.split(/[\.0-9]/)[0];
-    // Capitalize first letter
-    return firstName.charAt(0).toUpperCase() + firstName.slice(1);
-  };
-  const userName = user?.displayName || extractFirstName(user?.email);
-  const greeting =
-    new Date().getHours() < 12
-      ? "Good Morning"
-      : new Date().getHours() < 18
-        ? "Good Afternoon"
-        : "Good Evening";
+  // Nome utente
+  const userName = user?.displayName || user?.email?.split("@")[0] || "Alex";
 
-  // Ricarica i mood solo quando la schermata diventa visibile
+  // Ricarica i mood solo quando la schermata diventa visibile E l'utente è autenticato
   useFocusEffect(
     useCallback(() => {
-      refetch();
-    }, [refetch]),
+      if (user) {
+        refetch();
+      }
+    }, [refetch, user])
   );
 
   // Ottieni il mood più recente
   const latestMood = moods[0];
-  const currentMoodEmoji = (latestMood?.emojis[0] || "sunny") as
-    | "sunny"
-    | "partly"
-    | "cloudy"
-    | "rainy"
-    | "stormy";
-
-  // Giorni della settimana
-  const getDayLabel = (index: number) => {
-    const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  
+  // Check if latest mood is from today
+  const isLatestMoodToday = latestMood ? (() => {
     const today = new Date();
-    const moodDate = new Date(moods[index].timestamp);
-    return days[moodDate.getDay()];
-  };
-
-  const isToday = (index: number) => {
-    if (!moods[index]) return false;
-    const today = new Date();
-    const moodDate = new Date(moods[index].timestamp);
+    const moodDate = new Date(latestMood.timestamp); // Assuming ISO string
     return (
       today.getDate() === moodDate.getDate() &&
       today.getMonth() === moodDate.getMonth() &&
       today.getFullYear() === moodDate.getFullYear()
     );
-  };
+  })() : false;
+
+  const currentMoodEmoji = (latestMood?.emojis[0] || "sunny") as MoodEmojiType;
+  
+  const bgSource = !isLatestMoodToday ? MOOD_BACKGROUNDS.partly : MOOD_BACKGROUNDS[currentMoodEmoji];
 
   return (
     <View className="flex-1 bg-[#111722]">
-      {/* Background Weather Layer */}
+      {/* Background Weather Layer - Synced with mood */}
       <ImageBackground
-        // "sunny" | "cloudy" | "rainy" | "stormy" | "partly"
-        source={images.db_bg_sunny}
+        source={bgSource}
         className="absolute inset-0"
         resizeMode="cover"
       >
@@ -147,73 +74,22 @@ export default function Dashboard() {
         contentContainerStyle={{ paddingBottom: insets.bottom + 24 }}
         showsVerticalScrollIndicator={false}
       >
-        {/* Top App Bar */}
-        <View
-          style={{
-            paddingTop: insets.top + 16,
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-            paddingHorizontal: 24,
-            paddingBottom: 16,
-          }}
-        >
-          <View className="flex-row items-center gap-3">
-            {/* Profile Avatar */}
-            <Pressable
-              onPress={() => router.push("/profile")}
-              className="size-10 rounded-full bg-white/10 items-center justify-center"
-            >
-              <UserIcon size={24} color="white" weight="bold" />
-            </Pressable>
-          </View>
+        <DashboardHeader />
 
-          {/* Settings Button */}
-          <Pressable className="size-10 rounded-full bg-white/10 items-center justify-center active:bg-white/20">
-            <GearIcon size={24} color="white" weight="bold" />
-          </Pressable>
-        </View>
+        <DashboardGreeting userName={userName} />
 
-        {/* Greeting */}
-        <View className="px-6 pt-2 pb-4">
-          <Text
-            style={{
-              textShadowColor: "rgba(0,0,0,0.3)",
-              textShadowOffset: { width: 0, height: 2 },
-              textShadowRadius: 4,
-              fontSize: 32,
-              fontWeight: "bold",
-              lineHeight: 38,
-              letterSpacing: -0.5,
-              color: "white",
-              zIndex: 10,
-            }}
-          >
-            {greeting}, {userName}
-          </Text>
-          <Text
-            style={{
-              textShadowColor: "rgba(0,0,0,0.3)",
-              textShadowOffset: { width: 0, height: 2 },
-              textShadowRadius: 4,
-              fontSize: 18,
-              fontWeight: "500",
-              color: "white",
-              zIndex: 10,
-            }}
-          >
-            The sky is clearing up.
-          </Text>
-        </View>
+        <MoodSphereSection
+          loading={loading}
+          error={error}
+          user={user}
+          currentMoodEmoji={currentMoodEmoji}
+          isEmpty={!isLatestMoodToday}
+        />
 
-        {/* 3D Mood Sphere Area */}
-        <View className="flex-1 items-center justify-center py-8">
-          {loading ? (
-            <ActivityIndicator size="large" color="white" />
-          ) : (
-            <MoodSphere mood={currentMoodEmoji} size={192} />
-          )}
-        </View>
+        <EmotionalForecastCard 
+          latestMood={latestMood} 
+          isEmpty={!isLatestMoodToday}
+        />
 
         {/* Today's Emotional Forecast Card */}
         <View className="px-4 mb-6">
@@ -497,70 +373,3 @@ export default function Dashboard() {
     </View >
   );
 }
-
-const styles = StyleSheet.create({
-  warmTint: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: "rgba(255, 165, 0, 0.1)",
-    mixBlendMode: "overlay",
-  },
-  avatar: {
-    borderWidth: 2,
-    borderColor: "rgba(255,255,255,0.2)",
-  },
-  textShadow: {
-    textShadowColor: "rgba(0,0,0,0.3)",
-    textShadowOffset: { width: 0, height: 2 },
-    textShadowRadius: 4,
-  },
-  glassCard: {
-    backgroundColor: "rgba(255,255,255,0.1)",
-    borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.2)",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.3,
-    shadowRadius: 16,
-  },
-  primaryButton: {
-    backgroundColor: "rgba(19, 91, 236, 0.8)",
-    borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.1)",
-    shadowColor: "#135bec",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.4,
-    shadowRadius: 12,
-  },
-  secondaryButton: {
-    backgroundColor: "rgba(0,0,0,0.4)",
-    borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.1)",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-  },
-  dayCircle: {
-    width: 64,
-    height: 64,
-    borderRadius: 32,
-    alignItems: "center",
-    justifyContent: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-  },
-  todayRing: {
-    borderWidth: 2,
-    borderColor: "rgba(19, 91, 236, 0.5)",
-    shadowColor: "#135bec",
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.6,
-    shadowRadius: 8,
-  },
-});

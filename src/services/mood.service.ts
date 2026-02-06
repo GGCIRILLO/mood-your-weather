@@ -1,9 +1,6 @@
 import { auth } from "../config/firebaseConfig";
 import type { MoodEntry, MoodEmojiType } from "../types";
-import { storageService } from "./storage.service";
-
-// Base URL per le API
-const API_BASE_URL = "http://127.0.0.1:8000";
+import { API_BASE_URL } from "../config/api";
 
 /**
  * Helper per ottenere il token ID dell'utente corrente
@@ -11,31 +8,19 @@ const API_BASE_URL = "http://127.0.0.1:8000";
  */
 const getAuthToken = async (): Promise<string | null> => {
   const user = auth.currentUser;
+  
   if (!user) {
-    console.warn("⚠️ Nessun utente autenticato");
     return null;
   }
-
+  
   try {
-    // Prova prima con Firebase
-    const token = await user.getIdToken();
-    console.log("✅ Token ottenuto da Firebase");
-    // Aggiorna il token salvato
-    await storageService.saveAuthToken(token);
+    // Try to get cached token first (forceRefresh = false)
+    // This avoids network calls if the token is still valid
+    const token = await user.getIdToken(false);
     return token;
-  } catch (error) {
-    console.warn(
-      "⚠️ Errore getIdToken da Firebase, uso fallback AsyncStorage:",
-      error,
-    );
-    // Fallback: usa token salvato in AsyncStorage
-    const savedToken = await storageService.getAuthToken();
-    if (savedToken) {
-      console.log("✅ Token recuperato da AsyncStorage (fallback)");
-      return savedToken;
-    }
-    console.error("❌ Nessun token disponibile (né Firebase né AsyncStorage)");
-    return null;
+  } catch (error: any) {
+    console.error("Error getting ID token:", error.code, error.message);
+    throw error;
   }
 };
 
@@ -116,32 +101,37 @@ export const getMoods = async (params?: {
   if (params?.endDate) queryParams.append("endDate", params.endDate);
   if (params?.limit) queryParams.append("limit", params.limit.toString());
   if (params?.offset) queryParams.append("offset", params.offset.toString());
+  
+  const url = `${API_BASE_URL}/moods?${queryParams.toString()}`;
 
-  const response = await fetch(
-    `${API_BASE_URL}/moods?${queryParams.toString()}`,
-    {
+  try {
+    const response = await fetch(url, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
       },
-    },
-  );
+    });
 
-  const data = await handleApiResponse(response);
+    const data = await handleApiResponse(response);
 
-  // Converti formato backend a frontend
-  return {
-    items: data.items.map((item: any) => ({
-      id: item.entryId,
-      userId: item.userId,
-      timestamp: item.timestamp,
-      emojis: item.emojis,
-      intensity: item.intensity,
-      note: item.note,
-    })),
-    total: data.total,
-    hasMore: data.hasMore,
-  };
+    // Converti formato backend a frontend
+    return {
+      items: data.items.map((item: any) => ({
+        id: item.entryId,
+        userId: item.userId,
+        timestamp: item.timestamp,
+        emojis: item.emojis,
+        intensity: item.intensity,
+        note: item.note,
+      })),
+      total: data.total,
+      hasMore: data.hasMore,
+    };
+  } catch (error: any) {
+    console.error("Error fetching moods:", error.message);
+    throw error;
+  }
 };
 
 /**

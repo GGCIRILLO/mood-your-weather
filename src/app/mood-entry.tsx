@@ -12,7 +12,7 @@ import Animated, {
   Easing,
 } from "react-native-reanimated";
 import { ArrowLeftIcon } from "phosphor-react-native";
-import { createMood } from "@/services/mood.service";
+import { useCreateMood } from "@/hooks/api/useMoods";
 import { InsightBubble } from "@/components/mood-entry/InsightBubble";
 import { ConcentricRings } from "@/components/mood-entry/ConcentricRings";
 import { WeatherDisplay } from "@/components/mood-entry/WeatherDisplay";
@@ -31,7 +31,7 @@ export default function MoodEntryScreen() {
   const [intensity, setIntensity] = useState(50);
   const [note, setNote] = useState("");
   const [showNoteInput, setShowNoteInput] = useState(false);
-  const [saving, setSaving] = useState(false);
+  const { mutateAsync: createMood, isPending: isSaving } = useCreateMood();
 
   const pulseScale = useSharedValue(1);
   const ring1Opacity = useSharedValue(0.1);
@@ -57,13 +57,9 @@ export default function MoodEntryScreen() {
   });
 
   const handleWeatherAdd = (weather: WeatherType) => {
-    console.log("Adding weather:", weather, "Current:", selectedWeather);
     // Aggiungi se non presente e meno di 2
     if (!selectedWeather.includes(weather) && selectedWeather.length < 2) {
       setSelectedWeather([...selectedWeather, weather]);
-      console.log("Weather added successfully");
-    } else {
-      console.log("Cannot add: already exists or limit reached");
     }
   };
 
@@ -75,19 +71,18 @@ export default function MoodEntryScreen() {
   };
 
   const handleSave = async () => {
-    setSaving(true);
-
     try {
-      const createdMood = await createMood({
+      const newMood = await createMood({
         emojis: selectedWeather as any,
         intensity,
         note: note.trim() || undefined,
       });
 
-      setSaving(false);
-      router.back();
+      router.replace({
+        pathname: "/mood-analysis",
+        params: { entry: JSON.stringify(newMood) },
+      });
     } catch (error: any) {
-      setSaving(false);
       Alert.alert("Errore", error.message || "Impossibile salvare il mood");
       console.error("Save mood error:", error);
     }
@@ -179,7 +174,7 @@ export default function MoodEntryScreen() {
           note={note}
           onNoteChange={setNote}
           onSave={handleSave}
-          saving={saving}
+          saving={isSaving}
           moodAnalysis={getMoodAnalysis()}
           bottomInset={insets.bottom}
         />

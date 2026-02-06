@@ -1,224 +1,323 @@
-// ============================================
-// MOOD ANALYSIS SCREEN - Post-creation analysis
-// ============================================
-
-import { useEffect, useState } from "react";
-import { View, Text, ScrollView, Pressable } from "react-native";
+import { useEffect, useState, useMemo } from "react";
+import {
+  View,
+  Text,
+  ScrollView,
+  Pressable,
+  ImageBackground,
+  Image,
+  StyleSheet,
+} from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { storageService } from "@/services/storage.service";
-import { ACTIVITY_SUGGESTIONS, WEATHER_TYPE_TO_EMOJI } from "@/utils/constants";
-import { format } from "date-fns";
-import { it } from "date-fns/locale";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import type { MoodEntry } from "@/types";
+import {
+  SunIcon,
+  CloudIcon,
+  CloudRainIcon,
+  CloudSunIcon,
+  LightningIcon,
+  MoonIcon,
+  WindIcon,
+  ArrowLeftIcon,
+} from "phosphor-react-native";
+import { LinearGradient } from "expo-linear-gradient";
+import { images, analysis_forecast } from "../../assets";
+import moodDataRaw from "@/utils/moodAnalysis.json";
+
+// Map matching emojis to Phosphor Icons
+const MOOD_ICON_MAP: Record<string, any> = {
+  sunny: SunIcon,
+  partly: CloudSunIcon,
+  cloudy: CloudIcon,
+  rainy: CloudRainIcon,
+  stormy: LightningIcon,
+  windy: WindIcon,
+  clear: MoonIcon, // Night fallback
+};
+
+const MOOD_COLORS: Record<string, string> = {
+  sunny: "#F59E0B", // amber-500
+  partly: "#3B82F6", // blue-500
+  cloudy: "#64748B", // slate-500
+  rainy: "#3B82F6", // blue-500
+  stormy: "#6366F1", // indigo-500
+};
 
 export default function MoodAnalysisScreen() {
   const router = useRouter();
-  const { id } = useLocalSearchParams<{ id: string }>();
+  const insets = useSafeAreaInsets();
+  const { entry: entryParam } = useLocalSearchParams<{ entry: string }>();
   const [entry, setEntry] = useState<MoodEntry | null>(null);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    loadEntry();
-  }, [id]);
+    if (entryParam) {
+      try {
+        const parsedEntry = JSON.parse(entryParam);
+        setEntry(parsedEntry);
+      } catch (e) {
+        console.error("Failed to parse mood entry", e);
+      }
+    }
+  }, [entryParam]);
 
-  const loadEntry = async () => {
-    if (!id) return;
-    setLoading(true);
-    const moodEntry = await storageService.getMoodEntryById(id);
-    setEntry(moodEntry);
-    setLoading(false);
-  };
+  // Find matching mood data from JSON
+  const currentMoodData = useMemo(() => {
+    if (!entry) return null;
 
-  if (loading || !entry) {
+    // Normalize and sort user emojis for comparison
+    const userEmojis = [...entry.emojis].sort();
+
+    // Find matching mood definition
+    const moodDef = moodDataRaw.mood_data.find((m) => {
+      const defEmojis = [...m.emojis].sort();
+      return (
+        userEmojis.length === defEmojis.length &&
+        userEmojis.every((e, i) => e === defEmojis[i])
+      );
+    });
+
+    if (!moodDef) return null;
+
+    // Find matching intensity level
+    const level = moodDef.intensity_levels.find(
+      (l) => entry.intensity >= l.range[0] && entry.intensity <= l.range[1],
+    );
+
+    return {
+      moodDef,
+      level: level || moodDef.intensity_levels[0], // fallback
+    };
+  }, [entry]);
+
+  if (!entry) {
     return (
-      <View className="flex-1 items-center justify-center bg-blue-50">
-        <Text className="text-gray-600">Caricamento...</Text>
+      <View className="flex-1 items-center justify-center bg-[#0A0F1E]">
+        <Text className="text-gray-400">Loading forecast...</Text>
       </View>
     );
   }
 
-  // Calculate sentiment based on emojis (mock)
-  const sentimentScore = calculateSentiment(entry.emojis);
-  const sentiment =
-    sentimentScore > 0.3
-      ? "Positivo"
-      : sentimentScore < -0.3
-        ? "Negativo"
-        : "Neutrale";
-  const sentimentEmoji =
-    sentimentScore > 0.3 ? "😊" : sentimentScore < -0.3 ? "😔" : "😐";
+  const { moodDef, level } = currentMoodData || {};
+
+  // If no match found
+  if (!moodDef || !level) {
+    return (
+      <View className="flex-1 items-center justify-center bg-[#0A0F1E]">
+        <Pressable onPress={() => router.back()} className="p-4">
+          <Text className="text-white">
+            Analysis Data Unavailable. Go Back.
+          </Text>
+        </Pressable>
+      </View>
+    );
+  }
+
+  // Resolve hero image
+  const heroImage =
+    (analysis_forecast as any)[(moodDef as any).image_key] ||
+    (images as any)[(moodDef as any).image_key];
 
   return (
-    <SafeAreaView className="flex-1 bg-blue-50">
-      {/* Header */}
-      <View className="flex-row items-center justify-between px-4 py-4">
-        <Pressable onPress={() => router.back()}>
-          <Text className="text-2xl">←</Text>
-        </Pressable>
-        <Text className="text-gray-900 text-lg font-bold">Mood Analysis</Text>
-        <View style={{ width: 24 }} />
-      </View>
+    <View style={styles.container}>
+      <LinearGradient colors={["#0A0F1E", "#131A2E"]} style={styles.gradient}>
+        {/* Background Blur Blobs */}
+        <View style={styles.blueBlob} />
+        <View style={styles.purpleBlob} />
 
-      <ScrollView className="flex-1">
-        {/* Hero Section */}
-        <View className="px-6 py-8 items-center">
-          <View className="flex-row gap-4 mb-6">
-            {entry.emojis.map((weatherType, index) => (
-              <Text key={index} className="text-6xl">
-                {WEATHER_TYPE_TO_EMOJI[weatherType] || "☁️"}
-              </Text>
-            ))}
-          </View>
-
-          <Text className="text-gray-600 text-base">
-            {format(new Date(entry.timestamp), "EEEE, d MMMM 'alle' HH:mm", {
-              locale: it,
-            })}
-          </Text>
-
-          {entry.note && (
-            <View className="bg-white rounded-2xl p-4 mt-4 w-full shadow">
-              <Text className="text-gray-700 text-base">"{entry.note}"</Text>
-            </View>
-          )}
-        </View>
-
-        {/* Sentiment Analysis */}
-        <View className="px-6 mb-6">
-          <View className="bg-white rounded-3xl p-6 shadow-lg">
-            <View className="flex-row items-center justify-between mb-4">
-              <Text className="text-gray-900 text-xl font-bold">
-                Analisi Emotiva
-              </Text>
-              <Text className="text-4xl">{sentimentEmoji}</Text>
-            </View>
-
-            <View className="flex-row items-center justify-between mb-3">
-              <Text className="text-gray-600">Sentiment</Text>
-              <Text className="text-gray-900 font-semibold">{sentiment}</Text>
-            </View>
-
-            <View className="flex-row items-center justify-between mb-3">
-              <Text className="text-gray-600">Intensità</Text>
-              <Text className="text-gray-900 font-semibold">
-                {entry.intensity}%
-              </Text>
-            </View>
-
-            <View className="flex-row items-center justify-between">
-              <Text className="text-gray-600">Emoji selezionate</Text>
-              <Text className="text-gray-900 font-semibold">
-                {entry.emojis.length}
-              </Text>
-            </View>
-
-            {/* Progress bar for intensity */}
-            <View className="mt-4 bg-gray-100 rounded-full h-2 overflow-hidden">
-              <View
-                className={`h-full ${
-                  entry.intensity > 70
-                    ? "bg-red-500"
-                    : entry.intensity > 40
-                      ? "bg-yellow-500"
-                      : "bg-green-500"
-                }`}
-                style={{ width: `${entry.intensity}%` }}
-              />
-            </View>
-          </View>
-        </View>
-
-        {/* Suggested Activities */}
-        <View className="px-6 mb-6">
-          <Text className="text-gray-900 text-xl font-bold mb-4">
-            Attività Suggerite
-          </Text>
-
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={{ gap: 12 }}
+        <ScrollView
+          className="flex-1 pb-24"
+          showsVerticalScrollIndicator={false}
+        >
+          {/* Header */}
+          <View
+            style={{
+              paddingTop: insets.top + 16,
+              paddingBottom: 16,
+              paddingHorizontal: 16,
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
           >
-            {ACTIVITY_SUGGESTIONS.slice(0, 3).map((activity) => (
-              <Pressable
-                key={activity.id}
-                onPress={() => {}}
-                className="bg-white rounded-2xl p-4 w-48 shadow active:opacity-90"
+            <Pressable
+              onPress={() => router.push("/(tabs)")}
+              className="w-12 h-12 items-center justify-center rounded-full bg-white/10 active:bg-white/20"
+            >
+              <ArrowLeftIcon size={24} color="#FFF" />
+            </Pressable>
+
+            <Text className="text-sm font-bold uppercase tracking-widest text-slate-400">
+              YOUR FORECAST
+            </Text>
+
+            <View className="w-12 h-12" />
+          </View>
+
+          <View className="px-4 gap-6 pt-2">
+            {/* Hero Section */}
+            <View className="relative w-full rounded-4xl overflow-hidden bg-slate-900 group">
+              <ImageBackground
+                source={heroImage}
+                style={{ width: "100%", height: 350 }}
+                resizeMode="cover"
               >
-                <Text className="text-4xl mb-3">{activity.icon}</Text>
-                <Text className="text-gray-900 font-bold mb-1">
-                  {activity.title}
-                </Text>
-                <Text className="text-gray-600 text-sm mb-2">
-                  {activity.description}
-                </Text>
-                <Text className="text-blue-500 text-sm font-medium">
-                  {activity.duration} minuti
-                </Text>
-              </Pressable>
-            ))}
-          </ScrollView>
-        </View>
+                <LinearGradient
+                  colors={["rgba(0,0,0,0.1)", "rgba(0,0,0,0.4)", "#101622"]}
+                  style={{
+                    position: "absolute",
+                    left: 0,
+                    right: 0,
+                    top: 0,
+                    bottom: 0,
+                  }}
+                />
 
-        {/* Context History (Mini Graph Placeholder) */}
-        <View className="px-6 mb-8">
-          <View className="bg-white rounded-3xl p-6 shadow-lg">
-            <Text className="text-gray-900 text-xl font-bold mb-4">
-              Trend Ultimi 7 Giorni
-            </Text>
-            <View className="items-center py-8">
-              <Text className="text-6xl mb-2">📈</Text>
-              <Text className="text-gray-500 text-center">
-                Grafici e statistiche{"\n"}disponibili presto
+                <View className="flex-1 justify-end p-6 pb-8">
+                  <View className="mb-4 flex-row self-start items-center gap-2 rounded-full bg-white/20 px-3 py-1 backdrop-blur-md">
+                    {entry.emojis.slice(0, 3).map((e, i) => {
+                      const Icon = MOOD_ICON_MAP[e] || SunIcon;
+                      return (
+                        <Icon key={i} size={16} color="white" weight="fill" />
+                      );
+                    })}
+                    <Text className="text-xs font-bold text-white">
+                      Current Mood
+                    </Text>
+                  </View>
+
+                  <Text className="text-4xl font-extrabold text-white leading-tight tracking-tight">
+                    {level.title}
+                  </Text>
+                  <Text className="mt-2 text-lg font-medium text-slate-200/90 leading-snug">
+                    {level.description}
+                  </Text>
+                </View>
+              </ImageBackground>
+            </View>
+
+            {/* Emotional Composition */}
+            <View>
+              <Text className="mb-4 text-xl font-bold tracking-tight text-white px-1">
+                Emotional Composition
               </Text>
+
+              <View className="flex-row gap-3">
+                {/* Mood Cards */}
+                {entry.emojis.map((emoji, index) => {
+                  const Icon = MOOD_ICON_MAP[emoji] || SunIcon;
+                  const color = MOOD_COLORS[emoji] || "#64748B"; // slate-500
+                  const moodName =
+                    emoji.charAt(0).toUpperCase() + emoji.slice(1);
+
+                  return (
+                    <View
+                      key={index}
+                      className="flex-1 h-32 relative overflow-hidden bg-[#192233] p-5 rounded-3xl border border-slate-800 justify-end"
+                    >
+                      {/* Background Icon */}
+                      <View className="absolute -right-4 -bottom-4 opacity-10">
+                        <Icon size={100} color={color} weight="fill" />
+                      </View>
+
+                      <View className="z-10">
+                        <Text className="text-lg font-bold text-white leading-tight">
+                          {moodName}
+                        </Text>
+                      </View>
+                    </View>
+                  );
+                })}
+
+                {/* Intensity Card */}
+                <View className="flex-1 h-32 relative overflow-hidden bg-[#192233] p-5 rounded-3xl border border-slate-800 justify-end">
+                  {/* Background Number */}
+                  <View className="absolute -right-2 -bottom-6 opacity-10">
+                    <Text className="text-[100px] font-black text-white">
+                      {entry.intensity}
+                    </Text>
+                  </View>
+
+                  <View className="z-10">
+                    <Text className="text-3xl font-bold text-white">
+                      {entry.intensity}%
+                    </Text>
+                    <Text className="text-sm font-medium text-slate-400">
+                      Intensity
+                    </Text>
+                  </View>
+                </View>
+              </View>
+            </View>
+
+            {/* Suggested Activities */}
+            <View className="mb-8">
+              <View className="flex-row items-center justify-between px-1 mb-4">
+                <Text className="text-xl font-bold tracking-tight text-white">
+                  Suggested Activities
+                </Text>
+              </View>
+
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={{ paddingHorizontal: 4, gap: 16 }}
+                className="-mx-4 px-4 pb-4"
+              >
+                {level.activities.map((act, idx) => {
+                  return (
+                    <View
+                      key={act.id}
+                      className="w-50 bg-[#192233] p-4 rounded-2xl border border-slate-800 shadow-sm"
+                    >
+                      <View className="h-28 w-full rounded-xl overflow-hidden bg-slate-200 mb-3">
+                        <Image
+                          source={{ uri: (act as any).image_url }}
+                          style={{ width: "100%", height: "100%" }}
+                          resizeMode="cover"
+                        />
+                      </View>
+                      <Text className="font-bold text-white text-lg">
+                        {act.name}
+                      </Text>
+                      <Text className="text-xs text-slate-400 mt-1 leading-4">
+                        {act.description}
+                      </Text>
+                    </View>
+                  );
+                })}
+              </ScrollView>
             </View>
           </View>
-        </View>
-
-        {/* Action Buttons */}
-        <View className="px-6 pb-8 gap-3">
-          <Pressable
-            onPress={() => router.push("/(tabs)")}
-            className="bg-blue-500 rounded-full py-4 items-center shadow-lg active:bg-blue-600"
-          >
-            <Text className="text-white text-lg font-semibold">
-              Torna alla Dashboard
-            </Text>
-          </Pressable>
-
-          <Pressable
-            onPress={() => router.push("/mood-entry")}
-            className="bg-white border-2 border-blue-500 rounded-full py-4 items-center active:bg-blue-50"
-          >
-            <Text className="text-blue-500 text-lg font-semibold">
-              Crea Nuovo Mood
-            </Text>
-          </Pressable>
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+        </ScrollView>
+      </LinearGradient>
+    </View>
   );
 }
 
-// Helper function to calculate sentiment (mock)
-function calculateSentiment(emojis: string[]): number {
-  const sentimentMap: Record<string, number> = {
-    "☀️": 1.0,
-    "⛅": 0.5,
-    "☁️": 0.0,
-    "🌧️": -0.5,
-    "⛈️": -0.8,
-    "🌈": 0.9,
-    "🌙": 0.3,
-    "⚡": 0.6,
-    "❄️": -0.3,
-    "🌪️": -0.9,
-  };
-
-  const total = emojis.reduce(
-    (acc, emoji) => acc + (sentimentMap[emoji] || 0),
-    0
-  );
-  return emojis.length > 0 ? total / emojis.length : 0;
-}
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  gradient: {
+    flex: 1,
+  },
+  blueBlob: {
+    position: "absolute",
+    top: "20%",
+    right: -80,
+    width: 256,
+    height: 256,
+    backgroundColor: "rgba(19, 91, 236, 0.15)",
+    borderRadius: 9999,
+  },
+  purpleBlob: {
+    position: "absolute",
+    bottom: "33%",
+    left: -40,
+    width: 320,
+    height: 320,
+    backgroundColor: "rgba(168, 85, 247, 0.1)",
+    borderRadius: 9999,
+  },
+});

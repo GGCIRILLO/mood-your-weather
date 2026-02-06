@@ -5,9 +5,11 @@ import {
   ScrollView,
   StyleSheet,
   ActivityIndicator,
+  Pressable,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { ShuffleIcon, QuestionIcon } from "phosphor-react-native";
+import { router } from "expo-router";
 import { MoodEntry } from "@/types";
 import { EMOJI_TO_ICON, EMOJI_TO_COLOR } from "./constants";
 
@@ -41,6 +43,14 @@ export const RecentPatterns = ({ moods, loading }: RecentPatternsProps) => {
     return days[date.getDay()];
   };
 
+  const handleMoodPress = (mood: MoodEntry) => {
+    // Pass the serialized mood entry as `entry` so mood-analysis can parse it
+    router.push({
+      pathname: "/mood-analysis",
+      params: { entry: JSON.stringify(mood) },
+    });
+  };
+
   const last7Days = generateLast7Days();
 
   return (
@@ -61,11 +71,20 @@ export const RecentPatterns = ({ moods, loading }: RecentPatternsProps) => {
         ) : (
           last7Days.map((date, index) => {
             const today = isSameDay(date, new Date());
-            // Find mood for this day
-            // moods is assumed to be sorted, but simple find is efficient enough for 7 items * N moods
-            const mood = moods.find((m) =>
+
+            // Find all moods for this specific day
+            const dayMoods = moods.filter((m) =>
               isSameDay(new Date(m.timestamp), date),
             );
+
+            // If multiple moods in same day, get the latest one
+            const mood = dayMoods.length > 0
+              ? dayMoods.sort(
+                  (a, b) =>
+                    new Date(b.timestamp).getTime() -
+                    new Date(a.timestamp).getTime(),
+                )[0]
+              : null;
 
             if (mood) {
               const hasMultipleEmojis = mood.emojis.length > 1;
@@ -74,7 +93,11 @@ export const RecentPatterns = ({ moods, loading }: RecentPatternsProps) => {
                 : EMOJI_TO_ICON[mood.emojis[0]];
 
               return (
-                <View key={`mood-${index}`} className="items-center gap-2">
+                <Pressable
+                  key={`mood-${index}`}
+                  onPress={() => handleMoodPress(mood)}
+                  className="items-center gap-2"
+                >
                   {hasMultipleEmojis ? (
                     <LinearGradient
                       colors={[
@@ -107,7 +130,7 @@ export const RecentPatterns = ({ moods, loading }: RecentPatternsProps) => {
                   >
                     {today ? "Today" : getDayLabel(date)}
                   </Text>
-                </View>
+                </Pressable>
               );
             } else {
               // Empty state (Glass effect)

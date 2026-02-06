@@ -96,7 +96,7 @@ export default function Dashboard() {
           isEmpty={!isLatestMoodToday}
         />
 
-        <QuickActionButtons />
+        <QuickActionButtons latestMood={latestMood} />
 
         <RecentPatterns moods={moods} loading={loading} />
 

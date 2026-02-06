@@ -47,17 +47,40 @@ const MOOD_COLORS: Record<string, string> = {
 export default function MoodAnalysisScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const { entry: entryParam } = useLocalSearchParams<{ entry: string }>();
+  const { entry: entryParam } = useLocalSearchParams<{ entry: string | Record<string, any> }>();
   const [entry, setEntry] = useState<MoodEntry | null>(null);
 
   useEffect(() => {
     if (entryParam) {
+      // Defensive parsing: entryParam may already be an object depending on how the router serialized params
       try {
-        const parsedEntry = JSON.parse(entryParam);
-        setEntry(parsedEntry);
+        let parsed: any = null;
+        if (typeof entryParam === "string") {
+          parsed = JSON.parse(entryParam);
+        } else if (typeof entryParam === "object") {
+          // When expo-router/router pushes params as objects (platform/runtime differences), accept it directly
+          parsed = entryParam as MoodEntry;
+        }
+
+        // Basic validation to ensure parsed object looks like a MoodEntry
+        if (
+          parsed &&
+          Array.isArray(parsed.emojis) &&
+          typeof parsed.intensity === "number" &&
+          typeof parsed.timestamp === "string"
+        ) {
+          setEntry(parsed);
+        } else {
+          console.warn("Parsed entry does not match MoodEntry shape", parsed);
+          setEntry(null);
+        }
       } catch (e) {
         console.error("Failed to parse mood entry", e);
+        setEntry(null);
       }
+    } else {
+      // No entry param passed — show no-entry state instead of leaving a spinner forever
+      setEntry(null);
     }
   }, [entryParam]);
 
@@ -91,9 +114,13 @@ export default function MoodAnalysisScreen() {
   }, [entry]);
 
   if (!entry) {
+    // If there's no valid entry parsed from params, show an informative empty state instead of an ambiguous spinner
     return (
       <View className="flex-1 items-center justify-center bg-[#0A0F1E]">
-        <Text className="text-gray-400">Loading forecast...</Text>
+        <Text className="text-gray-400">Analysis data unavailable. Open a mood to see the forecast.</Text>
+        <Pressable onPress={() => router.back()} className="mt-4 p-3">
+          <Text className="text-white">Go Back</Text>
+        </Pressable>
       </View>
     );
   }
@@ -156,7 +183,7 @@ export default function MoodAnalysisScreen() {
 
           <View className="px-4 gap-6 pt-2">
             {/* Hero Section */}
-            <View className="relative w-full rounded-4xl overflow-hidden bg-slate-900 group">
+            <View className="relative w-full rounded-[2rem] overflow-hidden bg-slate-900 group">
               <ImageBackground
                 source={heroImage}
                 style={{ width: "100%", height: 350 }}
@@ -213,7 +240,7 @@ export default function MoodAnalysisScreen() {
                   return (
                     <View
                       key={index}
-                      className="flex-1 h-32 relative overflow-hidden bg-[#192233] p-5 rounded-3xl border border-slate-800 justify-end"
+                      className="flex-1 h-32 relative overflow-hidden bg-[#192233] p-5 rounded-[1.5rem] border border-slate-800 justify-end"
                     >
                       {/* Background Icon */}
                       <View className="absolute -right-4 -bottom-4 opacity-10">
@@ -230,7 +257,7 @@ export default function MoodAnalysisScreen() {
                 })}
 
                 {/* Intensity Card */}
-                <View className="flex-1 h-32 relative overflow-hidden bg-[#192233] p-5 rounded-3xl border border-slate-800 justify-end">
+                <View className="flex-1 h-32 relative overflow-hidden bg-[#192233] p-5 rounded-[1.5rem] border border-slate-800 justify-end">
                   {/* Background Number */}
                   <View className="absolute -right-2 -bottom-6 opacity-10">
                     <Text className="text-[100px] font-black text-white">
@@ -268,7 +295,7 @@ export default function MoodAnalysisScreen() {
                   return (
                     <View
                       key={act.id}
-                      className="w-50 bg-[#192233] p-4 rounded-2xl border border-slate-800 shadow-sm"
+                      className="w-[200px] bg-[#192233] p-4 rounded-2xl border border-slate-800 shadow-sm"
                     >
                       <View className="h-28 w-full rounded-xl overflow-hidden bg-slate-200 mb-3">
                         <Image

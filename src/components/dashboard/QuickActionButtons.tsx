@@ -1,10 +1,27 @@
-
 import React from "react";
 import { View, Text, Pressable, StyleSheet } from "react-native";
 import { PlusCircleIcon, NotePencilIcon, ChartLineUpIcon } from "phosphor-react-native";
 import { router } from "expo-router";
+import type { MoodEntry } from "@/types";
 
-export const QuickActionButtons = () => {
+interface QuickActionButtonsProps {
+  latestMood?: MoodEntry;
+}
+
+export const QuickActionButtons = ({ latestMood }: QuickActionButtonsProps) => {
+  const handleInsightsPress = () => {
+    if (latestMood) {
+      // Pass the entire mood entry serialized as `entry` so `mood-analysis` can parse it
+      router.push({
+        pathname: "/mood-analysis",
+        params: { entry: JSON.stringify(latestMood) },
+      });
+    } else {
+      // Fallback: navigate to mood-analysis without entry (could show empty state or general stats)
+      router.push("/mood-analysis");
+    }
+  };
+
   return (
     <View className="px-4 mb-8">
       <View className="flex-row gap-3">
@@ -26,6 +43,7 @@ export const QuickActionButtons = () => {
 
         <Pressable
           style={styles.secondaryButton}
+          onPress={handleInsightsPress}
         >
           <ChartLineUpIcon size={20} color="white" weight="bold" />
           <Text className="text-white font-bold ml-1">Insights</Text>

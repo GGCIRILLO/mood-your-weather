@@ -13,6 +13,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { ArrowLeftIcon } from "phosphor-react-native";
 import { useCreateMood } from "@/hooks/api/useMoods";
+import { storageService } from "@/services/storage.service";
 import { InsightBubble } from "@/components/mood-entry/InsightBubble";
 import { ConcentricRings } from "@/components/mood-entry/ConcentricRings";
 import { WeatherDisplay } from "@/components/mood-entry/WeatherDisplay";

@@ -3,6 +3,7 @@ import { Stack } from "expo-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { AuthProvider } from "@/contexts/authContext";
+import { usePushNotifications } from "@/hooks/usePushNotifications";
 
 // Create QueryClient instance
 const queryClient = new QueryClient({
@@ -16,6 +17,8 @@ const queryClient = new QueryClient({
 });
 
 export default function Layout() {
+  const { expoPushToken } = usePushNotifications();
+
   return (
     <AuthProvider>
       <QueryClientProvider client={queryClient}>

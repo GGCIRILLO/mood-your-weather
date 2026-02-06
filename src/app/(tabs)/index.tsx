@@ -1,8 +1,17 @@
 import { useCallback } from "react";
-import { View, ScrollView, ImageBackground, StyleSheet } from "react-native";
+import {
+  View,
+  ScrollView,
+  ImageBackground,
+  StyleSheet,
+  Text,
+  Pressable,
+} from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useFocusEffect } from "@react-navigation/native";
+import { router } from "expo-router";
+import { Medal, Moon } from "phosphor-react-native";
 import { useAuth } from "@/contexts/authContext";
 import { useRecentMoods } from "@/hooks/api/useMoods";
 import type { MoodEmojiType } from "@/types";
@@ -30,26 +39,30 @@ export default function Dashboard() {
       if (user) {
         refetch();
       }
-    }, [refetch, user])
+    }, [refetch, user]),
   );
 
   // Ottieni il mood più recente
   const latestMood = moods[0];
-  
+
   // Check if latest mood is from today
-  const isLatestMoodToday = latestMood ? (() => {
-    const today = new Date();
-    const moodDate = new Date(latestMood.timestamp); // Assuming ISO string
-    return (
-      today.getDate() === moodDate.getDate() &&
-      today.getMonth() === moodDate.getMonth() &&
-      today.getFullYear() === moodDate.getFullYear()
-    );
-  })() : false;
+  const isLatestMoodToday = latestMood
+    ? (() => {
+        const today = new Date();
+        const moodDate = new Date(latestMood.timestamp); // Assuming ISO string
+        return (
+          today.getDate() === moodDate.getDate() &&
+          today.getMonth() === moodDate.getMonth() &&
+          today.getFullYear() === moodDate.getFullYear()
+        );
+      })()
+    : false;
 
   const currentMoodEmoji = (latestMood?.emojis[0] || "sunny") as MoodEmojiType;
-  
-  const bgSource = !isLatestMoodToday ? MOOD_BACKGROUNDS.partly : MOOD_BACKGROUNDS[currentMoodEmoji];
+
+  const bgSource = !isLatestMoodToday
+    ? MOOD_BACKGROUNDS.partly
+    : MOOD_BACKGROUNDS[currentMoodEmoji];
 
   return (
     <View className="flex-1 bg-[#111722]">
@@ -86,12 +99,57 @@ export default function Dashboard() {
           isEmpty={!isLatestMoodToday}
         />
 
-        <EmotionalForecastCard 
-          latestMood={latestMood} 
+        <EmotionalForecastCard
+          latestMood={latestMood}
           isEmpty={!isLatestMoodToday}
         />
 
         <QuickActionButtons />
+
+        {/* Goals & Practice Buttons - Same Row */}
+        <View className="px-4 mb-6">
+          <View className="flex-row gap-3">
+            <Pressable
+              onPress={() => router.push("/challenges-gamification")}
+              className="bg-black/40 border border-white/10 flex-row items-center justify-center py-3 px-4 rounded-full shadow-lg"
+              style={{
+                shadowColor: "#000",
+                shadowOffset: { width: 0, height: 4 },
+                shadowOpacity: 0.3,
+                shadowRadius: 8,
+              }}
+            >
+              <Medal size={20} color="white" weight="bold" />
+              <Text className="text-white font-bold ml-1">Goals</Text>
+            </Pressable>
+
+            <Pressable
+              onPress={() => router.push("/guided-practices")}
+              style={{
+                backgroundColor: "rgba(19,91,236,0.2)",
+                borderWidth: 1,
+                borderColor: "rgba(19,91,236,0.3)",
+                shadowColor: "#135bec",
+                shadowOffset: { width: 0, height: 0 },
+                shadowOpacity: 0.4,
+                shadowRadius: 15,
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
+                paddingVertical: 12,
+                paddingHorizontal: 16,
+                borderRadius: 9999,
+              }}
+            >
+              <Moon size={20} color="#135bec" weight="fill" />
+              <Text
+                style={{ color: "#135bec", fontWeight: "bold", marginLeft: 4 }}
+              >
+                Practice
+              </Text>
+            </Pressable>
+          </View>
+        </View>
 
         <RecentPatterns moods={moods} loading={loading} />
       </ScrollView>

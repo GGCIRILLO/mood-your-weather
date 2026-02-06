@@ -18,7 +18,6 @@ import {
     subDays,
     isSameDay,
 } from "date-fns";
-import { it } from "date-fns/locale";
 import type { MoodEntry } from "@/types";
 
 type Props = {
@@ -173,7 +172,7 @@ export default function WeeklyMoodChart({
 
                 return{
                     date: day,
-                    label: format(day, "d MMM", {locale: it}),
+                    label: format(day, "d MMM"),
                     value: sentimentValue,
                     emoji: displayEmoji,
                 };
@@ -253,7 +252,7 @@ export default function WeeklyMoodChart({
         <View className={cardClassName}>
             {/*Mood chart*/}
             <Text className="text-gray-400 text-sm mb-1">{subtitle}</Text>
-            <Text className="text-gray-900 text-xl font-bold mb-4">{title}</Text>
+            <Text className="text-gray-400 text-xl font-bold mb-4">{title}</Text>
 
             <View style = {{width : "100%"}}>
                 <Svg
@@ -269,7 +268,7 @@ export default function WeeklyMoodChart({
                         </LinearGradient>
                     </Defs>
 
-                    {/* Y-axis labels - Positività */}
+                    {/* Y-axis labels - Positivity */}
                     <SvgText
                         x={15}
                         y={PAD_T + 10}
@@ -391,7 +390,7 @@ export default function WeeklyMoodChart({
                                     fill = "rgba(255,255,255,0.55)"
                                     textAnchor = "middle"
                                 >
-                                {format(d.date, "EEE", {locale: it}).toUpperCase()}
+                                {format(d.date, "EEE").toUpperCase()}
                                 </SvgText>
                                 );
                             })}

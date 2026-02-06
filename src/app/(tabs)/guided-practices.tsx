@@ -2,7 +2,7 @@ import { View, Text, ScrollView, Pressable, ImageBackground, TextInput, Animated
 import { LinearGradient } from "expo-linear-gradient";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { router } from "expo-router";
-import { List, Bell, CloudLightning, CloudRain, Sun, Moon, Play, BookmarkSimple, Clock, House, Medal, User, X, CaretDown, DotsThree, Wind, Shuffle, SkipBack, SkipForward, Repeat, Pause, Cloud, ArrowRight, Quotes } from "phosphor-react-native";
+import { CaretLeft, CloudLightning, CloudRain, Sun, Moon, Play, BookmarkSimple, Clock, House, Medal, User, X, CaretDown, DotsThree, Wind, Shuffle, SkipBack, SkipForward, Repeat, Pause, Cloud, ArrowRight, Quotes } from "phosphor-react-native";
 import { useAuth } from "@/contexts/authContext";
 import { useState, useEffect, useRef } from "react";
 
@@ -73,14 +73,11 @@ export default function GuidedPracticesScreen() {
                     {/* Header */}
                     <View style={{ paddingTop: insets.top + 16, paddingHorizontal: 24, paddingBottom: 20 }}>
                         <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
-                            <Pressable style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: "#192233", alignItems: "center", justifyContent: "center" }}>
-                                <List size={20} color="white" />
+                            <Pressable onPress={() => router.back()} style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: "#192233", alignItems: "center", justifyContent: "center" }}>
+                                <CaretLeft size={20} color="white" />
                             </Pressable>
                             <Text style={{ color: "white", fontSize: 18, fontWeight: "bold", letterSpacing: 0.5 }}>Guided Practices</Text>
-                            <Pressable style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: "#192233", alignItems: "center", justifyContent: "center" }}>
-                                <Bell size={20} color="white" />
-                                <View style={{ position: "absolute", top: 8, right: 8, width: 8, height: 8, borderRadius: 4, backgroundColor: "#135bec" }} />
-                            </Pressable>
+                            <View style={{ width: 40 }} />
                         </View>
 
                         {/* Filter Chips */}
@@ -124,9 +121,6 @@ export default function GuidedPracticesScreen() {
                                                 <View style={{ backgroundColor: "rgba(25, 34, 51, 0.6)", paddingHorizontal: 16, paddingVertical: 8, borderRadius: 20, borderWidth: 1, borderColor: "rgba(255, 255, 255, 0.05)" }}>
                                                     <Text style={{ color: "white", fontSize: 12, fontWeight: "600", textTransform: "uppercase", letterSpacing: 1.5 }}>{practice.tag}</Text>
                                                 </View>
-                                                <Pressable style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: "rgba(25, 34, 51, 0.6)", borderWidth: 1, borderColor: "rgba(255, 255, 255, 0.05)", alignItems: "center", justifyContent: "center" }}>
-                                                    <BookmarkSimple size={20} color="white" />
-                                                </Pressable>
                                             </View>
 
                                             <View style={{ alignItems: "center", justifyContent: "center" }}>
@@ -173,31 +167,7 @@ export default function GuidedPracticesScreen() {
                     </View>
                 </ScrollView>
 
-                {/* Bottom Navigation */}
-                <View style={{ position: "absolute", bottom: 0, width: "100%", backgroundColor: "rgba(11, 17, 33, 0.9)", borderTopWidth: 1, borderTopColor: "rgba(255, 255, 255, 0.05)", paddingBottom: insets.bottom + 8, paddingTop: 12, paddingHorizontal: 24 }}>
-                    <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-                        <Pressable onPress={() => router.push("/")} style={{ alignItems: "center", gap: 4, padding: 8 }}>
-                            <House size={24} color="#93c5fd" />
-                            <Text style={{ fontSize: 10, color: "#93c5fd" }}>Home</Text>
-                        </Pressable>
-                        <Pressable onPress={() => router.push("/challenges-gamification")} style={{ alignItems: "center", gap: 4, padding: 8 }}>
-                            <Medal size={24} color="#93c5fd" />
-                            <Text style={{ fontSize: 10, color: "#93c5fd" }}>Goals</Text>
-                        </Pressable>
-                        <Pressable style={{ alignItems: "center", gap: 4, padding: 8, marginTop: -32 }}>
-                            <View style={{ backgroundColor: "#162032", padding: 4, borderRadius: 16, borderWidth: 4, borderColor: "#0b1121" }}>
-                                <View style={{ backgroundColor: "#135bec", width: 48, height: 48, borderRadius: 12, alignItems: "center", justifyContent: "center" }}>
-                                    <Moon size={28} color="white" weight="fill" />
-                                </View>
-                            </View>
-                            <Text style={{ fontSize: 10, fontWeight: "bold", color: "#135bec" }}>Practice</Text>
-                        </Pressable>
-                        <Pressable onPress={() => router.push("/profile")} style={{ alignItems: "center", gap: 4, padding: 8 }}>
-                            <User size={24} color="#93c5fd" />
-                            <Text style={{ fontSize: 10, color: "#93c5fd" }}>Profile</Text>
-                        </Pressable>
-                    </View>
-                </View>
+
             </View>
         );
     }

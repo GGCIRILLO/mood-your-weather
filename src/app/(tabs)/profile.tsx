@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, Pressable, ImageBackground, Switch, Alert, Linking, StyleSheet } from "react-native";
+import { View, Text, ScrollView, Pressable, ImageBackground, Switch, Alert, Linking, StyleSheet, Modal, TextInput, KeyboardAvoidingView, Platform } from "react-native";
 import { useState } from "react";
 import * as ImagePicker from 'expo-image-picker';
 import { LinearGradient } from "expo-linear-gradient";
@@ -25,13 +25,12 @@ import {
   Envelope,
   CaretRight,
   PencilSimple,
-  SignOut
+  SignOut,
+  X
 } from "phosphor-react-native";
 import { useAuth } from "@/contexts/authContext";
-import { logout as authLogout } from "@/services/auth.service";
+import { logout as authLogout, updateUserProfile, updateUserPassword } from "@/services/auth.service";
 import { storageService } from "@/services/storage.service";
-
-
 
 export default function ProfileScreen() {
   const insets = useSafeAreaInsets();
@@ -40,6 +39,14 @@ export default function ProfileScreen() {
   const [reduceMotion, setReduceMotion] = useState(false);
   const [smartReminder, setSmartReminder] = useState(true);
   const [profileImage, setProfileImage] = useState<string | null>(null);
+
+  // Modal State
+  const [showNameModal, setShowNameModal] = useState(false);
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [newName, setNewName] = useState(user?.displayName || "");
+  const [newPassword, setNewPassword] = useState("");
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handlePickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -51,8 +58,53 @@ export default function ProfileScreen() {
 
     if (!result.canceled) {
       setProfileImage(result.assets[0].uri);
+      // Optional: Update profile photo in backend here too if needed
     }
   };
+
+  const handleUpdateName = async () => {
+    if (!newName.trim()) {
+      Alert.alert("Error", "Name cannot be empty");
+      return;
+    }
+    setIsLoading(true);
+    const result = await updateUserProfile(newName);
+    setIsLoading(false);
+
+    if (result.success) {
+      Alert.alert("Success", "Name updated successfully");
+      setShowNameModal(false);
+    } else {
+      Alert.alert("Error", result.error || "Failed to update name");
+    }
+  };
+
+  const handleUpdatePassword = async () => {
+    if (newPassword.length < 6) {
+      Alert.alert("Error", "Password must be at least 6 characters");
+      return;
+    }
+    if (!currentPassword) {
+      Alert.alert("Error", "Please enter your current password");
+      return;
+    }
+
+    setIsLoading(true);
+    const result = await updateUserPassword(newPassword, currentPassword);
+    setIsLoading(false);
+
+    if (result.success) {
+      Alert.alert("Success", "Password updated successfully. Please login again.");
+      setShowPasswordModal(false);
+      setNewPassword("");
+      setCurrentPassword("");
+      await authLogout();
+      router.replace("/(auth)/login");
+    } else {
+      Alert.alert("Error", result.error || "Failed to update password. You may need to logout and login again.");
+    }
+  };
+
 
   const handleLogout = async () => {
     Alert.alert("Close Weather Station", "Are you sure you want to sign out?", [
@@ -125,22 +177,14 @@ export default function ProfileScreen() {
                   <ImageBackground source={{ uri: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400" }} style={{ width: "100%", height: "100%" }} />
                 )}
               </Pressable>
-              <View style={{ position: "absolute", bottom: 0, right: 0, backgroundColor: "#135bec", padding: 6, borderRadius: 20, borderWidth: 4, borderColor: "#0b1121" }}>
+              <Pressable onPress={handlePickImage} style={{ position: "absolute", bottom: 0, right: 0, backgroundColor: "#135bec", padding: 6, borderRadius: 20, borderWidth: 4, borderColor: "#0b1121" }}>
                 <PencilSimple size={16} color="white" weight="fill" />
-              </View>
+              </Pressable>
             </View>
             <Text style={{ fontSize: 24, fontWeight: "bold", color: "white", marginBottom: 4 }}>
               {user?.displayName || "Alex Storm"}
             </Text>
             <Text style={{ color: "#7dd3fc", fontSize: 14, opacity: 0.7, fontWeight: "500", marginBottom: 16 }}>Weather Tracker since Oct 2023</Text>
-
-            <Pressable
-              onPress={handlePickImage}
-              style={{ flexDirection: "row", alignItems: "center", gap: 8, backgroundColor: "rgba(19, 91, 236, 0.1)", paddingHorizontal: 16, paddingVertical: 8, borderRadius: 20, borderWidth: 1, borderColor: "rgba(19, 91, 236, 0.2)" }}
-            >
-              <PencilSimple size={16} color="#135bec" />
-              <Text style={{ color: "#135bec", fontSize: 14, fontWeight: "600" }}>Edit Profile</Text>
-            </Pressable>
           </View>
 
           {/* Stats Grid */}
@@ -158,6 +202,22 @@ export default function ProfileScreen() {
                 <CloudLightning size={28} color="#60a5fa" weight="fill" style={{ marginBottom: 4 }} />
                 <Text style={{ fontSize: 12, color: "#92a4c9", fontWeight: "500" }}>Fav Weather</Text>
               </View>
+            </View>
+          </View>
+
+          {/* Account Settings */}
+          <View style={{ marginBottom: 32 }}>
+            <Text style={{ color: "#94a3b8", fontSize: 12, fontWeight: "bold", textTransform: "uppercase", paddingHorizontal: 24, marginBottom: 12, letterSpacing: 1 }}>Account Settings</Text>
+            <View style={{ backgroundColor: "#192233", marginHorizontal: 16, borderRadius: 20, borderWidth: 1, borderColor: "#1e293b", overflow: "hidden" }}>
+              <Pressable onPress={() => setShowNameModal(true)} style={{ padding: 16, flexDirection: "row", alignItems: "center", justifyContent: "space-between", borderBottomWidth: 1, borderBottomColor: "#1e293b" }}>
+                <Text style={{ color: "white", fontSize: 16, fontWeight: "500" }}>Change Name</Text>
+                <CaretRight size={16} color="#94a3b8" />
+              </Pressable>
+
+              <Pressable onPress={() => setShowPasswordModal(true)} style={{ padding: 16, flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
+                <Text style={{ color: "white", fontSize: 16, fontWeight: "500" }}>Change Password</Text>
+                <CaretRight size={16} color="#94a3b8" />
+              </Pressable>
             </View>
           </View>
 
@@ -225,6 +285,86 @@ export default function ProfileScreen() {
 
           </View>
         </ScrollView >
+
+        {/* Change Name Modal */}
+        <Modal
+          visible={showNameModal}
+          transparent={true}
+          animationType="fade"
+          onRequestClose={() => setShowNameModal(false)}
+        >
+          <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "rgba(0,0,0,0.5)" }}>
+            <View style={{ width: "85%", backgroundColor: "#192233", borderRadius: 24, padding: 24, borderWidth: 1, borderColor: "#1e293b" }}>
+              <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+                <Text style={{ fontSize: 20, fontWeight: "bold", color: "white" }}>Change Name</Text>
+                <Pressable onPress={() => setShowNameModal(false)}>
+                  <X size={24} color="#94a3b8" />
+                </Pressable>
+              </View>
+              <Text style={{ color: "#94a3b8", marginBottom: 16 }}>Enter your new display name.</Text>
+              <TextInput
+                style={{ backgroundColor: "#0b1121", color: "white", padding: 16, borderRadius: 16, marginBottom: 24, borderWidth: 1, borderColor: "#1e293b" }}
+                value={newName}
+                onChangeText={setNewName}
+                placeholder="Display Name"
+                placeholderTextColor="#64748b"
+              />
+              <Pressable
+                onPress={handleUpdateName}
+                disabled={isLoading}
+                style={{ backgroundColor: "#135bec", padding: 16, borderRadius: 16, alignItems: "center", opacity: isLoading ? 0.7 : 1 }}
+              >
+                <Text style={{ color: "white", fontWeight: "bold", fontSize: 16 }}>{isLoading ? "Updating..." : "Update Name"}</Text>
+              </Pressable>
+            </View>
+          </KeyboardAvoidingView>
+        </Modal>
+
+        {/* Change Password Modal */}
+        <Modal
+          visible={showPasswordModal}
+          transparent={true}
+          animationType="fade"
+          onRequestClose={() => setShowPasswordModal(false)}
+        >
+          <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "rgba(0,0,0,0.5)" }}>
+            <View style={{ width: "85%", backgroundColor: "#192233", borderRadius: 24, padding: 24, borderWidth: 1, borderColor: "#1e293b" }}>
+              <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+                <Text style={{ fontSize: 20, fontWeight: "bold", color: "white" }}>Change Password</Text>
+                <Pressable onPress={() => setShowPasswordModal(false)}>
+                  <X size={24} color="#94a3b8" />
+                </Pressable>
+              </View>
+              <Text style={{ color: "#94a3b8", marginBottom: 16 }}>Enter your current password and a new secure password (min 6 chars).</Text>
+
+              <TextInput
+                style={{ backgroundColor: "#0b1121", color: "white", padding: 16, borderRadius: 16, marginBottom: 12, borderWidth: 1, borderColor: "#1e293b" }}
+                value={currentPassword}
+                onChangeText={setCurrentPassword}
+                placeholder="Current Password"
+                placeholderTextColor="#64748b"
+                secureTextEntry
+              />
+
+              <TextInput
+                style={{ backgroundColor: "#0b1121", color: "white", padding: 16, borderRadius: 16, marginBottom: 24, borderWidth: 1, borderColor: "#1e293b" }}
+                value={newPassword}
+                onChangeText={setNewPassword}
+                placeholder="New Password"
+                placeholderTextColor="#64748b"
+                secureTextEntry
+              />
+              <Pressable
+                onPress={handleUpdatePassword}
+                disabled={isLoading}
+                style={{ backgroundColor: "#135bec", padding: 16, borderRadius: 16, alignItems: "center", opacity: isLoading ? 0.7 : 1 }}
+              >
+                <Text style={{ color: "white", fontWeight: "bold", fontSize: 16 }}>{isLoading ? "Updating..." : "Update Password"}</Text>
+              </Pressable>
+            </View>
+          </KeyboardAvoidingView>
+        </Modal>
+
       </LinearGradient>
     </View>
   );

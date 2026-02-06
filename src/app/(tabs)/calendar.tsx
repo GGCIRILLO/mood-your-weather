@@ -18,6 +18,7 @@ import {
   eachDayOfInterval,
   isSameDay,
 } from "date-fns";
+import { it } from "date-fns/locale";
 
 // Sentiment mapping per emoji
 const SENTIMENT_MAP: Record<string, number> = {
@@ -135,7 +136,7 @@ export default function CalendarScreen() {
           {/* Month/Year info */}
           <View className="px-4 pt-4 pb-4">
             <Text className="text-slate-400 text-base">
-              {format(currentDate, "MMMM yyyy")}
+              {format(currentDate, "MMMM yyyy", { locale: it })}
             </Text>
           </View>
 
@@ -145,8 +146,8 @@ export default function CalendarScreen() {
               moods={moods}
               weatherTypeToEmoji={WEATHER_TYPE_TO_EMOJI}
               cardClassName="bg-[#192233] rounded-3xl p-6 shadow-lg border border-slate-800"
-              title="Last 7 Days"
-              subtitle="Emotional Trend"
+              title="Ultimi 7 giorni"
+              subtitle="Tendenza emotiva"
             />
           </View>
 
@@ -155,7 +156,7 @@ export default function CalendarScreen() {
             <View className="bg-[#192233] rounded-3xl p-4 shadow-lg border border-slate-800">
               {/* Weekday headers */}
               <View className="flex-row mb-4">
-                {["M", "T", "W", "T", "F", "S", "S"].map((day, index) => (
+                {["L", "M", "M", "G", "V", "S", "D"].map((day, index) => (
                   <View key={index} className="flex-1 items-center">
                     <Text className="text-slate-400 font-semibold text-sm">
                       {day}
@@ -219,7 +220,7 @@ export default function CalendarScreen() {
           <View className="px-4 mb-8">
             <View className="bg-[#192233] rounded-2xl p-6 shadow border border-slate-800">
               <Text className="text-white text-lg font-bold mb-4">
-                Month Statistics
+                Statistiche del mese
               </Text>
 
               <View className="flex-row justify-between">

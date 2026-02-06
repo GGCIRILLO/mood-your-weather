@@ -129,3 +129,6 @@ export interface ApiResponse<T> {
 export interface ValidationErrors {
   [key: string]: string;
 }
+
+// Export challenges types
+export * from "./challenges";

@@ -85,6 +85,7 @@ export const useCreateMood = () => {
     onSuccess: () => {
       // Invalida tutte le query moods per ricaricare i dati aggiornati
       queryClient.invalidateQueries({ queryKey: ["moods"] });
+      queryClient.invalidateQueries({ queryKey: ["challenges"] });
       console.log("✅ Mood creato con successo");
     },
     onError: (error: any) => {

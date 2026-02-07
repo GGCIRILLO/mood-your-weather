@@ -3,7 +3,7 @@ import { View, Text, ScrollView, Pressable, StyleSheet } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
-import { format, isSameDay, parseISO } from "date-fns";
+import { format, isSameDay, isValid, parseISO } from "date-fns";
 
 import { useMoods } from "@/hooks/api/useMoods";
 
@@ -51,11 +51,8 @@ const HERO_GRADIENTS: Record<string, string[]> = {
 };
 
 function safeParseDate(dateStr: string) {
-  try {
-    return parseISO(dateStr); // expects yyyy-MM-dd
-  } catch {
-    return new Date();
-  }
+  const parsed = parseISO(dateStr); // expects yyyy-MM-dd
+  return isValid(parsed) ? parsed : new Date();
 }
 
 function titleCase(s: string) {

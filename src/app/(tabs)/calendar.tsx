@@ -9,7 +9,7 @@ import { CaretLeft } from "phosphor-react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useMoods } from "@/hooks/api/useMoods";
 import { WEATHER_TYPE_TO_EMOJI } from "@/utils/constants";
-import WeeklyMoodChart from "@/components/Insights/WeeklyMoodChart";
+import WeeklyMoodChart from "@/components/MonthlyStats/WeeklyMoodChart";
 import { LinearGradient } from "expo-linear-gradient";
 import {
   format,
@@ -20,6 +20,11 @@ import {
   startOfWeek,
   endOfWeek,
 } from "date-fns";
+import {
+  getMonthEntries,
+  calculateStreak,
+  calculatePositivePercent,
+} from "@/components/MonthlyStats/MonthStats";
 
 // Sentiment mapping per emoji
 const SENTIMENT_MAP: Record<string, number> = {
@@ -87,6 +92,16 @@ export default function CalendarScreen() {
   // -----------------------------
   const monthStart = startOfMonth(currentDate);
   const monthEnd = endOfMonth(currentDate);
+
+  const monthMoods = getMonthEntries(moods, currentDate);
+  const monthEntriesCount = monthMoods.length;
+  // streak should usually be based on ALL moods, not just month
+  const streakDays = calculateStreak(moods);
+  const positivePercent = calculatePositivePercent(
+    monthMoods,
+    WEATHER_TYPE_TO_EMOJI
+  );
+
 
   // start from Monday of the first week that contains the 1st of the month
   const gridStart = startOfWeek(monthStart, { weekStartsOn: 1 });
@@ -268,20 +283,20 @@ export default function CalendarScreen() {
                 <View className="items-center">
                   <Text className="text-3xl mb-1">📊</Text>
                   <Text className="text-white text-xl font-bold">
-                    {moods.length}
+                    {monthEntriesCount}
                   </Text>
                   <Text className="text-slate-400 text-sm">Entries</Text>
                 </View>
 
                 <View className="items-center">
                   <Text className="text-3xl mb-1">🔥</Text>
-                  <Text className="text-white text-xl font-bold">5</Text>
+                  <Text className="text-white text-xl font-bold">{streakDays}</Text>
                   <Text className="text-slate-400 text-sm">Streak</Text>
                 </View>
 
                 <View className="items-center">
                   <Text className="text-3xl mb-1">☀️</Text>
-                  <Text className="text-white text-xl font-bold">68%</Text>
+                  <Text className="text-white text-xl font-bold">{positivePercent}%</Text>
                   <Text className="text-slate-400 text-sm">Positive</Text>
                 </View>
               </View>

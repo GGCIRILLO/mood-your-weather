@@ -2,12 +2,10 @@
 // CALENDAR VIEW - Monthly mood history + Weekly chart (FIXED GRID)
 // ============================================
 
-import { View, Text, ScrollView, Pressable, StyleSheet } from "react-native";
-import { useState, useEffect } from "react";
-import { router } from "expo-router";
-import { CaretLeft } from "phosphor-react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useMoods } from "@/hooks/api/useMoods";
+import { View, Text, ScrollView, Pressable } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { useState } from "react";
+import { useMoodEntries } from "@/hooks/storage/useStorage";
 import { WEATHER_TYPE_TO_EMOJI } from "@/utils/constants";
 import WeeklyMoodChart from "@/components/MonthlyStats/WeeklyMoodChart";
 import { LinearGradient } from "expo-linear-gradient";
@@ -66,7 +64,6 @@ function findClosestEmoji(sentiment: number): string {
 }
 
 export default function CalendarScreen() {
-  const insets = useSafeAreaInsets();
   const [currentDate, setCurrentDate] = useState(new Date());
   const { moods = [] } = useMoods({ limit: 100 });
 
@@ -296,7 +293,7 @@ export default function CalendarScreen() {
                   );
                 })}
               </View>
-            </View>
+            ))}
           </View>
 
           {/* Stats */}
@@ -326,12 +323,38 @@ export default function CalendarScreen() {
                   <Text className="text-white text-xl font-bold">{positivePercent}%</Text>
                   <Text className="text-slate-400 text-sm">Positive</Text>
                 </View>
-              </View>
+              );
+            })}
+          </View>
+        </View>
+
+        {/* Stats */}
+        <View className="bg-white rounded-2xl p-6 shadow mb-6">
+          <Text className="text-gray-900 text-lg font-bold mb-4">
+            Statistiche del mese
+          </Text>
+          <View className="flex-row justify-between">
+            <View className="items-center">
+              <Text className="text-3xl mb-1">📊</Text>
+              <Text className="text-gray-900 text-xl font-bold">
+                {entries.length}
+              </Text>
+              <Text className="text-gray-500 text-sm">Entries</Text>
+            </View>
+            <View className="items-center">
+              <Text className="text-3xl mb-1">🔥</Text>
+              <Text className="text-gray-900 text-xl font-bold">5</Text>
+              <Text className="text-gray-500 text-sm">Streak</Text>
+            </View>
+            <View className="items-center">
+              <Text className="text-3xl mb-1">☀️</Text>
+              <Text className="text-gray-900 text-xl font-bold">68%</Text>
+              <Text className="text-gray-500 text-sm">Positive</Text>
             </View>
           </View>
-        </ScrollView>
-      </LinearGradient>
-    </View>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 

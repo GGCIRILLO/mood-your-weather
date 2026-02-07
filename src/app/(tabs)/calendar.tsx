@@ -19,6 +19,9 @@ import {
   isSameDay,
   startOfWeek,
   endOfWeek,
+  addMonths,
+  subMonths,
+  isAfter,
 } from "date-fns";
 import {
   getMonthEntries,
@@ -67,7 +70,6 @@ export default function CalendarScreen() {
   const [currentDate, setCurrentDate] = useState(new Date());
   const { moods = [] } = useMoods({ limit: 100 });
 
-  // Debug logs
   useEffect(() => {
     console.log("📅 [CALENDAR] Moods caricati:", moods.length);
     console.log(
@@ -87,12 +89,18 @@ export default function CalendarScreen() {
     }
   }, [moods]);
 
-  // -----------------------------
-  // REAL CALENDAR GRID (Mon-first)
-  // -----------------------------
   const monthStart = startOfMonth(currentDate);
   const monthEnd = endOfMonth(currentDate);
-
+  const goPrevMonth = () => setCurrentDate((d) => subMonths(d, 1));
+  const goNextMonth = () => {
+    const next = addMonths(currentDate, 1);
+    if (isAfter(startOfMonth(next), startOfMonth(new Date()))) return;
+    setCurrentDate(next);
+  };
+  const isNextDisabled = isAfter(
+    startOfMonth(addMonths(currentDate, 1)),
+    startOfMonth(new Date())
+  );
   const monthMoods = getMonthEntries(moods, currentDate);
   const monthEntriesCount = monthMoods.length;
   // streak should usually be based on ALL moods, not just month
@@ -171,13 +179,6 @@ export default function CalendarScreen() {
             </Text>
           </View>
 
-          {/* Month/Year info */}
-          <View className="px-4 pt-4 pb-4">
-            <Text className="text-slate-400 text-base">
-              {format(currentDate, "MMMM yyyy")}
-            </Text>
-          </View>
-
           {/* Weekly Mood Chart */}
           <View className="px-4 mb-8">
             <WeeklyMoodChart
@@ -187,6 +188,32 @@ export default function CalendarScreen() {
               title="Last 7 Days"
               subtitle="Emotional Trend"
             />
+          </View>
+
+          {/* Month/Year info */}
+          <View className="px-4 pt-4 pb-4 flex-row items-center justify-between">
+            <Pressable
+              onPress={goPrevMonth}
+              className="w-10 h-10 items-center justify-center rounded-full bg-white/5"
+              hitSlop={10}
+            >
+            <Text className="text-white text-xl">‹</Text>
+              </Pressable>
+                <Text className="text-slate-200 text-base font-semibold">
+                  {format(currentDate, "MMMM yyyy")}
+                </Text>
+              <Pressable
+                onPress={goNextMonth}
+                disabled={isNextDisabled}
+                className={`w-10 h-10 items-center justify-center rounded-full ${
+                  isNextDisabled ? "bg-white/0" : "bg-white/5"
+                }`}
+                hitSlop={10}
+              >
+                <Text className={`${isNextDisabled ? "text-slate-600" : "text-white"} text-xl`}>
+                  ›
+                </Text>
+              </Pressable>
           </View>
 
           {/* Calendar Grid */}

@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
-    "ignoreDeprecations": "6.0",
     "paths": {
       "@/*": [
         "./src/*"
@@ -15,7 +14,7 @@
     "global.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "nativewind-env.d.ts"
-, "__tests__/utils/Example-test.tsx", "jest.config.js"  ],
-  
+    "nativewind-env.d.ts", 
+    "__tests__/utils/Example-test.tsx", "jest.config.js"  
+  ],
 }

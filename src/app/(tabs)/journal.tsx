@@ -55,11 +55,11 @@ export default function JournalScreen() {
         day: "numeric",
       });
 
-      // Format time: "9:30 PM"
+      // Format time: "09:30" (24h format)
       const time = timestamp.toLocaleTimeString("en-US", {
-        hour: "numeric",
+        hour: "2-digit",
         minute: "2-digit",
-        hour12: true,
+        hour12: false,
       });
 
       return {

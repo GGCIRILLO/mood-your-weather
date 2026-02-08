@@ -12,6 +12,7 @@ import Slider from "@react-native-community/slider";
 import { Practice } from "@/utils/practicesData";
 import { formatTime } from "@/utils/audioUtils";
 import { useEffect, useRef } from "react";
+import { useCompleteActivity } from "@/hooks/api/useCompleteActivity";
 
 interface PlayerModalProps {
   visible: boolean;
@@ -36,6 +37,8 @@ export const PlayerModal = ({
 }: PlayerModalProps) => {
   const insets = useSafeAreaInsets();
   const breatheAnim = useRef(new Animated.Value(1)).current;
+  const { mutate: completeActivity } = useCompleteActivity();
+  const hasCompletedRef = useRef(false);
 
   useEffect(() => {
     if (visible) {
@@ -55,6 +58,26 @@ export const PlayerModal = ({
       ).start();
     }
   }, [visible]);
+
+  // Reset completion flag when modal closes or practice changes
+  useEffect(() => {
+    if (!visible || !practice) {
+      hasCompletedRef.current = false;
+    }
+  }, [visible, practice]);
+
+  // Auto-complete activity when audio finishes
+  useEffect(() => {
+    // Check if audio has finished (with 500ms tolerance)
+    if (
+      duration > 0 &&
+      position >= duration - 500 &&
+      !hasCompletedRef.current
+    ) {
+      hasCompletedRef.current = true;
+      completeActivity();
+    }
+  }, [position, duration, completeActivity]);
 
   if (!practice) return null;
 

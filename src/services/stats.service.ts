@@ -101,3 +101,34 @@ export const getUserStats = async (): Promise<UserStats> => {
     throw error;
   }
 };
+
+/**
+ * Complete a mindful activity
+ *
+ * POST /challenges/mindful
+ * Requires authentication
+ */
+export const completeMindfulActivity = async (): Promise<{
+  success: boolean;
+}> => {
+  const token = await getAuthToken();
+  if (!token) throw new Error("User not authenticated");
+
+  const url = `${API_BASE_URL}/challenges/mindful`;
+
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    const data = await handleApiResponse(response);
+    return data;
+  } catch (error: any) {
+    console.error("❌ Error completing mindful activity:", error.message);
+    throw error;
+  }
+};

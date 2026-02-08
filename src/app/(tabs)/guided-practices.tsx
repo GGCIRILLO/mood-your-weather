@@ -24,12 +24,31 @@ export default function GuidedPracticesScreen() {
     const [isPlaying, setIsPlaying] = useState(false);
     const [position, setPosition] = useState(0);
     const [duration, setDuration] = useState(0);
+    const [audioDurations, setAudioDurations] = useState<Record<number, string>>({});
 
     const formatTime = (millis: number) => {
         if (!millis) return "00:00";
-        const minutes = Math.floor(millis / 60000);
-        const seconds = Math.floor((millis % 60000) / 1000);
+        const totalSeconds = Math.floor(millis / 1000);
+        const hours = Math.floor(totalSeconds / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
+        const seconds = totalSeconds % 60;
+
+        if (hours > 0) {
+            return `${hours}:${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+        }
         return `${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    };
+
+    // Format duration for list display (human-readable)
+    const formatDurationForList = (millis: number) => {
+        if (!millis) return "--";
+        const totalMinutes = Math.round(millis / 60000);
+        if (totalMinutes >= 60) {
+            const hours = Math.floor(totalMinutes / 60);
+            const mins = totalMinutes % 60;
+            return `${hours} hr ${mins} min`;
+        }
+        return `${totalMinutes} min`;
     };
 
     // Audio Logic
@@ -39,6 +58,39 @@ export default function GuidedPracticesScreen() {
             staysActiveInBackground: true,
             shouldDuckAndroid: true,
         });
+    }, []);
+
+    // Load audio durations on mount
+    useEffect(() => {
+        const loadDurations = async () => {
+            const durations: Record<number, string> = {};
+            const audioSources = [
+                { id: 1, audio: require("../../../assets/audio/Thunderstorm.mp4") },
+                { id: 2, audio: require("../../../assets/audio/RainyDay.mp4") },
+                { id: 3, audio: require("../../../assets/audio/ForestWay.mp3") },
+                { id: 4, audio: require("../../../assets/audio/MorningMindfulness.mp4") },
+                { id: 5, audio: require("../../../assets/audio/DeepRestBodyScan.mp4") },
+                { id: 6, audio: require("../../../assets/audio/DeepWork.mp4") },
+                { id: 8, audio: require("../../../assets/audio/PanicSOS.mp4") },
+                { id: 9, audio: require("../../../assets/audio/BoxBreathing.mp4") },
+                { id: 10, audio: require("../../../assets/audio/Dreamscapes.mp4") },
+            ];
+
+            for (const source of audioSources) {
+                try {
+                    const { sound } = await Audio.Sound.createAsync(source.audio, { shouldPlay: false });
+                    const status = await sound.getStatusAsync();
+                    if (status.isLoaded && status.durationMillis) {
+                        durations[source.id] = formatDurationForList(status.durationMillis);
+                    }
+                    await sound.unloadAsync();
+                } catch (e) {
+                    console.log('Error loading duration for id:', source.id, e);
+                }
+            }
+            setAudioDurations(durations);
+        };
+        loadDurations();
     }, []);
 
     async function playSound(audioSource: any) {
@@ -134,7 +186,7 @@ export default function GuidedPracticesScreen() {
             id: 1,
             title: "Thunderstorm Release",
             tag: "Anxiety Relief",
-            duration: "10 min",
+            duration: "21 min",
             type: "Relaxation",
             description: "Let the rolling thunder wash away your stress and ground you in the present moment. Feel the electricity clear your mind.",
             icon: CloudLightning,
@@ -146,7 +198,7 @@ export default function GuidedPracticesScreen() {
             id: 2,
             title: "Rainy Day Calm",
             tag: "Sleep Aid",
-            duration: "14 min",
+            duration: "29 min",
             type: "Relaxation",
             description: "Gentle rain sounds to help you drift into peaceful sleep. Let each drop carry away your worries.",
             icon: CloudRain,
@@ -158,7 +210,7 @@ export default function GuidedPracticesScreen() {
             id: 3,
             title: "Forest Focus",
             tag: "Focus Enhancement",
-            duration: "3 min",
+            duration: "2 min",
             type: "Focus",
             description: "Immerse yourself in the sounds of a deep forest to heighten your concentration and block out distractions.",
             icon: Tree,
@@ -170,7 +222,7 @@ export default function GuidedPracticesScreen() {
             id: 4,
             title: "Morning Mindfulness",
             tag: "Daily Ritual",
-            duration: "10 min",
+            duration: "20 min",
             type: "Meditation",
             description: "Start your day with intention and clarity. A gentle guided meditation to awaken your mind.",
             icon: Sun,
@@ -182,7 +234,7 @@ export default function GuidedPracticesScreen() {
             id: 5,
             title: "Deep Rest Body Scan",
             tag: "Stress Relief",
-            duration: "25 min",
+            duration: "54 min",
             type: "Meditation",
             description: "Systematically relax every part of your body. Perfect for releasing deep-seated tension.",
             icon: Moon,
@@ -206,7 +258,7 @@ export default function GuidedPracticesScreen() {
             id: 8,
             title: "Panic SOS",
             tag: "Immediate Relief",
-            duration: "6 min",
+            duration: "12 min",
             type: "Anxiety",
             description: "A short, powerful session to ground you when you feel overwhelmed. Use this for immediate panic relief.",
             icon: CloudLightning,
@@ -218,7 +270,7 @@ export default function GuidedPracticesScreen() {
             id: 9,
             title: "Box Breathing",
             tag: "Breathwork",
-            duration: "5 min",
+            duration: "14 min",
             type: "Anxiety",
             description: "Simple, effective breathing technique to calm your nervous system. Inhale, hold, exhale, hold.",
             icon: Wind,
@@ -230,7 +282,7 @@ export default function GuidedPracticesScreen() {
             id: 10,
             title: "Dreamscapes",
             tag: "Sleep Stories",
-            duration: "20 min",
+            duration: "42 min",
             type: "Sleep",
             description: "A calming story that takes you on a journey to a peaceful world, helping you disconnect from the day.",
             icon: Moon,
@@ -313,7 +365,7 @@ export default function GuidedPracticesScreen() {
                                                     <Text style={{ color: "white", fontSize: 32, fontWeight: "bold", marginBottom: 8 }}>{practice.title}</Text>
                                                     <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
                                                         <Clock size={16} color="#92a4c9" />
-                                                        <Text style={{ color: "#92a4c9", fontSize: 14 }}>{practice.duration}</Text>
+                                                        <Text style={{ color: "#92a4c9", fontSize: 14 }}>{audioDurations[practice.id] || practice.duration}</Text>
                                                         <Text style={{ color: "#92a4c9", fontSize: 14 }}>•</Text>
                                                         <Text style={{ color: "#92a4c9", fontSize: 14 }}>{practice.type}</Text>
                                                     </View>

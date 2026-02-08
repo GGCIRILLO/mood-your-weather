@@ -64,6 +64,10 @@ import {
   restoreNotificationSettings,
   sendTestNotification,
 } from "@/services/notification.service";
+import {
+  useExportToCSV,
+  useExportToGoogleSheets,
+} from "@/hooks/api/useExport";
 
 const PROFILE_IMAGE_KEY = "@mood_weather:profile_image";
 
@@ -89,6 +93,13 @@ export default function ProfileScreen() {
   const insets = useSafeAreaInsets();
   const { user } = useAuth();
   const { stats, loading: statsLoading } = useUserStats();
+  const { mutate: exportToCSV, isPending: isExportingCSV } = useExportToCSV();
+  const {
+    mutate: exportToGoogleSheets,
+    isPending: isExportingSheets,
+  } = useExportToGoogleSheets();
+
+  const isExporting = isExportingCSV || isExportingSheets;
 
   // State for toggles
   const [reduceMotion, setReduceMotion] = useState(false);
@@ -172,7 +183,7 @@ export default function ProfileScreen() {
     return date.toLocaleTimeString("en-US", {
       hour: "2-digit",
       minute: "2-digit",
-      hour12: true,
+      hour12: false,
     });
   };
 
@@ -312,6 +323,67 @@ export default function ProfileScreen() {
     ]);
   };
 
+  const handleExportData = async () => {
+    Alert.alert(
+      "Export Data",
+      "Choose your export format:",
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "CSV File",
+          onPress: () => {
+            exportToCSV(undefined, {
+              onSuccess: () => {
+                Alert.alert(
+                  "Success",
+                  "Your data has been exported to CSV successfully!",
+                );
+              },
+              onError: (error: Error) => {
+                Alert.alert(
+                  "Export Failed",
+                  error.message || "Failed to export data. Please try again.",
+                );
+              },
+            });
+          },
+        },
+        {
+          text: "Google Sheets",
+          onPress: () => {
+            exportToGoogleSheets(undefined, {
+              onSuccess: (data) => {
+                if (data.url) {
+                  Alert.alert(
+                    "Success",
+                    `Your data has been exported to Google Sheets!\n\nURL: ${data.url}`,
+                    [
+                      {
+                        text: "OK",
+                        style: "default",
+                      },
+                    ],
+                  );
+                } else {
+                  Alert.alert(
+                    "Success",
+                    data.message || "Data exported to Google Sheets!",
+                  );
+                }
+              },
+              onError: (error: Error) => {
+                Alert.alert(
+                  "Export Failed",
+                  error.message || "Failed to export to Google Sheets.",
+                );
+              },
+            });
+          },
+        },
+      ],
+    );
+  };
+
   const handleClearData = async () => {
     Alert.alert(
       "Delete All Data",
@@ -336,49 +408,50 @@ export default function ProfileScreen() {
         {/* Background Blur Blobs */}
         <View style={styles.blueBlob} />
         <View style={styles.purpleBlob} />
-        {/* Header */}
-        <View
-          style={{
-            paddingTop: insets.top + 16,
-            paddingBottom: 16,
-            paddingHorizontal: 16,
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <Pressable
-            onPress={() => router.back()}
-            style={{
-              width: 48,
-              height: 48,
-              alignItems: "center",
-              justifyContent: "center",
-              borderRadius: 24,
-              backgroundColor: "rgba(255,255,255,0.1)",
-            }}
-          >
-            <ArrowLeft size={24} color="#FFF" />
-          </Pressable>
-          <Text
-            style={{
-              fontSize: 14,
-              fontWeight: "bold",
-              textTransform: "uppercase",
-              letterSpacing: 1.5,
-              color: "#94a3b8",
-            }}
-          >
-            PROFILE
-          </Text>
-          <View style={{ width: 48 }} />
-        </View>
 
         <ScrollView
           style={{ flex: 1 }}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingBottom: 100 }}
         >
+          {/* Header */}
+          <View
+            style={{
+              paddingTop: insets.top + 16,
+              paddingBottom: 16,
+              paddingHorizontal: 16,
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <Pressable
+              onPress={() => router.back()}
+              style={{
+                width: 48,
+                height: 48,
+                alignItems: "center",
+                justifyContent: "center",
+                borderRadius: 24,
+                backgroundColor: "rgba(255,255,255,0.1)",
+              }}
+            >
+              <ArrowLeft size={24} color="#FFF" />
+            </Pressable>
+            <Text
+              style={{
+                fontSize: 14,
+                fontWeight: "bold",
+                textTransform: "uppercase",
+                letterSpacing: 1.5,
+                color: "#94a3b8",
+              }}
+            >
+              PROFILE
+            </Text>
+            <View style={{ width: 48 }} />
+          </View>
+
           {/* Profile Profile */}
           <View
             style={{
@@ -788,7 +861,8 @@ export default function ProfileScreen() {
               }}
             >
               <Pressable
-                onPress={() => Alert.alert("Export Data", "Coming soon!")}
+                onPress={handleExportData}
+                disabled={isExporting}
                 style={{
                   padding: 16,
                   flexDirection: "row",
@@ -796,6 +870,7 @@ export default function ProfileScreen() {
                   justifyContent: "space-between",
                   borderBottomWidth: 1,
                   borderBottomColor: "#1e293b",
+                  opacity: isExporting ? 0.5 : 1,
                 }}
               >
                 <View
@@ -809,7 +884,7 @@ export default function ProfileScreen() {
                   <Text
                     style={{ color: "white", fontSize: 16, fontWeight: "500" }}
                   >
-                    Export All Data
+                    {isExporting ? "Exporting..." : "Export All Data"}
                   </Text>
                 </View>
                 <CaretRight size={16} color="#94a3b8" />

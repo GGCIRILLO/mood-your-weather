@@ -40,3 +40,6 @@ app-example
 /.idea
 /android/app
 /android
+
+# Tests
+coverage/**/*

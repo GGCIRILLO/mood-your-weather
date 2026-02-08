@@ -75,7 +75,7 @@ export const WeatherLocationCard = () => {
         <View className="flex-row items-center mb-2">
           <NavigationArrowIcon size={20} weight="bold" color="white" />
           <Text className="text-white/70 text-xs ml-2 font-medium">
-            {latFormatted}, {lonFormatted}
+            {weather.location.name || `${latFormatted}, ${lonFormatted}`}
           </Text>
         </View>
 

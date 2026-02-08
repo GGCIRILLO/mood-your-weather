@@ -6,6 +6,7 @@ import { API_BASE_URL } from "../config/api";
 export interface Location {
   lat: number;
   lon: number;
+  name?: string; 
 }
 
 /**

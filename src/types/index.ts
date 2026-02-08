@@ -52,6 +52,7 @@ export interface MoodEntry {
   location?: {
     lat: number;
     lon: number;
+    name: string;
   };
 }
 

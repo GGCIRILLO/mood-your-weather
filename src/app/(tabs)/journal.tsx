@@ -80,9 +80,10 @@ export default function JournalScreen() {
               temperature: entry.mood.externalWeather.temp,
             }
           : undefined,
-        // Location - for now just show coordinates, could be geocoded later
+        // Location - show name if available, otherwise coordinates
         location: entry.mood.location
-          ? `${entry.mood.location.lat.toFixed(2)}°, ${entry.mood.location.lon.toFixed(2)}°`
+          ? entry.mood.location.name ||
+            `${entry.mood.location.lat.toFixed(2)}°, ${entry.mood.location.lon.toFixed(2)}°`
           : undefined,
       };
     });

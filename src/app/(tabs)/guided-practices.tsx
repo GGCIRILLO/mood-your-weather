@@ -1,5 +1,6 @@
 import { View, Text, ScrollView, Pressable, ImageBackground, TextInput, Animated } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import Slider from "@react-native-community/slider";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { CaretLeft, CloudLightning, CloudRain, Sun, Moon, Play, BookmarkSimple, Clock, House, Medal, User, X, CaretDown, DotsThree, Wind, Shuffle, SkipBack, SkipForward, Repeat, Pause, Cloud, ArrowRight, Quotes, Tree } from "phosphor-react-native";
@@ -21,6 +22,15 @@ export default function GuidedPracticesScreen() {
     const [selectedPractice, setSelectedPractice] = useState<any>(null);
     const [sound, setSound] = useState<Audio.Sound | null>(null);
     const [isPlaying, setIsPlaying] = useState(false);
+    const [position, setPosition] = useState(0);
+    const [duration, setDuration] = useState(0);
+
+    const formatTime = (millis: number) => {
+        if (!millis) return "00:00";
+        const minutes = Math.floor(millis / 60000);
+        const seconds = Math.floor((millis % 60000) / 1000);
+        return `${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    };
 
     // Audio Logic
     useEffect(() => {
@@ -39,7 +49,21 @@ export default function GuidedPracticesScreen() {
             console.log('Loading Sound:', audioSource);
             // Check if audioSource is a string (URL) or a number (require)
             const source = typeof audioSource === 'string' ? { uri: audioSource } : audioSource;
-            const { sound: newSound } = await Audio.Sound.createAsync(source, { shouldPlay: true });
+            const { sound: newSound } = await Audio.Sound.createAsync(
+                source,
+                { shouldPlay: true },
+                (status) => {
+                    if (status.isLoaded) {
+                        setDuration(status.durationMillis || 0);
+                        setPosition(status.positionMillis);
+                        setIsPlaying(status.isPlaying);
+                        if (status.didJustFinish) {
+                            setIsPlaying(false);
+                            setPosition(0);
+                        }
+                    }
+                }
+            );
             setSound(newSound);
             console.log('Sound loaded and playing');
             setIsPlaying(true);
@@ -51,11 +75,15 @@ export default function GuidedPracticesScreen() {
     async function togglePlayback() {
         if (sound) {
             if (isPlaying) {
+                console.log('Pausing audio...');
                 await sound.pauseAsync();
                 setIsPlaying(false);
+                console.log('Audio paused');
             } else {
+                console.log('Resuming audio...');
                 await sound.playAsync();
                 setIsPlaying(true);
+                console.log('Audio playing');
             }
         } else if (selectedPractice?.audio) {
             await playSound(selectedPractice.audio);
@@ -112,31 +140,31 @@ export default function GuidedPracticesScreen() {
             icon: CloudLightning,
             image: "https://images.unsplash.com/photo-1605727216801-e27ce1d0cc28?w=800",
             color: "#135bec",
-            audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+            audio: require("../../../assets/audio/Thunderstorm.mp4"),
         },
         {
             id: 2,
             title: "Rainy Day Calm",
             tag: "Sleep Aid",
-            duration: "15 min",
+            duration: "14 min",
             type: "Relaxation",
             description: "Gentle rain sounds to help you drift into peaceful sleep. Let each drop carry away your worries.",
             icon: CloudRain,
             image: "https://images.unsplash.com/photo-1515694346937-94d85e41e6f0?w=800",
             color: "#6366f1",
-            audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+            audio: require("../../../assets/audio/RainyDay.mp4"),
         },
         {
             id: 3,
             title: "Forest Focus",
             tag: "Focus Enhancement",
-            duration: "20 min",
+            duration: "3 min",
             type: "Focus",
             description: "Immerse yourself in the sounds of a deep forest to heighten your concentration and block out distractions.",
             icon: Tree,
             image: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800",
             color: "#10b981",
-            audio: require("@/assets/audio/ForestWay.mp3"),
+            audio: require("../../../assets/audio/ForestWay.mp3"),
         },
         {
             id: 4,
@@ -148,7 +176,7 @@ export default function GuidedPracticesScreen() {
             icon: Sun,
             image: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=800",
             color: "#f59e0b",
-            audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3",
+            audio: require("../../../assets/audio/MorningMindfulness.mp4"),
         },
         {
             id: 5,
@@ -160,31 +188,31 @@ export default function GuidedPracticesScreen() {
             icon: Moon,
             image: "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=800",
             color: "#6366f1", // Indigo
-            audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3",
+            audio: require("../../../assets/audio/DeepRestBodyScan.mp4"),
         },
         {
             id: 6,
             title: "Deep Work Zone",
             tag: "Productivity",
-            duration: "45 min",
+            duration: "1 hr 45 min",
             type: "Focus",
             description: "Binaural beats combined with white noise to help you enter a flow state for deep work sessions.",
             icon: Wind,
             image: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=800",
             color: "#0ea5e9",
-            audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3",
+            audio: require("../../../assets/audio/DeepWork.mp4"),
         },
         {
             id: 8,
             title: "Panic SOS",
             tag: "Immediate Relief",
-            duration: "5 min",
+            duration: "6 min",
             type: "Anxiety",
             description: "A short, powerful session to ground you when you feel overwhelmed. Use this for immediate panic relief.",
             icon: CloudLightning,
             image: "https://images.unsplash.com/photo-1504608524841-42fe6f032b4b?w=800",
             color: "#ef4444",
-            audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3",
+            audio: require("../../../assets/audio/PanicSOS.mp4"),
         },
         {
             id: 9,
@@ -196,7 +224,7 @@ export default function GuidedPracticesScreen() {
             icon: Wind,
             image: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=800",
             color: "#14b8a6",
-            audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3",
+            audio: require("../../../assets/audio/BoxBreathing.mp4"),
         },
         {
             id: 10,
@@ -208,7 +236,7 @@ export default function GuidedPracticesScreen() {
             icon: Moon,
             image: "https://images.unsplash.com/photo-1495616811223-4d98c6e9d869?w=800",
             color: "#4f46e5",
-            audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3",
+            audio: require("../../../assets/audio/Dreamscapes.mp4"),
         },
     ];
 
@@ -383,35 +411,34 @@ export default function GuidedPracticesScreen() {
 
                             {/* Progress */}
                             <View style={{ gap: 8 }}>
-                                <View style={{ width: "100%", height: 4, backgroundColor: "rgba(255,255,255,0.1)", borderRadius: 2, overflow: "hidden" }}>
-                                    <View style={{ width: "33%", height: "100%", backgroundColor: "#135bec", borderRadius: 2 }} />
-                                </View>
-                                <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                                    <Text style={{ color: "rgba(255,255,255,0.4)", fontSize: 12, fontFamily: "monospace" }}>03:20</Text>
-                                    <Text style={{ color: "rgba(255,255,255,0.4)", fontSize: 12, fontFamily: "monospace" }}>10:00</Text>
+                                <Slider
+                                    style={{ width: "100%", height: 40 }}
+                                    minimumValue={0}
+                                    maximumValue={duration}
+                                    value={position}
+                                    minimumTrackTintColor="#135bec"
+                                    maximumTrackTintColor="rgba(255,255,255,0.1)"
+                                    thumbTintColor="white"
+                                    onSlidingComplete={async (value) => {
+                                        if (sound) {
+                                            await sound.setPositionAsync(value);
+                                        }
+                                    }}
+                                />
+                                <View style={{ flexDirection: "row", justifyContent: "space-between", paddingHorizontal: 16, marginTop: -10 }}>
+                                    <Text style={{ color: "rgba(255,255,255,0.4)", fontSize: 12, fontFamily: "monospace" }}>{formatTime(position)}</Text>
+                                    <Text style={{ color: "rgba(255,255,255,0.4)", fontSize: 12, fontFamily: "monospace" }}>{formatTime(duration)}</Text>
                                 </View>
                             </View>
 
                             {/* Controls */}
-                            <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingHorizontal: 16 }}>
-                                <Pressable onPress={() => setIsShuffleOn(!isShuffleOn)}>
-                                    <Shuffle size={28} color={isShuffleOn ? "#38bdf8" : "rgba(255,255,255,0.6)"} />
-                                </Pressable>
-                                <Pressable onPress={() => console.log("Previous track")}>
-                                    <SkipBack size={36} color="rgba(255,255,255,0.8)" weight="fill" />
-                                </Pressable>
-                                <Pressable onPress={togglePlayback} style={{ width: 64, height: 64, borderRadius: 32, backgroundColor: "white", alignItems: "center", justifyContent: "center", shadowColor: "white", shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.3, shadowRadius: 30 }}>
+                            <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center", paddingHorizontal: 16, paddingBottom: 20 }}>
+                                <Pressable onPress={togglePlayback} style={{ width: 80, height: 80, borderRadius: 40, backgroundColor: "white", alignItems: "center", justifyContent: "center", shadowColor: "white", shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.3, shadowRadius: 30 }}>
                                     {isPlaying ? (
-                                        <Pause size={36} color="#0b1121" weight="fill" />
+                                        <Pause size={48} color="#0b1121" weight="fill" />
                                     ) : (
-                                        <Play size={36} color="#0b1121" weight="fill" />
+                                        <Play size={48} color="#0b1121" weight="fill" />
                                     )}
-                                </Pressable>
-                                <Pressable onPress={() => console.log("Next track")}>
-                                    <SkipForward size={36} color="rgba(255,255,255,0.8)" weight="fill" />
-                                </Pressable>
-                                <Pressable onPress={() => setIsRepeatOn(!isRepeatOn)}>
-                                    <Repeat size={28} color={isRepeatOn ? "#38bdf8" : "rgba(255,255,255,0.6)"} />
                                 </Pressable>
                             </View>
                         </View>

@@ -370,6 +370,7 @@ export default function JournalScreen() {
                   return (
                     <View key={entry.id}>
                       <Animated.View
+                        key={entry.id}
                         style={{
                           opacity: animValue,
                           transform: [

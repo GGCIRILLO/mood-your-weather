@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo, Fragment } from "react";
 import {
   View,
   Text,
@@ -7,6 +7,7 @@ import {
   Animated,
   StatusBar,
   StyleSheet,
+  ActivityIndicator,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -23,75 +24,7 @@ import {
   EmptyState,
 } from "@/components/journal";
 import type { MoodEmojiType } from "@/types";
-
-// Dummy data for testing
-const DUMMY_ENTRIES = [
-  {
-    id: "1",
-    date: "Monday, January 15, 2026",
-    emojis: ["stormy", "rainy"] as MoodEmojiType[],
-    intensity: 85,
-    note: "Today was really tough at work. Had a difficult meeting with my manager and felt completely overwhelmed. I couldn't focus on anything afterward. Need to figure out a better way to handle stress before it gets worse.",
-    externalWeather: {
-      condition: "Rainy",
-      temperature: 8,
-    },
-    location: "Milan, IT",
-    time: "9:30 PM",
-  },
-  {
-    id: "2",
-    date: "Sunday, January 14, 2026",
-    emojis: ["sunny"] as MoodEmojiType[],
-    intensity: 90,
-    note: "Amazing day! Went for a long walk in the park and had lunch with friends. Feeling grateful for the little things in life. The weather was perfect and everything just felt right.",
-    externalWeather: {
-      condition: "Sunny",
-      temperature: 15,
-    },
-    location: "Milan, IT",
-    time: "8:15 PM",
-  },
-  {
-    id: "3",
-    date: "Saturday, January 13, 2026",
-    emojis: ["partly", "cloudy"] as MoodEmojiType[],
-    intensity: 60,
-    note: "A quiet day at home. Did some reading and caught up on my favorite shows. Not particularly exciting, but needed this rest after a busy week.",
-    externalWeather: {
-      condition: "Cloudy",
-      temperature: 10,
-    },
-    location: "Milan, IT",
-    time: "10:00 PM",
-  },
-  {
-    id: "4",
-    date: "Friday, January 12, 2026",
-    emojis: ["rainy"] as MoodEmojiType[],
-    intensity: 55,
-    note: "Felt a bit down today. Missing home and thinking about old friends. Sometimes you just need to let yourself feel sad and that's okay.",
-    externalWeather: {
-      condition: "Rainy",
-      temperature: 7,
-    },
-    location: "Milan, IT",
-    time: "7:45 PM",
-  },
-  {
-    id: "5",
-    date: "Thursday, January 11, 2026",
-    emojis: ["stormy"] as MoodEmojiType[],
-    intensity: 95,
-    note: "Feeling extremely anxious about the upcoming presentation. Can't sleep, heart racing. Need to remember to breathe and take it one step at a time.",
-    externalWeather: {
-      condition: "Stormy",
-      temperature: 6,
-    },
-    location: "Milan, IT",
-    time: "11:30 PM",
-  },
-];
+import { useJournalMoods } from "@/hooks/api/useJournalMoods";
 
 export default function JournalScreen() {
   const insets = useSafeAreaInsets();
@@ -101,7 +34,59 @@ export default function JournalScreen() {
   const [selectedFilters, setSelectedFilters] = useState<MoodEmojiType[]>([]);
   const [scrollY, setScrollY] = useState(0);
 
+  // Fetch journal data from API
+  const { entries, loading, error } = useJournalMoods({
+    limit: 50,
+    autoFetch: true,
+  });
+
   const headerOpacity = useRef(new Animated.Value(1)).current;
+
+  // Transform API data to match JournalEntryCard format
+  const transformedEntries = useMemo(() => {
+    return entries.map((entry) => {
+      const timestamp = new Date(entry.mood.timestamp);
+
+      // Format date: "Monday, January 15, 2026"
+      const date = timestamp.toLocaleDateString("en-US", {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      });
+
+      // Format time: "9:30 PM"
+      const time = timestamp.toLocaleTimeString("en-US", {
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: true,
+      });
+
+      return {
+        id: entry.mood.id,
+        date,
+        emojis: entry.mood.emojis,
+        intensity: entry.mood.intensity,
+        note: entry.mood.note || "",
+        time,
+        // NLP analysis data
+        nlpSentiment: entry.nlpAnalysis.sentiment,
+        nlpScore: entry.nlpAnalysis.score,
+        nlpMagnitude: entry.nlpAnalysis.magnitude,
+        // External weather - map API structure to component structure
+        externalWeather: entry.mood.externalWeather
+          ? {
+              condition: entry.mood.externalWeather.weather_main,
+              temperature: entry.mood.externalWeather.temp,
+            }
+          : undefined,
+        // Location - for now just show coordinates, could be geocoded later
+        location: entry.mood.location
+          ? `${entry.mood.location.lat.toFixed(2)}°, ${entry.mood.location.lon.toFixed(2)}°`
+          : undefined,
+      };
+    });
+  }, [entries]);
 
   // Handle scroll for blur effect
   const handleScroll = (event: any) => {
@@ -117,7 +102,7 @@ export default function JournalScreen() {
   };
 
   // Filter entries based on search and filters
-  const filteredEntries = DUMMY_ENTRIES.filter((entry) => {
+  const filteredEntries = transformedEntries.filter((entry) => {
     // Search filter
     const matchesSearch =
       searchQuery.trim() === "" ||
@@ -134,7 +119,7 @@ export default function JournalScreen() {
 
   // Determine empty state type
   const getEmptyStateType = (): "noEntries" | "noResults" | "noFilters" => {
-    if (DUMMY_ENTRIES.length === 0) return "noEntries";
+    if (transformedEntries.length === 0) return "noEntries";
     if (selectedFilters.length > 0 && filteredEntries.length === 0)
       return "noFilters";
     if (searchQuery.trim() !== "" && filteredEntries.length === 0)
@@ -155,21 +140,46 @@ export default function JournalScreen() {
   };
 
   // Staggered fade-in animation for entries
-  const entryAnims = useRef(
-    DUMMY_ENTRIES.map(() => new Animated.Value(0)),
-  ).current;
+  // Use a stable map to store animations by entry ID
+  const entryAnimsMap = useRef<Map<string, Animated.Value>>(new Map()).current;
+  const animatedEntries = useRef<Set<string>>(new Set()).current;
 
+  // Initialize animations only for new entries from API, not on filter changes
   useEffect(() => {
-    const animations = filteredEntries.map((_, index) =>
-      Animated.timing(entryAnims[index], {
-        toValue: 1,
-        duration: 300,
-        delay: index * 50,
-        useNativeDriver: true,
-      }),
-    );
-    Animated.stagger(50, animations).start();
-  }, [filteredEntries, entryAnims]);
+    // Only animate entries that haven't been animated yet
+    const newAnimations: Animated.CompositeAnimation[] = [];
+    const entriesToAnimate: { id: string; index: number }[] = [];
+
+    transformedEntries.forEach((entry, index) => {
+      if (!animatedEntries.has(entry.id)) {
+        if (!entryAnimsMap.has(entry.id)) {
+          entryAnimsMap.set(entry.id, new Animated.Value(0));
+        }
+        entriesToAnimate.push({ id: entry.id, index });
+        animatedEntries.add(entry.id);
+      }
+    });
+
+    // Create animations for new entries
+    entriesToAnimate.forEach(({ id }, arrayIndex) => {
+      const anim = entryAnimsMap.get(id)!;
+      anim.setValue(0);
+
+      newAnimations.push(
+        Animated.timing(anim, {
+          toValue: 1,
+          duration: 300,
+          delay: arrayIndex * 50,
+          useNativeDriver: true,
+        }),
+      );
+    });
+
+    // Start animations only if there are new entries
+    if (newAnimations.length > 0) {
+      Animated.stagger(50, newAnimations).start();
+    }
+  }, [transformedEntries]); // Only depend on transformedEntries (API data), not filteredEntries
 
   return (
     <View style={styles.container}>
@@ -223,10 +233,12 @@ export default function JournalScreen() {
                 color: "#94a3b8",
               }}
             >
-              Reflections
+              Journal
             </Text>
 
-            <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+            <View
+              style={{ flexDirection: "row", alignItems: "center", gap: 8 }}
+            >
               <Pressable
                 onPress={() => {
                   setSearchVisible(!searchVisible);
@@ -288,40 +300,106 @@ export default function JournalScreen() {
 
           {/* Entry Feed */}
           <View style={{ paddingTop: 20 }}>
-            {filteredEntries.length === 0 ? (
-              <EmptyState
-                type={getEmptyStateType()}
-                searchQuery={searchQuery}
-                onClearFilters={handleClearFilters}
-              />
-            ) : (
-              filteredEntries.map((entry, index) => (
-                <Animated.View
-                  key={entry.id}
+            {loading ? (
+              <Fragment key="loading">
+                <View
                   style={{
-                    opacity: entryAnims[index],
-                    transform: [
-                      {
-                        translateY: entryAnims[index].interpolate({
-                          inputRange: [0, 1],
-                          outputRange: [20, 0],
-                        }),
-                      },
-                    ],
+                    flex: 1,
+                    justifyContent: "center",
+                    alignItems: "center",
+                    paddingVertical: 60,
                   }}
                 >
-                  <JournalEntryCard
-                    date={entry.date}
-                    emojis={entry.emojis}
-                    intensity={entry.intensity}
-                    note={entry.note}
-                    externalWeather={entry.externalWeather}
-                    location={entry.location}
-                    time={entry.time}
-                    searchQuery={searchQuery}
-                  />
-                </Animated.View>
-              ))
+                  <ActivityIndicator size="large" color="#6366F1" />
+                  <Text
+                    style={{
+                      color: "#94a3b8",
+                      fontSize: 16,
+                      marginTop: 16,
+                    }}
+                  >
+                    Loading your reflections...
+                  </Text>
+                </View>
+              </Fragment>
+            ) : error ? (
+              <Fragment key="error">
+                <View
+                  style={{
+                    flex: 1,
+                    justifyContent: "center",
+                    alignItems: "center",
+                    paddingVertical: 60,
+                    paddingHorizontal: 20,
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: "#ef4444",
+                      fontSize: 18,
+                      fontWeight: "600",
+                      marginBottom: 8,
+                    }}
+                  >
+                    Error loading reflections
+                  </Text>
+                  <Text
+                    style={{
+                      color: "#94a3b8",
+                      fontSize: 14,
+                      textAlign: "center",
+                    }}
+                  >
+                    {error}
+                  </Text>
+                </View>
+              </Fragment>
+            ) : filteredEntries.length === 0 ? (
+              <Fragment key="empty">
+                <EmptyState
+                  type={getEmptyStateType()}
+                  searchQuery={searchQuery}
+                  onClearFilters={handleClearFilters}
+                />
+              </Fragment>
+            ) : (
+              <Fragment key="entries">
+                {filteredEntries.map((entry) => {
+                  const animValue =
+                    entryAnimsMap.get(entry.id) || new Animated.Value(1);
+                  return (
+                    <View key={entry.id}>
+                      <Animated.View
+                        style={{
+                          opacity: animValue,
+                          transform: [
+                            {
+                              translateY: animValue.interpolate({
+                                inputRange: [0, 1],
+                                outputRange: [20, 0],
+                              }),
+                            },
+                          ],
+                        }}
+                      >
+                        <JournalEntryCard
+                          date={entry.date}
+                          emojis={entry.emojis}
+                          intensity={entry.intensity}
+                          note={entry.note}
+                          externalWeather={entry.externalWeather}
+                          location={entry.location}
+                          time={entry.time}
+                          searchQuery={searchQuery}
+                          nlpSentiment={entry.nlpSentiment}
+                          nlpScore={entry.nlpScore}
+                          nlpMagnitude={entry.nlpMagnitude}
+                        />
+                      </Animated.View>
+                    </View>
+                  );
+                })}
+              </Fragment>
             )}
           </View>
         </ScrollView>

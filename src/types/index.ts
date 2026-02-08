@@ -41,6 +41,18 @@ export interface MoodEntry {
   intensity: number; // 0-100
   note?: string;
   analysis?: MoodAnalysis;
+  externalWeather?: {
+    temp: number;
+    feels_like: number;
+    humidity: number;
+    weather_main: string;
+    weather_description: string;
+    icon: string;
+  };
+  location?: {
+    lat: number;
+    lon: number;
+  };
 }
 
 /**
@@ -128,6 +140,35 @@ export interface ApiResponse<T> {
  */
 export interface ValidationErrors {
   [key: string]: string;
+}
+
+/**
+ * NLP Analysis response from backend
+ */
+export interface NLPAnalyzeResponse {
+  sentiment: "positive" | "negative" | "neutral";
+  score: number; // -1 to 1
+  magnitude: number;
+  emojis_suggested: string[];
+}
+
+/**
+ * Mood entry with NLP analysis
+ */
+export interface MoodEntryWithNLP {
+  mood: MoodEntry;
+  nlpAnalysis: NLPAnalyzeResponse;
+}
+
+/**
+ * Paginated list of mood entries with NLP analysis
+ */
+export interface MoodListWithNLP {
+  items: MoodEntryWithNLP[];
+  total: number;
+  limit: number;
+  offset: number;
+  hasMore: boolean;
 }
 
 // Export challenges types

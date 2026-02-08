@@ -23,6 +23,9 @@ interface JournalEntryCardProps {
   location?: string;
   time: string;
   searchQuery?: string;
+  nlpSentiment?: "positive" | "negative" | "neutral";
+  nlpScore?: number;
+  nlpMagnitude?: number;
 }
 
 const MOOD_ICON_MAP: Record<MoodEmojiType, any> = {
@@ -50,10 +53,25 @@ export const JournalEntryCard: React.FC<JournalEntryCardProps> = ({
   location,
   time,
   searchQuery,
+  nlpSentiment,
+  nlpScore,
+  nlpMagnitude,
 }) => {
   // Format intensity as percentage
   const intensityPercent = Math.round(intensity);
-  const intensityBars = Math.round(intensity / 10);
+
+  // NLP Sentiment colors
+  const sentimentColors = {
+    positive: "#10b981",
+    negative: "#ef4444",
+    neutral: "#64748b",
+  };
+
+  const sentimentLabels = {
+    positive: "Positive",
+    negative: "Negative",
+    neutral: "Neutral",
+  };
 
   // Highlight search query in text
   const highlightText = (text: string, query?: string) => {
@@ -157,29 +175,32 @@ export const JournalEntryCard: React.FC<JournalEntryCardProps> = ({
             </Text>
           </View>
 
-          {/* Intensity Bar */}
+          {/* Intensity Bar - Continuous */}
           <View style={{ flexDirection: "row", alignItems: "center" }}>
             <Text style={{ color: "#94a3b8", fontSize: 14, marginRight: 12 }}>
               Intensity:
             </Text>
             <View
-              style={{ flexDirection: "row", alignItems: "center", flex: 1 }}
+              style={{ flex: 1, flexDirection: "row", alignItems: "center" }}
             >
-              {[...Array(10)].map((_, index) => (
+              <View
+                style={{
+                  flex: 1,
+                  height: 8,
+                  backgroundColor: "#334155",
+                  borderRadius: 4,
+                  overflow: "hidden",
+                }}
+              >
                 <View
-                  key={index}
                   style={{
-                    height: 8,
-                    flex: 1,
-                    marginHorizontal: 2,
+                    width: `${intensityPercent}%`,
+                    height: "100%",
+                    backgroundColor: "rgba(255,255,255,0.8)",
                     borderRadius: 4,
-                    backgroundColor:
-                      index < intensityBars
-                        ? "rgba(255,255,255,0.8)"
-                        : "#334155",
                   }}
                 />
-              ))}
+              </View>
               <Text
                 style={{
                   color: "white",
@@ -192,6 +213,103 @@ export const JournalEntryCard: React.FC<JournalEntryCardProps> = ({
               </Text>
             </View>
           </View>
+
+          {/* NLP Analysis Badges */}
+          {nlpSentiment && (
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                marginTop: 12,
+                gap: 8,
+              }}
+            >
+              {/* Sentiment Badge */}
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  paddingHorizontal: 10,
+                  paddingVertical: 4,
+                  borderRadius: 12,
+                  backgroundColor: `${sentimentColors[nlpSentiment]}20`,
+                  borderWidth: 1,
+                  borderColor: sentimentColors[nlpSentiment],
+                }}
+              >
+                <View
+                  style={{
+                    width: 6,
+                    height: 6,
+                    borderRadius: 3,
+                    backgroundColor: sentimentColors[nlpSentiment],
+                    marginRight: 6,
+                  }}
+                />
+                <Text
+                  style={{
+                    color: sentimentColors[nlpSentiment],
+                    fontSize: 12,
+                    fontWeight: "600",
+                  }}
+                >
+                  {sentimentLabels[nlpSentiment]}
+                </Text>
+              </View>
+
+              {/* Confidence Score */}
+              {nlpScore !== undefined && (
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    paddingHorizontal: 10,
+                    paddingVertical: 4,
+                    borderRadius: 12,
+                    backgroundColor: "rgba(99, 102, 241, 0.15)",
+                    borderWidth: 1,
+                    borderColor: "#6366f1",
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: "#818cf8",
+                      fontSize: 12,
+                      fontWeight: "600",
+                    }}
+                  >
+                    {Math.round(Math.abs(nlpScore) * 100)}% confident
+                  </Text>
+                </View>
+              )}
+
+              {/* Magnitude/Intensity Indicator */}
+              {nlpMagnitude !== undefined && (
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    paddingHorizontal: 10,
+                    paddingVertical: 4,
+                    borderRadius: 12,
+                    backgroundColor: "rgba(168, 85, 247, 0.15)",
+                    borderWidth: 1,
+                    borderColor: "#a855f7",
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: "#c084fc",
+                      fontSize: 12,
+                      fontWeight: "600",
+                    }}
+                  >
+                    {nlpMagnitude.toFixed(1)} intensity
+                  </Text>
+                </View>
+              )}
+            </View>
+          )}
         </View>
 
         {/* Divider */}
@@ -204,7 +322,7 @@ export const JournalEntryCard: React.FC<JournalEntryCardProps> = ({
         />
 
         {/* Journal Note */}
-        <View style={{ marginBottom: 16 }}>
+        <View>
           {highlightText(note, searchQuery)}
         </View>
 
@@ -213,7 +331,8 @@ export const JournalEntryCard: React.FC<JournalEntryCardProps> = ({
           style={{
             height: 1,
             backgroundColor: "#334155",
-            marginVertical: 16,
+            marginTop: 16,
+            marginBottom: 16,
           }}
         />
 

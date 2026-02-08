@@ -1,5 +1,5 @@
 import { auth } from "../config/firebaseConfig";
-import type { MoodEntry, MoodEmojiType } from "../types";
+import type { MoodEntry, MoodEmojiType, MoodListWithNLP } from "../types";
 import { API_BASE_URL } from "../config/api";
 
 /**
@@ -8,11 +8,11 @@ import { API_BASE_URL } from "../config/api";
  */
 const getAuthToken = async (): Promise<string | null> => {
   const user = auth.currentUser;
-  
+
   if (!user) {
     return null;
   }
-  
+
   try {
     // Try to get cached token first (forceRefresh = false)
     // This avoids network calls if the token is still valid
@@ -100,7 +100,7 @@ export const getMoods = async (params?: {
   if (params?.endDate) queryParams.append("endDate", params.endDate);
   if (params?.limit) queryParams.append("limit", params.limit.toString());
   if (params?.offset) queryParams.append("offset", params.offset.toString());
-  
+
   const url = `${API_BASE_URL}/moods?${queryParams.toString()}`;
 
   try {
@@ -129,6 +129,38 @@ export const getMoods = async (params?: {
     };
   } catch (error: any) {
     console.error("Error fetching moods:", error.message);
+    throw error;
+  }
+};
+
+/**
+ * Recupera mood entries con analisi NLP per la schermata Journal
+ */
+export const getJournalMoods = async (params?: {
+  limit?: number;
+  offset?: number;
+}): Promise<MoodListWithNLP> => {
+  const token = await getAuthToken();
+  if (!token) throw new Error("User not authenticated");
+
+  const queryParams = new URLSearchParams();
+  if (params?.limit) queryParams.append("limit", params.limit.toString());
+  if (params?.offset) queryParams.append("offset", params.offset.toString());
+
+  const url = `${API_BASE_URL}/moods/journal?${queryParams.toString()}`;
+
+  try {
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    return await handleApiResponse(response);
+  } catch (error: any) {
+    console.error("Error fetching journal moods:", error.message);
     throw error;
   }
 };

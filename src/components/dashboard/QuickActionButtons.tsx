@@ -29,7 +29,7 @@ export const QuickActionButtons = () => {
 
         <Pressable
           style={styles.secondaryButton}
-          onPress={() => router.push("/daily-mood")}
+          onPress={() => router.push("/insights")}
         >
           <ChartLineUpIcon size={20} color="white" weight="bold" />
           <Text className="text-white font-bold ml-1">Insights</Text>

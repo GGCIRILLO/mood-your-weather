@@ -23,7 +23,7 @@ import {
   ArrowLeftIcon,
 } from "phosphor-react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { images, analysis_forecast } from "../../assets";
+import { images, analysis_forecast } from "../../../assets";
 import moodDataRaw from "@/utils/moodAnalysis.json";
 
 // Map matching emojis to Phosphor Icons

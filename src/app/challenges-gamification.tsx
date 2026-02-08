@@ -1,4 +1,5 @@
-import { View, ScrollView } from "react-native";
+import { useRef, useEffect } from "react";
+import { View, ScrollView, Animated } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useChallenges } from "@/hooks/api/useChallenges";
 import { ChallengesHeader } from "@/components/challenges/ChallengesHeader";
@@ -7,6 +8,25 @@ import { ChallengesGrid } from "@/components/challenges/ChallengesGrid";
 
 export default function ChallengesScreen() {
   const { currentStreak, challenges, loading } = useChallenges();
+
+  // Animation refs for staggered fade-in + slide-up
+  const componentAnims = useRef([
+    new Animated.Value(0),
+    new Animated.Value(0),
+    new Animated.Value(0),
+  ]).current;
+
+  useEffect(() => {
+    const animations = componentAnims.map((anim, index) =>
+      Animated.timing(anim, {
+        toValue: 1,
+        duration: 300,
+        delay: index * 50,
+        useNativeDriver: true,
+      }),
+    );
+    Animated.stagger(50, animations).start();
+  }, [componentAnims]);
 
   // Find the 7-day streak challenge for the progress card
   const streakChallenge = challenges.find((c) => c.id === "7_day_streak");
@@ -27,18 +47,60 @@ export default function ChallengesScreen() {
           showsVerticalScrollIndicator={false}
         >
           {/* Header */}
-          <ChallengesHeader />
+          <Animated.View
+            style={{
+              opacity: componentAnims[0],
+              transform: [
+                {
+                  translateY: componentAnims[0].interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [20, 0],
+                  }),
+                },
+              ],
+            }}
+          >
+            <ChallengesHeader />
+          </Animated.View>
 
           <View className="flex-col gap-6 px-4 pt-2">
             {/* Active Streak Card */}
-            <ActiveStreakCard
-              currentStreak={currentStreak}
-              streakChallenge={streakChallenge}
-              streakProgress={streakProgress}
-            />
+            <Animated.View
+              style={{
+                opacity: componentAnims[1],
+                transform: [
+                  {
+                    translateY: componentAnims[1].interpolate({
+                      inputRange: [0, 1],
+                      outputRange: [20, 0],
+                    }),
+                  },
+                ],
+              }}
+            >
+              <ActiveStreakCard
+                currentStreak={currentStreak}
+                streakChallenge={streakChallenge}
+                streakProgress={streakProgress}
+              />
+            </Animated.View>
 
             {/* Challenges Grid */}
-            <ChallengesGrid challenges={challenges} loading={loading} />
+            <Animated.View
+              style={{
+                opacity: componentAnims[2],
+                transform: [
+                  {
+                    translateY: componentAnims[2].interpolate({
+                      inputRange: [0, 1],
+                      outputRange: [20, 0],
+                    }),
+                  },
+                ],
+              }}
+            >
+              <ChallengesGrid challenges={challenges} loading={loading} />
+            </Animated.View>
           </View>
         </ScrollView>
       </LinearGradient>

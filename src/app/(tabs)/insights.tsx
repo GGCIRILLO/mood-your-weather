@@ -1,4 +1,5 @@
-import { View, Text, ScrollView, Pressable, StyleSheet } from "react-native";
+import React, { useRef, useEffect } from "react";
+import { View, Text, ScrollView, Pressable, StyleSheet, Animated } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
@@ -16,6 +17,22 @@ import { PatternAnalysisCard } from "@/components/insights/PatternAnalysisCard";
 export default function InsightsScreen() {
   const insets = useSafeAreaInsets();
   const { stats, loading, error } = useUserStats();
+
+  const componentAnims = useRef(
+    Array(6).fill(0).map(() => new Animated.Value(0))
+  ).current;
+
+  useEffect(() => {
+    const animations = componentAnims.map((anim, index) =>
+      Animated.timing(anim, {
+        toValue: 1,
+        duration: 300,
+        delay: index * 50,
+        useNativeDriver: true,
+      })
+    );
+    Animated.stagger(50, animations).start();
+  }, [componentAnims]);
 
   // Show loading or error state
   if (loading) {
@@ -93,12 +110,101 @@ export default function InsightsScreen() {
           </View>
 
           <View className="px-5 gap-4">
-            <StatsGrid stats={stats} />
-            <DominantMoodCard dominantMood={stats?.dominantMood} />
-            <WeeklyRhythmCard weeklyRhythm={stats?.weeklyRhythm} />
-            <MindfulMomentsCard count={stats?.mindfulMomentsCount} />
-            <UnlockedBadgesCard badges={stats?.unlockedBadges} />
-            <PatternAnalysisCard />
+            <Animated.View
+              style={{
+                opacity: componentAnims[0],
+                transform: [
+                  {
+                    translateY: componentAnims[0].interpolate({
+                      inputRange: [0, 1],
+                      outputRange: [20, 0],
+                    }),
+                  },
+                ],
+              }}
+            >
+              <StatsGrid stats={stats} />
+            </Animated.View>
+
+            <Animated.View
+              style={{
+                opacity: componentAnims[1],
+                transform: [
+                  {
+                    translateY: componentAnims[1].interpolate({
+                      inputRange: [0, 1],
+                      outputRange: [20, 0],
+                    }),
+                  },
+                ],
+              }}
+            >
+              <DominantMoodCard dominantMood={stats?.dominantMood} />
+            </Animated.View>
+
+            <Animated.View
+              style={{
+                opacity: componentAnims[2],
+                transform: [
+                  {
+                    translateY: componentAnims[2].interpolate({
+                      inputRange: [0, 1],
+                      outputRange: [20, 0],
+                    }),
+                  },
+                ],
+              }}
+            >
+              <WeeklyRhythmCard weeklyRhythm={stats?.weeklyRhythm} />
+            </Animated.View>
+
+            <Animated.View
+              style={{
+                opacity: componentAnims[3],
+                transform: [
+                  {
+                    translateY: componentAnims[3].interpolate({
+                      inputRange: [0, 1],
+                      outputRange: [20, 0],
+                    }),
+                  },
+                ],
+              }}
+            >
+              <MindfulMomentsCard count={stats?.mindfulMomentsCount} />
+            </Animated.View>
+
+            <Animated.View
+              style={{
+                opacity: componentAnims[4],
+                transform: [
+                  {
+                    translateY: componentAnims[4].interpolate({
+                      inputRange: [0, 1],
+                      outputRange: [20, 0],
+                    }),
+                  },
+                ],
+              }}
+            >
+              <UnlockedBadgesCard badges={stats?.unlockedBadges} />
+            </Animated.View>
+
+            <Animated.View
+              style={{
+                opacity: componentAnims[5],
+                transform: [
+                  {
+                    translateY: componentAnims[5].interpolate({
+                      inputRange: [0, 1],
+                      outputRange: [20, 0],
+                    }),
+                  },
+                ],
+              }}
+            >
+              <PatternAnalysisCard />
+            </Animated.View>
           </View>
         </ScrollView>
       </LinearGradient>

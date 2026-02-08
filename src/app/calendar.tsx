@@ -1,5 +1,5 @@
-import { View, ScrollView, StyleSheet } from "react-native";
-import { useState, useMemo, useCallback } from "react";
+import { View, ScrollView, StyleSheet, Animated } from "react-native";
+import { useState, useMemo, useCallback, useRef, useEffect } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import {
   startOfMonth,
@@ -30,6 +30,26 @@ export default function CalendarScreen() {
   const [modalVisible, setModalVisible] = useState(false);
 
   const { moods = [] } = useMoods({ limit: 100 });
+
+  // Animation state
+  const componentAnims = useRef([
+    new Animated.Value(0),
+    new Animated.Value(0),
+    new Animated.Value(0),
+    new Animated.Value(0),
+  ]).current;
+
+  useEffect(() => {
+    const animations = componentAnims.map((anim, index) =>
+      Animated.timing(anim, {
+        toValue: 1,
+        duration: 300,
+        delay: index * 50,
+        useNativeDriver: true,
+      }),
+    );
+    Animated.stagger(50, animations).start();
+  }, [componentAnims]);
 
   // Month boundaries
   const monthStart = useMemo(() => startOfMonth(currentDate), [currentDate]);
@@ -95,25 +115,81 @@ export default function CalendarScreen() {
     <View style={styles.container}>
       <LinearGradient colors={["#0A0F1E", "#131A2E"]} style={styles.gradient}>
         {/* Background Blur Blobs */}
-        <View style={styles.blueBlob} />
-        <View style={styles.purpleBlob} />
+        <Animated.View
+          style={{
+            opacity: componentAnims[0],
+            transform: [
+              {
+                translateY: componentAnims[0].interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [20, 0],
+                }),
+              },
+            ],
+          }}
+        >
+          <View style={styles.blueBlob} />
+        </Animated.View>
+        <Animated.View
+          style={{
+            opacity: componentAnims[1],
+            transform: [
+              {
+                translateY: componentAnims[1].interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [20, 0],
+                }),
+              },
+            ],
+          }}
+        >
+          <View style={styles.purpleBlob} />
+        </Animated.View>
 
         <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
           {/* Header */}
-          <CalendarHeader
-            currentDate={currentDate}
-            onPrevMonth={handlePrevMonth}
-            onNextMonth={handleNextMonth}
-            isNextDisabled={isNextDisabled}
-          />
+          <Animated.View
+            style={{
+              opacity: componentAnims[2],
+              transform: [
+                {
+                  translateY: componentAnims[2].interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [20, 0],
+                  }),
+                },
+              ],
+            }}
+          >
+            <CalendarHeader
+              currentDate={currentDate}
+              onPrevMonth={handlePrevMonth}
+              onNextMonth={handleNextMonth}
+              isNextDisabled={isNextDisabled}
+            />
+          </Animated.View>
 
           {/* Calendar Grid */}
-          <View className="pt-2">
-            <CalendarGrid
-              calendarDays={calendarDays}
-              onDayPress={handleDayPress}
-            />
-          </View>
+          <Animated.View
+            style={{
+              opacity: componentAnims[3],
+              transform: [
+                {
+                  translateY: componentAnims[3].interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [20, 0],
+                  }),
+                },
+              ],
+            }}
+          >
+            <View className="pt-2">
+              <CalendarGrid
+                calendarDays={calendarDays}
+                onDayPress={handleDayPress}
+              />
+            </View>
+          </Animated.View>
         </ScrollView>
 
         {/* Day Detail Modal */}

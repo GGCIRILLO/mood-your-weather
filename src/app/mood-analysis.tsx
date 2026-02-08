@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useRef } from "react";
 import {
   View,
   Text,
@@ -7,6 +7,7 @@ import {
   ImageBackground,
   Image,
   StyleSheet,
+  Animated,
 } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -49,6 +50,24 @@ export default function MoodAnalysisScreen() {
   const insets = useSafeAreaInsets();
   const { entry: entryParam } = useLocalSearchParams<{ entry: string }>();
   const [entry, setEntry] = useState<MoodEntry | null>(null);
+
+  const componentAnims = useRef(
+    Array(3)
+      .fill(0)
+      .map(() => new Animated.Value(0)),
+  ).current;
+
+  useEffect(() => {
+    const animations = componentAnims.map((anim, index) =>
+      Animated.timing(anim, {
+        toValue: 1,
+        duration: 300,
+        delay: index * 60,
+        useNativeDriver: true,
+      }),
+    );
+    Animated.stagger(60, animations).start();
+  }, [componentAnims]);
 
   useEffect(() => {
     if (entryParam) {
@@ -156,7 +175,20 @@ export default function MoodAnalysisScreen() {
 
           <View className="px-4 gap-6 pt-2">
             {/* Hero Section */}
-            <View className="relative w-full rounded-4xl overflow-hidden bg-slate-900 group">
+            <Animated.View
+              style={{
+                opacity: componentAnims[0],
+                transform: [
+                  {
+                    translateY: componentAnims[0].interpolate({
+                      inputRange: [0, 1],
+                      outputRange: [20, 0],
+                    }),
+                  },
+                ],
+              }}
+              className="relative w-full rounded-4xl overflow-hidden bg-slate-900 group"
+            >
               <ImageBackground
                 source={heroImage}
                 style={{ width: "100%", height: 350 }}
@@ -194,10 +226,22 @@ export default function MoodAnalysisScreen() {
                   </Text>
                 </View>
               </ImageBackground>
-            </View>
+            </Animated.View>
 
             {/* Emotional Composition */}
-            <View>
+            <Animated.View
+              style={{
+                opacity: componentAnims[1],
+                transform: [
+                  {
+                    translateY: componentAnims[1].interpolate({
+                      inputRange: [0, 1],
+                      outputRange: [20, 0],
+                    }),
+                  },
+                ],
+              }}
+            >
               <Text className="mb-4 text-xl font-bold tracking-tight text-white px-1">
                 Emotional Composition
               </Text>
@@ -248,10 +292,23 @@ export default function MoodAnalysisScreen() {
                   </View>
                 </View>
               </View>
-            </View>
+            </Animated.View>
 
             {/* Suggested Activities */}
-            <View className="mb-8">
+            <Animated.View
+              style={{
+                opacity: componentAnims[2],
+                transform: [
+                  {
+                    translateY: componentAnims[2].interpolate({
+                      inputRange: [0, 1],
+                      outputRange: [20, 0],
+                    }),
+                  },
+                ],
+              }}
+              className="mb-8"
+            >
               <View className="flex-row items-center justify-between px-1 mb-4">
                 <Text className="text-xl font-bold tracking-tight text-white">
                   Suggested Activities
@@ -287,7 +344,7 @@ export default function MoodAnalysisScreen() {
                   );
                 })}
               </ScrollView>
-            </View>
+            </Animated.View>
           </View>
         </ScrollView>
       </LinearGradient>

@@ -43,7 +43,7 @@ const CalendarHeader = memo(
           </Pressable>
 
           <Text className="text-sm font-bold uppercase tracking-widest text-slate-400">
-            YOUR CALENDAR
+            CALENDAR
           </Text>
 
           <View style={styles.placeholderButton} />

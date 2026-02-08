@@ -61,6 +61,8 @@ export function WeatherDisplay({
       <Pressable
         key={`${type}-${index}`}
         onPress={() => onWeatherRemove(type)}
+        accessibilityRole="button"
+        accessibilityLabel={`Remove ${type} mood`}
         style={[
           styles.iconWrapper,
           selectedWeather.length > 1 && {

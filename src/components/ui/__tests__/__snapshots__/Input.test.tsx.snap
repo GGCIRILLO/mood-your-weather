@@ -1,0 +1,46 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Input Component renders correctly (snapshot) 1`] = `
+<View
+  className="w-full"
+>
+  <Text
+    className="text-gray-700 font-medium mb-2 ml-1"
+  >
+    Test Label
+  </Text>
+  <View
+    className="flex-row items-center bg-white border-2 rounded-2xl px-4 py-3 border-gray-200"
+  >
+    <TextInput
+      className="flex-1 text-base text-gray-900"
+      onBlur={[Function]}
+      onFocus={[Function]}
+      placeholder="Placeholder"
+      placeholderTextColor="#9CA3AF"
+    />
+  </View>
+</View>
+`;
+
+exports[`Input Component renders with error (snapshot) 1`] = `
+<View
+  className="w-full"
+>
+  <View
+    className="flex-row items-center bg-white border-2 rounded-2xl px-4 py-3 border-red-400"
+  >
+    <TextInput
+      className="flex-1 text-base text-gray-900"
+      onBlur={[Function]}
+      onFocus={[Function]}
+      placeholderTextColor="#9CA3AF"
+    />
+  </View>
+  <Text
+    className="text-red-500 text-sm mt-1 ml-1"
+  >
+    Error Message
+  </Text>
+</View>
+`;

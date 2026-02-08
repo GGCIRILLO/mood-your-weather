@@ -1,0 +1,161 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`WeatherDisplay matches snapshot with selected weather 1`] = `
+<View
+  style={
+    [
+      {
+        "alignItems": "center",
+        "justifyContent": "center",
+        "minHeight": 200,
+        "minWidth": 200,
+        "zIndex": 10,
+      },
+      {},
+    ]
+  }
+>
+  <View
+    style={
+      {
+        "alignItems": "center",
+        "flexDirection": "row",
+        "flexWrap": "wrap",
+        "justifyContent": "center",
+        "maxWidth": 250,
+      }
+    }
+  >
+    <View
+      accessibilityLabel="Remove sunny mood"
+      accessibilityRole="button"
+      accessibilityState={
+        {
+          "busy": undefined,
+          "checked": undefined,
+          "disabled": undefined,
+          "expanded": undefined,
+          "selected": undefined,
+        }
+      }
+      accessibilityValue={
+        {
+          "max": undefined,
+          "min": undefined,
+          "now": undefined,
+          "text": undefined,
+        }
+      }
+      accessible={true}
+      collapsable={false}
+      focusable={true}
+      onBlur={[Function]}
+      onClick={[Function]}
+      onFocus={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        [
+          {
+            "alignItems": "center",
+            "justifyContent": "center",
+            "position": "relative",
+          },
+          {
+            "marginHorizontal": 4,
+          },
+        ]
+      }
+    >
+      <View
+        style={
+          [
+            {
+              "borderRadius": 9999,
+              "height": 96,
+              "opacity": 0.6,
+              "position": "absolute",
+              "width": 96,
+            },
+            {
+              "backgroundColor": "rgba(251, 191, 36, 0.2)",
+              "borderRadius": 48,
+              "height": 96,
+              "width": 96,
+            },
+          ]
+        }
+      />
+    </View>
+    <View
+      accessibilityLabel="Remove rainy mood"
+      accessibilityRole="button"
+      accessibilityState={
+        {
+          "busy": undefined,
+          "checked": undefined,
+          "disabled": undefined,
+          "expanded": undefined,
+          "selected": undefined,
+        }
+      }
+      accessibilityValue={
+        {
+          "max": undefined,
+          "min": undefined,
+          "now": undefined,
+          "text": undefined,
+        }
+      }
+      accessible={true}
+      collapsable={false}
+      focusable={true}
+      onBlur={[Function]}
+      onClick={[Function]}
+      onFocus={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        [
+          {
+            "alignItems": "center",
+            "justifyContent": "center",
+            "position": "relative",
+          },
+          {
+            "marginHorizontal": 4,
+          },
+        ]
+      }
+    >
+      <View
+        style={
+          [
+            {
+              "borderRadius": 9999,
+              "height": 96,
+              "opacity": 0.6,
+              "position": "absolute",
+              "width": 96,
+            },
+            {
+              "backgroundColor": "rgba(96, 165, 250, 0.2)",
+              "borderRadius": 48,
+              "height": 96,
+              "width": 96,
+            },
+          ]
+        }
+      />
+    </View>
+  </View>
+</View>
+`;

@@ -80,6 +80,7 @@ export function OnboardingSlideOne({ onNext }: OnboardingSlideOneProps) {
 
             {/* FAB / Next Button */}
             <TouchableOpacity
+              testID="next-button"
               onPress={onNext}
               activeOpacity={0.8}
               style={{

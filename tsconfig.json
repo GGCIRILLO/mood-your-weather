@@ -7,7 +7,8 @@
         "./src/*"
       ],
       "@firebase/auth": ["./node_modules/@firebase/auth/dist/index.rn.d.ts"]
-    }
+    },
+    "types": ["jest"]
   },
   "extends": "expo/tsconfig.base",
   "include": [
@@ -15,6 +16,6 @@
     "**/*.ts",
     "**/*.tsx",
     "nativewind-env.d.ts"
-  ],
+, "__tests__/utils/Example-test.tsx", "jest.config.js"  ],
   
 }

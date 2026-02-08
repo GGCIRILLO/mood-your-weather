@@ -38,7 +38,12 @@ const CalendarHeader = memo(
             justifyContent: "space-between",
           }}
         >
-          <Pressable onPress={() => router.back()} style={styles.backButton}>
+          <Pressable
+            onPress={() => router.back()}
+            style={styles.backButton}
+            accessibilityRole="button"
+            accessibilityLabel="Go back"
+          >
             <ArrowLeftIcon size={24} color="#FFF" />
           </Pressable>
 
@@ -51,7 +56,12 @@ const CalendarHeader = memo(
 
         {/* Month Navigator */}
         <View className="px-4 pb-4 flex-row items-center justify-center gap-3">
-          <Pressable onPress={onPrevMonth} style={styles.navButton}>
+          <Pressable
+            onPress={onPrevMonth}
+            style={styles.navButton}
+            accessibilityRole="button"
+            accessibilityLabel="Previous month"
+          >
             <CaretLeftIcon size={20} color="white" />
           </Pressable>
           <Text className="text-2xl font-extrabold text-white tracking-tight min-w-50 text-center">
@@ -60,6 +70,8 @@ const CalendarHeader = memo(
           <Pressable
             onPress={onNextMonth}
             disabled={isNextDisabled}
+            accessibilityRole="button"
+            accessibilityLabel="Next month"
             style={[
               styles.navButton,
               isNextDisabled && styles.navButtonDisabled,

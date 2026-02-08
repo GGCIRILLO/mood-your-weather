@@ -8,7 +8,15 @@ import {
 } from "react-native";
 import { memo, useMemo } from "react";
 import { LinearGradient } from "expo-linear-gradient";
-import { XIcon, ShuffleIcon } from "phosphor-react-native";
+import {
+  XIcon,
+  ShuffleIcon,
+  CloudIcon,
+  SunIcon,
+  CloudRainIcon,
+  CloudSnowIcon,
+  ThermometerIcon,
+} from "phosphor-react-native";
 import { format, isToday } from "date-fns";
 import type { MoodEntry } from "@/types";
 import {
@@ -25,6 +33,21 @@ interface DayDetailModalProps {
   entries: MoodEntry[];
   onClose: () => void;
 }
+
+// Helper function to get weather icon based on condition
+const getWeatherIcon = (condition: string) => {
+  const lowerCondition = condition.toLowerCase();
+  if (lowerCondition.includes("clear") || lowerCondition.includes("sun")) {
+    return SunIcon;
+  }
+  if (lowerCondition.includes("rain") || lowerCondition.includes("drizzle")) {
+    return CloudRainIcon;
+  }
+  if (lowerCondition.includes("snow")) {
+    return CloudSnowIcon;
+  }
+  return CloudIcon; // Default for cloudy, mist, etc.
+};
 
 const DayDetailModal = memo(
   ({ visible, date, entries, onClose }: DayDetailModalProps) => {
@@ -61,6 +84,16 @@ const DayDetailModal = memo(
     }, [entries, displayType, hasMultipleTypes]);
 
     const moodLabel = useMemo(() => getMoodLabel(displayType), [displayType]);
+
+    // Extract weather data from entries (use first entry with weather data)
+    const weatherData = useMemo(() => {
+      const entryWithWeather = entries.find((entry) => entry.externalWeather);
+      return entryWithWeather?.externalWeather;
+    }, [entries]);
+
+    const WeatherIcon = weatherData
+      ? getWeatherIcon(weatherData.weather_main)
+      : CloudIcon;
 
     return (
       <Modal
@@ -195,7 +228,92 @@ const DayDetailModal = memo(
                 <View style={styles.weatherCardGradient} />
                 <View style={styles.weatherContent}>
                   <Text style={styles.weatherLabel}>Weather Context</Text>
-                  <Text style={styles.weatherInfo}>Coming soon...</Text>
+                  {weatherData ? (
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        gap: 12,
+                      }}
+                    >
+                      <View
+                        style={{
+                          backgroundColor: "rgba(255,255,255,0.1)",
+                          padding: 12,
+                          borderRadius: 12,
+                          borderWidth: 1,
+                          borderColor: "rgba(255,255,255,0.2)",
+                        }}
+                      >
+                        <WeatherIcon size={24} color="white" weight="fill" />
+                      </View>
+                      <View style={{ flex: 1 }}>
+                        <Text
+                          style={{
+                            fontSize: 16,
+                            fontWeight: "600",
+                            color: "white",
+                            marginBottom: 2,
+                          }}
+                        >
+                          {weatherData.weather_main}
+                        </Text>
+                        <Text
+                          style={{
+                            fontSize: 13,
+                            color: "rgba(255,255,255,0.7)",
+                          }}
+                        >
+                          {weatherData.weather_description}
+                        </Text>
+                      </View>
+                      <View
+                        style={{
+                          alignItems: "flex-end",
+                        }}
+                      >
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            alignItems: "flex-start",
+                          }}
+                        >
+                          <Text
+                            style={{
+                              fontSize: 28,
+                              fontWeight: "bold",
+                              color: "white",
+                            }}
+                          >
+                            {Math.round(weatherData.temp)}
+                          </Text>
+                          <Text
+                            style={{
+                              fontSize: 16,
+                              fontWeight: "600",
+                              color: "rgba(255,255,255,0.7)",
+                              marginTop: 2,
+                            }}
+                          >
+                            °C
+                          </Text>
+                        </View>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            color: "rgba(255,255,255,0.6)",
+                            marginTop: 2,
+                          }}
+                        >
+                          Feels like {Math.round(weatherData.feels_like)}°C
+                        </Text>
+                      </View>
+                    </View>
+                  ) : (
+                    <Text style={styles.weatherInfo}>
+                      No weather data recorded
+                    </Text>
+                  )}
                 </View>
               </View>
             </View>

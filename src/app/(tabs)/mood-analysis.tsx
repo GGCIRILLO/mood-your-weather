@@ -172,7 +172,6 @@ export default function MoodAnalysisScreen() {
 
             <View className="w-12 h-12" />
           </View>
-
           <View className="px-4 gap-6 pt-2">
             {/* Hero Section */}
             <Animated.View
@@ -186,8 +185,14 @@ export default function MoodAnalysisScreen() {
                     }),
                   },
                 ],
+                position: "relative",
+                width: "100%",
+                borderRadius: 32,
+                overflow: "hidden",
+                backgroundColor: "#192233",
+
               }}
-              className="relative w-full rounded-4xl overflow-hidden bg-slate-900 group"
+              //className="relative w-full rounded-4xl overflow-hidden bg-slate-900 group"
             >
               <ImageBackground
                 source={heroImage}
@@ -346,6 +351,7 @@ export default function MoodAnalysisScreen() {
               </ScrollView>
             </Animated.View>
           </View>
+          <View style={{ height: 30 }} />
         </ScrollView>
       </LinearGradient>
     </View>

@@ -80,6 +80,8 @@ export const createMood = async (moodData: {
     emojis: data.emojis,
     intensity: data.intensity,
     note: data.note,
+    externalWeather: data.externalWeather,
+    location: data.location,
   };
 };
 
@@ -123,6 +125,8 @@ export const getMoods = async (params?: {
         emojis: item.emojis,
         intensity: item.intensity,
         note: item.note,
+        externalWeather: item.externalWeather,
+        location: item.location,
       })),
       total: data.total,
       hasMore: data.hasMore,
@@ -188,6 +192,8 @@ export const getMood = async (entryId: string): Promise<MoodEntry> => {
     emojis: data.emojis,
     intensity: data.intensity,
     note: data.note,
+    externalWeather: data.externalWeather,
+    location: data.location,
   };
 };
 
@@ -223,6 +229,8 @@ export const updateMood = async (
     emojis: data.emojis,
     intensity: data.intensity,
     note: data.note,
+    externalWeather: data.externalWeather,
+    location: data.location,
   };
 };
 

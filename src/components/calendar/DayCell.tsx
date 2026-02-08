@@ -82,7 +82,9 @@ const DayCell = memo(({ dayData, onPress }: DayCellProps) => {
     <View className="w-[14.28%] aspect-square p-1">
       {isDayToday && hasEntry && (
         <View style={styles.todayBanner}>
-          <Text style={styles.todayBannerText}>TODAY</Text>
+          <Text style={styles.todayBannerText} numberOfLines={1}>
+            TODAY
+          </Text>
         </View>
       )}
       <Pressable
@@ -148,7 +150,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: -6,
     left: "50%",
-    transform: [{ translateX: -20 }],
+    transform: [{ translateX: -25 }],
     backgroundColor: "#135bec",
     paddingHorizontal: 8,
     paddingVertical: 3,
@@ -158,6 +160,8 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.5,
     shadowRadius: 4,
+    flexShrink: 0,
+    minWidth: 50,
   },
   todayBannerText: {
     fontSize: 8,

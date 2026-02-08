@@ -95,7 +95,7 @@
     {
       "id": "cloudy_single",
       "emojis": ["cloudy"],
-      "image_key": "cloudy",
+      "image_key": "db_bg_cloudy",
       "mood_name": "Muffled Introspection",
       "intensity_levels": [
         {

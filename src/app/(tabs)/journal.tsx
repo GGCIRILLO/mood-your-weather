@@ -384,6 +384,7 @@ export default function JournalScreen() {
                         }}
                       >
                         <JournalEntryCard
+                          key={entry.id}
                           date={entry.date}
                           emojis={entry.emojis}
                           intensity={entry.intensity}

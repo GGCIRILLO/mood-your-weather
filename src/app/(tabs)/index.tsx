@@ -10,6 +10,7 @@ import type { MoodEmojiType } from "@/types";
 // Components
 import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
 import { DashboardGreeting } from "@/components/dashboard/DashboardGreeting";
+import { WeatherLocationCard } from "@/components/dashboard/WeatherLocationCard";
 import { MoodSphereSection } from "@/components/dashboard/MoodSphereSection";
 import { EmotionalForecastCard } from "@/components/dashboard/EmotionalForecastCard";
 import { QuickActionButtons } from "@/components/dashboard/QuickActionButtons";
@@ -82,6 +83,8 @@ export default function Dashboard() {
         <DashboardHeader />
 
         <DashboardGreeting userName={userName} />
+
+        <WeatherLocationCard />
 
         <MoodSphereSection
           loading={loading}

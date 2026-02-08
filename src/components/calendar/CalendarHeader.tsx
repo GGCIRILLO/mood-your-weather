@@ -54,7 +54,7 @@ const CalendarHeader = memo(
           <Pressable onPress={onPrevMonth} style={styles.navButton}>
             <CaretLeftIcon size={20} color="white" />
           </Pressable>
-          <Text className="text-2xl font-extrabold text-white tracking-tight min-w-[200px] text-center">
+          <Text className="text-2xl font-extrabold text-white tracking-tight min-w-50 text-center">
             {format(currentDate, "MMMM yyyy")}
           </Text>
           <Pressable

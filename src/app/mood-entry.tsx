@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Pressable, Alert, StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
@@ -12,6 +12,7 @@ import Animated, {
   Easing,
 } from "react-native-reanimated";
 import { ArrowLeftIcon } from "phosphor-react-native";
+import * as Location from "expo-location";
 import { useCreateMood } from "@/hooks/api/useMoods";
 import { InsightBubble } from "@/components/mood-entry/InsightBubble";
 import { ConcentricRings } from "@/components/mood-entry/ConcentricRings";
@@ -31,7 +32,32 @@ export default function MoodEntryScreen() {
   const [intensity, setIntensity] = useState(50);
   const [note, setNote] = useState("");
   const [showNoteInput, setShowNoteInput] = useState(false);
+  const [location, setLocation] = useState<{
+    lat: number;
+    lon: number;
+  } | null>(null);
   const { mutateAsync: createMood, isPending: isSaving } = useCreateMood();
+
+  // Get user location on mount
+  useEffect(() => {
+    (async () => {
+      try {
+        const { status } = await Location.getForegroundPermissionsAsync();
+        if (status === "granted") {
+          const position = await Location.getCurrentPositionAsync({
+            accuracy: Location.Accuracy.Balanced,
+          });
+          setLocation({
+            lat: position.coords.latitude,
+            lon: position.coords.longitude,
+          });
+        }
+      } catch (error) {
+        console.log("Could not get location:", error);
+        // Silently fail - mood will be created without location
+      }
+    })();
+  }, []);
 
   const pulseScale = useSharedValue(1);
   const ring1Opacity = useSharedValue(0.1);
@@ -76,6 +102,7 @@ export default function MoodEntryScreen() {
         emojis: selectedWeather as any,
         intensity,
         note: note.trim() || undefined,
+        location: location || undefined,
       });
 
       router.replace({

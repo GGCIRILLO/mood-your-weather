@@ -5,6 +5,7 @@ import { router } from "expo-router";
 import { CaretLeft, CloudLightning, CloudRain, Sun, Moon, Play, BookmarkSimple, Clock, House, Medal, User, X, CaretDown, DotsThree, Wind, Shuffle, SkipBack, SkipForward, Repeat, Pause, Cloud, ArrowRight, Quotes, Tree } from "phosphor-react-native";
 import { useAuth } from "@/contexts/authContext";
 import { useState, useEffect, useRef } from "react";
+import { Audio } from 'expo-av';
 
 export default function GuidedPracticesScreen() {
     const insets = useSafeAreaInsets();
@@ -15,6 +16,68 @@ export default function GuidedPracticesScreen() {
     const [journalNotes, setJournalNotes] = useState("");
     const [isShuffleOn, setIsShuffleOn] = useState(false);
     const [isRepeatOn, setIsRepeatOn] = useState(false);
+
+    // Player State
+    const [selectedPractice, setSelectedPractice] = useState<any>(null);
+    const [sound, setSound] = useState<Audio.Sound | null>(null);
+    const [isPlaying, setIsPlaying] = useState(false);
+
+    // Audio Logic
+    useEffect(() => {
+        Audio.setAudioModeAsync({
+            playsInSilentModeIOS: true,
+            staysActiveInBackground: true,
+            shouldDuckAndroid: true,
+        });
+    }, []);
+
+    async function playSound(audioSource: any) {
+        try {
+            if (sound) {
+                await sound.unloadAsync();
+            }
+            console.log('Loading Sound:', audioSource);
+            // Check if audioSource is a string (URL) or a number (require)
+            const source = typeof audioSource === 'string' ? { uri: audioSource } : audioSource;
+            const { sound: newSound } = await Audio.Sound.createAsync(source, { shouldPlay: true });
+            setSound(newSound);
+            console.log('Sound loaded and playing');
+            setIsPlaying(true);
+        } catch (error) {
+            console.error("Error playing sound:", error);
+        }
+    }
+
+    async function togglePlayback() {
+        if (sound) {
+            if (isPlaying) {
+                await sound.pauseAsync();
+                setIsPlaying(false);
+            } else {
+                await sound.playAsync();
+                setIsPlaying(true);
+            }
+        } else if (selectedPractice?.audio) {
+            await playSound(selectedPractice.audio);
+        }
+    }
+
+    useEffect(() => {
+        return sound
+            ? () => {
+                console.log('Unloading Sound');
+                sound.unloadAsync();
+            }
+            : undefined;
+    }, [sound]);
+
+    // Cleanup sound when leaving player screen
+    useEffect(() => {
+        if (currentScreen !== 'player' && sound) {
+            sound.stopAsync();
+            setIsPlaying(false);
+        }
+    }, [currentScreen]);
 
     // Breathing animation
     const breatheAnim = useRef(new Animated.Value(1)).current;
@@ -44,11 +107,12 @@ export default function GuidedPracticesScreen() {
             title: "Thunderstorm Release",
             tag: "Anxiety Relief",
             duration: "10 min",
-            type: "Deep Focus",
+            type: "Relaxation",
             description: "Let the rolling thunder wash away your stress and ground you in the present moment. Feel the electricity clear your mind.",
             icon: CloudLightning,
             image: "https://images.unsplash.com/photo-1605727216801-e27ce1d0cc28?w=800",
             color: "#135bec",
+            audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
         },
         {
             id: 2,
@@ -60,6 +124,7 @@ export default function GuidedPracticesScreen() {
             icon: CloudRain,
             image: "https://images.unsplash.com/photo-1515694346937-94d85e41e6f0?w=800",
             color: "#6366f1",
+            audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
         },
         {
             id: 3,
@@ -71,6 +136,7 @@ export default function GuidedPracticesScreen() {
             icon: Tree,
             image: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800",
             color: "#10b981",
+            audio: require("@/assets/audio/ForestWay.mp3"),
         },
         {
             id: 4,
@@ -82,6 +148,7 @@ export default function GuidedPracticesScreen() {
             icon: Sun,
             image: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=800",
             color: "#f59e0b",
+            audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3",
         },
         {
             id: 5,
@@ -93,6 +160,55 @@ export default function GuidedPracticesScreen() {
             icon: Moon,
             image: "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=800",
             color: "#6366f1", // Indigo
+            audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3",
+        },
+        {
+            id: 6,
+            title: "Deep Work Zone",
+            tag: "Productivity",
+            duration: "45 min",
+            type: "Focus",
+            description: "Binaural beats combined with white noise to help you enter a flow state for deep work sessions.",
+            icon: Wind,
+            image: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=800",
+            color: "#0ea5e9",
+            audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3",
+        },
+        {
+            id: 8,
+            title: "Panic SOS",
+            tag: "Immediate Relief",
+            duration: "5 min",
+            type: "Anxiety",
+            description: "A short, powerful session to ground you when you feel overwhelmed. Use this for immediate panic relief.",
+            icon: CloudLightning,
+            image: "https://images.unsplash.com/photo-1504608524841-42fe6f032b4b?w=800",
+            color: "#ef4444",
+            audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3",
+        },
+        {
+            id: 9,
+            title: "Box Breathing",
+            tag: "Breathwork",
+            duration: "5 min",
+            type: "Anxiety",
+            description: "Simple, effective breathing technique to calm your nervous system. Inhale, hold, exhale, hold.",
+            icon: Wind,
+            image: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=800",
+            color: "#14b8a6",
+            audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3",
+        },
+        {
+            id: 10,
+            title: "Dreamscapes",
+            tag: "Sleep Stories",
+            duration: "20 min",
+            type: "Sleep",
+            description: "A calming story that takes you on a journey to a peaceful world, helping you disconnect from the day.",
+            icon: Moon,
+            image: "https://images.unsplash.com/photo-1495616811223-4d98c6e9d869?w=800",
+            color: "#4f46e5",
+            audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3",
         },
     ];
 
@@ -176,7 +292,12 @@ export default function GuidedPracticesScreen() {
                                                 </View>
                                                 <Text style={{ color: "#92a4c9", fontSize: 14, lineHeight: 22 }} numberOfLines={2}>{practice.description}</Text>
                                                 <Pressable
-                                                    onPress={() => setCurrentScreen('player')}
+                                                    onPress={() => {
+                                                        setSelectedPractice(practice);
+                                                        setCurrentScreen('player');
+                                                        // Auto-play
+                                                        playSound(practice.audio);
+                                                    }}
                                                     style={{
                                                         width: "100%",
                                                         height: 56,
@@ -203,18 +324,16 @@ export default function GuidedPracticesScreen() {
                         ))}
                     </View>
                 </ScrollView>
-
-
             </View>
         );
     }
 
     // SCREEN 2: PLAYER
-    if (currentScreen === 'player') {
+    if (currentScreen === 'player' && selectedPractice) {
         return (
             <View style={{ flex: 1, backgroundColor: "#0b1121" }}>
                 <ImageBackground
-                    source={{ uri: "https://images.unsplash.com/photo-1515694346937-94d85e41e6f0?w=800" }}
+                    source={{ uri: selectedPractice.image }}
                     style={{ flex: 1 }}
                     resizeMode="cover"
                 >
@@ -236,20 +355,23 @@ export default function GuidedPracticesScreen() {
                         </View>
 
                         {/* Center Breathing Element */}
+                        {/* Center Breathing Element */}
                         <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
                             <Animated.View style={{ transform: [{ scale: breatheAnim }] }}>
-                                <View style={{ width: 128, height: 128, borderRadius: 64, backgroundColor: "#135bec", alignItems: "center", justifyContent: "center", shadowColor: "#135bec", shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.6, shadowRadius: 60 }}>
-                                    <Wind size={48} color="white" weight="fill" />
+                                <View style={{ width: 128, height: 128, borderRadius: 64, backgroundColor: selectedPractice.color, alignItems: "center", justifyContent: "center", shadowColor: selectedPractice.color, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.6, shadowRadius: 60 }}>
+                                    <selectedPractice.icon size={48} color="white" weight="fill" />
                                 </View>
                             </Animated.View>
-                            <Text style={{ marginTop: 48, color: "rgba(255,255,255,0.6)", fontSize: 14, fontWeight: "500", letterSpacing: 3, textTransform: "uppercase" }}>Breathe In</Text>
+                            <Text style={{ marginTop: 48, color: "rgba(255,255,255,0.6)", fontSize: 14, fontWeight: "500", letterSpacing: 3, textTransform: "uppercase" }}>
+                                {selectedPractice.tag === "Breathwork" ? "Breathe In" : "Immerse Yourself"}
+                            </Text>
                         </View>
 
                         {/* Bottom Player Controls */}
                         <View style={{ paddingHorizontal: 24, paddingBottom: insets.bottom + 24, gap: 24 }}>
                             <View style={{ alignItems: "center" }}>
-                                <Text style={{ color: "white", fontSize: 24, fontWeight: "bold", marginBottom: 4 }}>Thunderstorm Release</Text>
-                                <Text style={{ color: "#135bec", fontSize: 14, fontWeight: "500" }}>Nature Sounds • Focus</Text>
+                                <Text style={{ color: "white", fontSize: 24, fontWeight: "bold", marginBottom: 4 }}>{selectedPractice.title}</Text>
+                                <Text style={{ color: "#135bec", fontSize: 14, fontWeight: "500" }}>{selectedPractice.tag} • {selectedPractice.type}</Text>
                             </View>
 
                             {/* Waveform */}
@@ -278,8 +400,12 @@ export default function GuidedPracticesScreen() {
                                 <Pressable onPress={() => console.log("Previous track")}>
                                     <SkipBack size={36} color="rgba(255,255,255,0.8)" weight="fill" />
                                 </Pressable>
-                                <Pressable onPress={() => setCurrentScreen('reflection')} style={{ width: 64, height: 64, borderRadius: 32, backgroundColor: "white", alignItems: "center", justifyContent: "center", shadowColor: "white", shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.3, shadowRadius: 30 }}>
-                                    <Pause size={36} color="#0b1121" weight="fill" />
+                                <Pressable onPress={togglePlayback} style={{ width: 64, height: 64, borderRadius: 32, backgroundColor: "white", alignItems: "center", justifyContent: "center", shadowColor: "white", shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.3, shadowRadius: 30 }}>
+                                    {isPlaying ? (
+                                        <Pause size={36} color="#0b1121" weight="fill" />
+                                    ) : (
+                                        <Play size={36} color="#0b1121" weight="fill" />
+                                    )}
                                 </Pressable>
                                 <Pressable onPress={() => console.log("Next track")}>
                                     <SkipForward size={36} color="rgba(255,255,255,0.8)" weight="fill" />

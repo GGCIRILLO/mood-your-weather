@@ -8,4 +8,10 @@ describe("<HomeScreen />", () => {
 
     getByText("Welcome!");
   });
+
+  test("CustomText renders correctly", () => {
+    const tree = render(<CustomText>Some text</CustomText>).toJSON();
+
+    expect(tree).toMatchSnapshot();
+  });
 });

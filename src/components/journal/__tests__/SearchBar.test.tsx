@@ -63,4 +63,43 @@ describe("SearchBar", () => {
     expect(onSearchChange).toHaveBeenCalledWith("");
     expect(onDismiss).toHaveBeenCalled();
   });
+
+  it("updates animations when visibility changes", () => {
+    const { rerender } = render(
+      <SearchBar
+        visible={true}
+        searchQuery=""
+        onSearchChange={() => {}}
+        onDismiss={() => {}}
+      />,
+    );
+
+    // Change visible to false to trigger useEffect branch
+    rerender(
+      <SearchBar
+        visible={false}
+        searchQuery=""
+        onSearchChange={() => {}}
+        onDismiss={() => {}}
+      />,
+    );
+
+    // We can't easily test actual animation values here without deeper integration,
+    // but rerendering ensures the useEffect branch for visible=false is executed.
+  });
+
+  it("returns null when not visible and height is 0", () => {
+    const { toJSON } = render(
+      <SearchBar
+        visible={false}
+        searchQuery=""
+        onSearchChange={() => {}}
+        onDismiss={() => {}}
+      />,
+    );
+
+    // According to the code: if (!visible && heightAnim._value === 0) return null;
+    // Since heightAnim defaults to 0, this should return null.
+    expect(toJSON()).toBeNull();
+  });
 });

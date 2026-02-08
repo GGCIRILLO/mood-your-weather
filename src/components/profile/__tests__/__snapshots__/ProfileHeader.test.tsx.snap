@@ -1,0 +1,267 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ProfileHeader matches snapshot 1`] = `
+<View
+  style={
+    {
+      "alignItems": "center",
+      "paddingHorizontal": 16,
+      "paddingVertical": 24,
+    }
+  }
+>
+  <View
+    style={
+      {
+        "marginBottom": 16,
+        "position": "relative",
+      }
+    }
+  >
+    <View
+      style={
+        {
+          "backgroundColor": "#135bec",
+          "borderRadius": 9999,
+          "inset": 0,
+          "opacity": 0.2,
+          "position": "absolute",
+          "transform": [
+            {
+              "scale": 1.2,
+            },
+          ],
+        }
+      }
+    />
+    <View
+      accessibilityState={
+        {
+          "busy": undefined,
+          "checked": undefined,
+          "disabled": undefined,
+          "expanded": undefined,
+          "selected": undefined,
+        }
+      }
+      accessibilityValue={
+        {
+          "max": undefined,
+          "min": undefined,
+          "now": undefined,
+          "text": undefined,
+        }
+      }
+      accessible={true}
+      collapsable={false}
+      focusable={true}
+      onBlur={[Function]}
+      onClick={[Function]}
+      onFocus={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        {
+          "backgroundColor": "#163a5f",
+          "borderColor": "#0b1121",
+          "borderRadius": 60,
+          "borderWidth": 4,
+          "height": 120,
+          "overflow": "hidden",
+          "width": 120,
+        }
+      }
+      testID="profile-avatar-button"
+    >
+      <View
+        style={
+          {
+            "alignItems": "center",
+            "height": "100%",
+            "justifyContent": "center",
+            "width": "100%",
+          }
+        }
+      >
+        <RNSVGSvgView
+          align="xMidYMid"
+          bbHeight={80}
+          bbWidth={80}
+          className="user-circle-fill__svg-icon-phosphor"
+          color="rgba(255,255,255,0.3)"
+          fill="currentColor"
+          focusable={false}
+          height={80}
+          meetOrSlice={0}
+          minX={0}
+          minY={0}
+          style={
+            [
+              {
+                "backgroundColor": "transparent",
+                "borderWidth": 0,
+              },
+              [
+                undefined,
+                undefined,
+                {},
+              ],
+              {
+                "flex": 0,
+                "height": 80,
+                "width": 80,
+              },
+            ]
+          }
+          testID="phosphor-react-native-user-circle-fill"
+          vbHeight={256}
+          vbWidth={256}
+          width={80}
+        >
+          <RNSVGGroup
+            fill={
+              {
+                "type": 2,
+              }
+            }
+            propList={
+              [
+                "fill",
+              ]
+            }
+          >
+            <RNSVGPath
+              d="M172 120a44 44 0 1 1-44-44 44.05 44.05 0 0 1 44 44m60 8A104 104 0 1 1 128 24a104.11 104.11 0 0 1 104 104m-16 0a88.09 88.09 0 0 0-91.47-87.93C77.43 41.89 39.87 81.12 40 128.25a87.65 87.65 0 0 0 22.24 58.16A79.7 79.7 0 0 1 84 165.1a4 4 0 0 1 4.83.32 59.83 59.83 0 0 0 78.28 0 4 4 0 0 1 4.83-.32 79.7 79.7 0 0 1 21.79 21.31A87.62 87.62 0 0 0 216 128"
+              fill={
+                {
+                  "payload": 4278190080,
+                  "type": 0,
+                }
+              }
+            />
+          </RNSVGGroup>
+        </RNSVGSvgView>
+      </View>
+    </View>
+    <View
+      accessibilityState={
+        {
+          "busy": undefined,
+          "checked": undefined,
+          "disabled": undefined,
+          "expanded": undefined,
+          "selected": undefined,
+        }
+      }
+      accessibilityValue={
+        {
+          "max": undefined,
+          "min": undefined,
+          "now": undefined,
+          "text": undefined,
+        }
+      }
+      accessible={true}
+      collapsable={false}
+      focusable={true}
+      onBlur={[Function]}
+      onClick={[Function]}
+      onFocus={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        {
+          "backgroundColor": "#135bec",
+          "borderColor": "#0b1121",
+          "borderRadius": 20,
+          "borderWidth": 4,
+          "bottom": 0,
+          "padding": 6,
+          "position": "absolute",
+          "right": 0,
+        }
+      }
+      testID="edit-avatar-button"
+    >
+      <RNSVGSvgView
+        align="xMidYMid"
+        bbHeight={16}
+        bbWidth={16}
+        className="pencil-simple-fill__svg-icon-phosphor"
+        color="white"
+        fill="currentColor"
+        focusable={false}
+        height={16}
+        meetOrSlice={0}
+        minX={0}
+        minY={0}
+        style={
+          [
+            {
+              "backgroundColor": "transparent",
+              "borderWidth": 0,
+            },
+            [
+              undefined,
+              undefined,
+              {},
+            ],
+            {
+              "flex": 0,
+              "height": 16,
+              "width": 16,
+            },
+          ]
+        }
+        testID="phosphor-react-native-pencil-simple-fill"
+        vbHeight={256}
+        vbWidth={256}
+        width={16}
+      >
+        <RNSVGGroup
+          fill={
+            {
+              "type": 2,
+            }
+          }
+          propList={
+            [
+              "fill",
+            ]
+          }
+        >
+          <RNSVGPath
+            d="m227.31 73.37-44.68-44.69a16 16 0 0 0-22.63 0L36.69 152A15.86 15.86 0 0 0 32 163.31V208a16 16 0 0 0 16 16h44.69a15.86 15.86 0 0 0 11.31-4.69L227.31 96a16 16 0 0 0 0-22.63M192 108.68 147.31 64l24-24L216 84.68Z"
+            fill={
+              {
+                "payload": 4278190080,
+                "type": 0,
+              }
+            }
+          />
+        </RNSVGGroup>
+      </RNSVGSvgView>
+    </View>
+  </View>
+  <Text
+    style={
+      {
+        "color": "white",
+        "fontSize": 24,
+        "fontWeight": "bold",
+        "marginBottom": 4,
+      }
+    }
+  >
+    John Doe
+  </Text>
+</View>
+`;

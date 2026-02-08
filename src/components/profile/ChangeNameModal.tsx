@@ -63,7 +63,7 @@ export const ChangeNameModal = ({
             <Text style={{ fontSize: 20, fontWeight: "bold", color: "white" }}>
               Change Name
             </Text>
-            <Pressable onPress={onClose}>
+            <Pressable onPress={onClose} testID="close-modal-button">
               <X size={24} color="#94a3b8" />
             </Pressable>
           </View>
@@ -88,6 +88,7 @@ export const ChangeNameModal = ({
           <Pressable
             onPress={onUpdate}
             disabled={isLoading}
+            testID="update-button"
             style={{
               backgroundColor: "#135bec",
               padding: 16,

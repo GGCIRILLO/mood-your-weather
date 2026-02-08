@@ -1,0 +1,234 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ChangeNameModal matches snapshot when visible 1`] = `
+<Modal
+  animationType="fade"
+  onRequestClose={[MockFunction]}
+  transparent={true}
+  visible={true}
+>
+  <View
+    onLayout={[Function]}
+    style={
+      [
+        {
+          "alignItems": "center",
+          "backgroundColor": "rgba(0,0,0,0.5)",
+          "flex": 1,
+          "justifyContent": "center",
+        },
+        {
+          "paddingBottom": 0,
+        },
+      ]
+    }
+  >
+    <View
+      style={
+        {
+          "backgroundColor": "#192233",
+          "borderColor": "#1e293b",
+          "borderRadius": 24,
+          "borderWidth": 1,
+          "padding": 24,
+          "width": "85%",
+        }
+      }
+    >
+      <View
+        style={
+          {
+            "alignItems": "center",
+            "flexDirection": "row",
+            "justifyContent": "space-between",
+            "marginBottom": 16,
+          }
+        }
+      >
+        <Text
+          style={
+            {
+              "color": "white",
+              "fontSize": 20,
+              "fontWeight": "bold",
+            }
+          }
+        >
+          Change Name
+        </Text>
+        <View
+          accessibilityState={
+            {
+              "busy": undefined,
+              "checked": undefined,
+              "disabled": undefined,
+              "expanded": undefined,
+              "selected": undefined,
+            }
+          }
+          accessibilityValue={
+            {
+              "max": undefined,
+              "min": undefined,
+              "now": undefined,
+              "text": undefined,
+            }
+          }
+          accessible={true}
+          collapsable={false}
+          focusable={true}
+          onBlur={[Function]}
+          onClick={[Function]}
+          onFocus={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          testID="close-modal-button"
+        >
+          <RNSVGSvgView
+            align="xMidYMid"
+            bbHeight={24}
+            bbWidth={24}
+            className="x-undefined__svg-icon-phosphor"
+            color="#94a3b8"
+            fill="currentColor"
+            focusable={false}
+            height={24}
+            meetOrSlice={0}
+            minX={0}
+            minY={0}
+            style={
+              [
+                {
+                  "backgroundColor": "transparent",
+                  "borderWidth": 0,
+                },
+                [
+                  undefined,
+                  undefined,
+                  {},
+                ],
+                {
+                  "flex": 0,
+                  "height": 24,
+                  "width": 24,
+                },
+              ]
+            }
+            testID="phosphor-react-native-x-undefined"
+            vbHeight={256}
+            vbWidth={256}
+            width={24}
+          >
+            <RNSVGGroup
+              fill={
+                {
+                  "type": 2,
+                }
+              }
+              propList={
+                [
+                  "fill",
+                ]
+              }
+            >
+              <RNSVGPath
+                d="M205.66 194.34a8 8 0 0 1-11.32 11.32L128 139.31l-66.34 66.35a8 8 0 0 1-11.32-11.32L116.69 128 50.34 61.66a8 8 0 0 1 11.32-11.32L128 116.69l66.34-66.35a8 8 0 0 1 11.32 11.32L139.31 128Z"
+                fill={
+                  {
+                    "payload": 4278190080,
+                    "type": 0,
+                  }
+                }
+              />
+            </RNSVGGroup>
+          </RNSVGSvgView>
+        </View>
+      </View>
+      <Text
+        style={
+          {
+            "color": "#94a3b8",
+            "marginBottom": 16,
+          }
+        }
+      >
+        Enter your new display name.
+      </Text>
+      <TextInput
+        onChangeText={[MockFunction]}
+        placeholder="Display Name"
+        placeholderTextColor="#64748b"
+        style={
+          {
+            "backgroundColor": "#0b1121",
+            "borderColor": "#1e293b",
+            "borderRadius": 16,
+            "borderWidth": 1,
+            "color": "white",
+            "marginBottom": 24,
+            "padding": 16,
+          }
+        }
+        value="John Doe"
+      />
+      <View
+        accessibilityState={
+          {
+            "busy": undefined,
+            "checked": undefined,
+            "disabled": false,
+            "expanded": undefined,
+            "selected": undefined,
+          }
+        }
+        accessibilityValue={
+          {
+            "max": undefined,
+            "min": undefined,
+            "now": undefined,
+            "text": undefined,
+          }
+        }
+        accessible={true}
+        collapsable={false}
+        focusable={true}
+        onBlur={[Function]}
+        onClick={[Function]}
+        onFocus={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          {
+            "alignItems": "center",
+            "backgroundColor": "#135bec",
+            "borderRadius": 16,
+            "opacity": 1,
+            "padding": 16,
+          }
+        }
+        testID="update-button"
+      >
+        <Text
+          style={
+            {
+              "color": "white",
+              "fontSize": 16,
+              "fontWeight": "bold",
+            }
+          }
+        >
+          Update Name
+        </Text>
+      </View>
+    </View>
+  </View>
+</Modal>
+`;

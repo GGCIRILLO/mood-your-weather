@@ -1,0 +1,457 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PracticeCard matches snapshot 1`] = `
+<View
+  style={
+    {
+      "marginBottom": 20,
+    }
+  }
+>
+  <View
+    style={
+      {
+        "backgroundColor": "#192233",
+        "borderRadius": 40,
+        "height": 550,
+        "overflow": "hidden",
+      }
+    }
+  >
+    <View
+      accessibilityIgnoresInvertColors={true}
+      style={
+        {
+          "height": "100%",
+          "width": "100%",
+        }
+      }
+    >
+      <Image
+        resizeMode="cover"
+        source={
+          {
+            "uri": "https://example.com/image.jpg",
+          }
+        }
+        style={
+          [
+            {
+              "bottom": 0,
+              "left": 0,
+              "position": "absolute",
+              "right": 0,
+              "top": 0,
+            },
+            {
+              "height": "100%",
+              "width": "100%",
+            },
+            undefined,
+          ]
+        }
+      />
+      <ViewManagerAdapter_ExpoLinearGradient
+        colors={
+          [
+            855638016,
+            0,
+            4060811553,
+          ]
+        }
+        style={
+          {
+            "bottom": 0,
+            "left": 0,
+            "position": "absolute",
+            "right": 0,
+            "top": 0,
+          }
+        }
+      />
+      <ViewManagerAdapter_ExpoLinearGradient
+        colors={
+          [
+            0,
+            3423277345,
+          ]
+        }
+        style={
+          {
+            "bottom": 0,
+            "left": 0,
+            "position": "absolute",
+            "right": 0,
+            "top": 0,
+          }
+        }
+      />
+      <View
+        style={
+          {
+            "flex": 1,
+            "justifyContent": "space-between",
+            "padding": 32,
+          }
+        }
+      >
+        <View
+          style={
+            {
+              "alignItems": "flex-start",
+              "flexDirection": "row",
+              "justifyContent": "space-between",
+            }
+          }
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "rgba(25, 34, 51, 0.6)",
+                "borderColor": "rgba(255, 255, 255, 0.05)",
+                "borderRadius": 20,
+                "borderWidth": 1,
+                "paddingHorizontal": 16,
+                "paddingVertical": 8,
+              }
+            }
+          >
+            <Text
+              style={
+                {
+                  "color": "white",
+                  "fontSize": 12,
+                  "fontWeight": "600",
+                  "letterSpacing": 1.5,
+                  "textTransform": "uppercase",
+                }
+              }
+            >
+              Anxiety Relief
+            </Text>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "alignItems": "center",
+              "justifyContent": "center",
+            }
+          }
+        >
+          <RNSVGSvgView
+            align="xMidYMid"
+            bbHeight={84}
+            bbWidth={84}
+            className="cloud-lightning-fill__svg-icon-phosphor"
+            color="rgba(255,255,255,0.9)"
+            fill="currentColor"
+            focusable={false}
+            height={84}
+            meetOrSlice={0}
+            minX={0}
+            minY={0}
+            style={
+              [
+                {
+                  "backgroundColor": "transparent",
+                  "borderWidth": 0,
+                },
+                [
+                  undefined,
+                  undefined,
+                  {},
+                ],
+                {
+                  "flex": 0,
+                  "height": 84,
+                  "width": 84,
+                },
+              ]
+            }
+            testID="phosphor-react-native-cloud-lightning-fill"
+            vbHeight={256}
+            vbWidth={256}
+            width={84}
+          >
+            <RNSVGGroup
+              fill={
+                {
+                  "type": 2,
+                }
+              }
+              propList={
+                [
+                  "fill",
+                ]
+              }
+            >
+              <RNSVGPath
+                d="M156 168h-23.47l-14.4 24H144a8 8 0 0 1 6.86 12.12l-24 40a8 8 0 0 1-13.72-8.24L129.87 208H104a8 8 0 0 1-6.86-12.12L113.87 168h-37C48.12 168 24.2 145.07 24 116.36A52.09 52.09 0 0 1 61.35 66.1a4 4 0 0 1 5 4.78A92.5 92.5 0 0 0 64 87.39 8.14 8.14 0 0 0 71.41 96h.6a8.18 8.18 0 0 0 8.08-7.72A76 76 0 1 1 156 168"
+                fill={
+                  {
+                    "payload": 4278190080,
+                    "type": 0,
+                  }
+                }
+              />
+            </RNSVGGroup>
+          </RNSVGSvgView>
+        </View>
+        <View
+          style={
+            {
+              "gap": 16,
+            }
+          }
+        >
+          <View>
+            <Text
+              style={
+                {
+                  "color": "white",
+                  "fontSize": 32,
+                  "fontWeight": "bold",
+                  "marginBottom": 8,
+                }
+              }
+            >
+              Test Practice
+            </Text>
+            <View
+              style={
+                {
+                  "alignItems": "center",
+                  "flexDirection": "row",
+                  "gap": 8,
+                }
+              }
+            >
+              <RNSVGSvgView
+                align="xMidYMid"
+                bbHeight={16}
+                bbWidth={16}
+                className="clock-undefined__svg-icon-phosphor"
+                color="#92a4c9"
+                fill="currentColor"
+                focusable={false}
+                height={16}
+                meetOrSlice={0}
+                minX={0}
+                minY={0}
+                style={
+                  [
+                    {
+                      "backgroundColor": "transparent",
+                      "borderWidth": 0,
+                    },
+                    [
+                      undefined,
+                      undefined,
+                      {},
+                    ],
+                    {
+                      "flex": 0,
+                      "height": 16,
+                      "width": 16,
+                    },
+                  ]
+                }
+                testID="phosphor-react-native-clock-undefined"
+                vbHeight={256}
+                vbWidth={256}
+                width={16}
+              >
+                <RNSVGGroup
+                  fill={
+                    {
+                      "type": 2,
+                    }
+                  }
+                  propList={
+                    [
+                      "fill",
+                    ]
+                  }
+                >
+                  <RNSVGPath
+                    d="M128 24a104 104 0 1 0 104 104A104.11 104.11 0 0 0 128 24m0 192a88 88 0 1 1 88-88 88.1 88.1 0 0 1-88 88m64-88a8 8 0 0 1-8 8h-56a8 8 0 0 1-8-8V72a8 8 0 0 1 16 0v48h48a8 8 0 0 1 8 8"
+                    fill={
+                      {
+                        "payload": 4278190080,
+                        "type": 0,
+                      }
+                    }
+                  />
+                </RNSVGGroup>
+              </RNSVGSvgView>
+              <Text
+                style={
+                  {
+                    "color": "#92a4c9",
+                    "fontSize": 14,
+                  }
+                }
+              >
+                21 min
+              </Text>
+              <Text
+                style={
+                  {
+                    "color": "#92a4c9",
+                    "fontSize": 14,
+                  }
+                }
+              >
+                •
+              </Text>
+              <Text
+                style={
+                  {
+                    "color": "#92a4c9",
+                    "fontSize": 14,
+                  }
+                }
+              >
+                Relaxation
+              </Text>
+            </View>
+          </View>
+          <Text
+            numberOfLines={2}
+            style={
+              {
+                "color": "#92a4c9",
+                "fontSize": 14,
+                "lineHeight": 22,
+              }
+            }
+          >
+            This is a test practice description
+          </Text>
+          <View
+            accessibilityState={
+              {
+                "busy": undefined,
+                "checked": undefined,
+                "disabled": undefined,
+                "expanded": undefined,
+                "selected": undefined,
+              }
+            }
+            accessibilityValue={
+              {
+                "max": undefined,
+                "min": undefined,
+                "now": undefined,
+                "text": undefined,
+              }
+            }
+            accessible={true}
+            collapsable={false}
+            focusable={true}
+            onBlur={[Function]}
+            onClick={[Function]}
+            onFocus={[Function]}
+            onResponderGrant={[Function]}
+            onResponderMove={[Function]}
+            onResponderRelease={[Function]}
+            onResponderTerminate={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+            style={
+              {
+                "alignItems": "center",
+                "backgroundColor": "#135bec",
+                "borderRadius": 28,
+                "flexDirection": "row",
+                "gap": 8,
+                "height": 56,
+                "justifyContent": "center",
+                "shadowColor": "#135bec",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 0.4,
+                "shadowRadius": 25,
+                "width": "100%",
+              }
+            }
+          >
+            <RNSVGSvgView
+              align="xMidYMid"
+              bbHeight={24}
+              bbWidth={24}
+              className="play-fill__svg-icon-phosphor"
+              color="white"
+              fill="currentColor"
+              focusable={false}
+              height={24}
+              meetOrSlice={0}
+              minX={0}
+              minY={0}
+              style={
+                [
+                  {
+                    "backgroundColor": "transparent",
+                    "borderWidth": 0,
+                  },
+                  [
+                    undefined,
+                    undefined,
+                    {},
+                  ],
+                  {
+                    "flex": 0,
+                    "height": 24,
+                    "width": 24,
+                  },
+                ]
+              }
+              testID="phosphor-react-native-play-fill"
+              vbHeight={256}
+              vbWidth={256}
+              width={24}
+            >
+              <RNSVGGroup
+                fill={
+                  {
+                    "type": 2,
+                  }
+                }
+                propList={
+                  [
+                    "fill",
+                  ]
+                }
+              >
+                <RNSVGPath
+                  d="M240 128a15.74 15.74 0 0 1-7.6 13.51L88.32 229.65a16 16 0 0 1-16.2.3A15.86 15.86 0 0 1 64 216.13V39.87a15.86 15.86 0 0 1 8.12-13.82 16 16 0 0 1 16.2.3l144.08 88.14A15.74 15.74 0 0 1 240 128"
+                  fill={
+                    {
+                      "payload": 4278190080,
+                      "type": 0,
+                    }
+                  }
+                />
+              </RNSVGGroup>
+            </RNSVGSvgView>
+            <Text
+              style={
+                {
+                  "color": "white",
+                  "fontSize": 18,
+                  "fontWeight": "bold",
+                }
+              }
+            >
+              Begin Journey
+            </Text>
+          </View>
+        </View>
+      </View>
+    </View>
+  </View>
+</View>
+`;

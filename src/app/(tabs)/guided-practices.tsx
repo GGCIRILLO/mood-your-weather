@@ -63,8 +63,9 @@ export default function GuidedPracticesScreen() {
   ]).current;
 
   // Staggered fade-in animation for practice cards
-  const practiceAnimsMap = useRef<Map<number, Animated.Value>>(new Map())
-    .current;
+  const practiceAnimsMap = useRef<Map<number, Animated.Value>>(
+    new Map(),
+  ).current;
   const animatedPractices = useRef<Set<number>>(new Set()).current;
 
   useEffect(() => {
@@ -142,7 +143,11 @@ export default function GuidedPracticesScreen() {
               justifyContent: "space-between",
             }}
           >
-            <Pressable onPress={() => router.back()} style={styles.backButton}>
+            <Pressable
+              onPress={() => router.back()}
+              style={styles.backButton}
+              testID="back-button"
+            >
               <ArrowLeftIcon size={24} color="#FFF" />
             </Pressable>
 
@@ -222,16 +227,16 @@ export default function GuidedPracticesScreen() {
 }
 
 const styles = StyleSheet.create({
-    backButton: {
-        width: 48,
-        height: 48,
-        alignItems: "center",
-        justifyContent: "center",
-        borderRadius: 24,
-        backgroundColor: "rgba(255,255,255,0.1)",
-    },
-    placeholderButton: {
-        width: 48,
-        height: 48,
-    },
+  backButton: {
+    width: 48,
+    height: 48,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 24,
+    backgroundColor: "rgba(255,255,255,0.1)",
+  },
+  placeholderButton: {
+    width: 48,
+    height: 48,
+  },
 });

@@ -116,6 +116,7 @@ export const PlayerModal = ({
             >
               <Pressable
                 onPress={onClose}
+                testID="close-player-button"
                 style={{
                   width: 40,
                   height: 40,
@@ -304,6 +305,7 @@ export const PlayerModal = ({
               >
                 <Pressable
                   onPress={onTogglePlayback}
+                  testID="play-pause-button"
                   style={{
                     width: 80,
                     height: 80,

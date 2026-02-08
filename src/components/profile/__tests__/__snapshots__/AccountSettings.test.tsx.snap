@@ -1,0 +1,260 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AccountSettings matches snapshot 1`] = `
+<View
+  style={
+    {
+      "marginBottom": 32,
+    }
+  }
+>
+  <Text
+    style={
+      {
+        "color": "#94a3b8",
+        "fontSize": 12,
+        "fontWeight": "bold",
+        "letterSpacing": 1,
+        "marginBottom": 12,
+        "paddingHorizontal": 24,
+        "textTransform": "uppercase",
+      }
+    }
+  >
+    Account Settings
+  </Text>
+  <View
+    style={
+      {
+        "backgroundColor": "#192233",
+        "borderColor": "#1e293b",
+        "borderRadius": 20,
+        "borderWidth": 1,
+        "marginHorizontal": 16,
+        "overflow": "hidden",
+      }
+    }
+  >
+    <View
+      accessibilityState={
+        {
+          "busy": undefined,
+          "checked": undefined,
+          "disabled": undefined,
+          "expanded": undefined,
+          "selected": undefined,
+        }
+      }
+      accessibilityValue={
+        {
+          "max": undefined,
+          "min": undefined,
+          "now": undefined,
+          "text": undefined,
+        }
+      }
+      accessible={true}
+      collapsable={false}
+      focusable={true}
+      onBlur={[Function]}
+      onClick={[Function]}
+      onFocus={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        {
+          "alignItems": "center",
+          "borderBottomColor": "#1e293b",
+          "borderBottomWidth": 1,
+          "flexDirection": "row",
+          "justifyContent": "space-between",
+          "padding": 16,
+        }
+      }
+    >
+      <Text
+        style={
+          {
+            "color": "white",
+            "fontSize": 16,
+            "fontWeight": "500",
+          }
+        }
+      >
+        Change Name
+      </Text>
+      <RNSVGSvgView
+        align="xMidYMid"
+        bbHeight={16}
+        bbWidth={16}
+        className="caret-right-undefined__svg-icon-phosphor"
+        color="#94a3b8"
+        fill="currentColor"
+        focusable={false}
+        height={16}
+        meetOrSlice={0}
+        minX={0}
+        minY={0}
+        style={
+          [
+            {
+              "backgroundColor": "transparent",
+              "borderWidth": 0,
+            },
+            [
+              undefined,
+              undefined,
+              {},
+            ],
+            {
+              "flex": 0,
+              "height": 16,
+              "width": 16,
+            },
+          ]
+        }
+        testID="phosphor-react-native-caret-right-undefined"
+        vbHeight={256}
+        vbWidth={256}
+        width={16}
+      >
+        <RNSVGGroup
+          fill={
+            {
+              "type": 2,
+            }
+          }
+          propList={
+            [
+              "fill",
+            ]
+          }
+        >
+          <RNSVGPath
+            d="m181.66 133.66-80 80a8 8 0 0 1-11.32-11.32L164.69 128 90.34 53.66a8 8 0 0 1 11.32-11.32l80 80a8 8 0 0 1 0 11.32"
+            fill={
+              {
+                "payload": 4278190080,
+                "type": 0,
+              }
+            }
+          />
+        </RNSVGGroup>
+      </RNSVGSvgView>
+    </View>
+    <View
+      accessibilityState={
+        {
+          "busy": undefined,
+          "checked": undefined,
+          "disabled": undefined,
+          "expanded": undefined,
+          "selected": undefined,
+        }
+      }
+      accessibilityValue={
+        {
+          "max": undefined,
+          "min": undefined,
+          "now": undefined,
+          "text": undefined,
+        }
+      }
+      accessible={true}
+      collapsable={false}
+      focusable={true}
+      onBlur={[Function]}
+      onClick={[Function]}
+      onFocus={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        {
+          "alignItems": "center",
+          "flexDirection": "row",
+          "justifyContent": "space-between",
+          "padding": 16,
+        }
+      }
+    >
+      <Text
+        style={
+          {
+            "color": "white",
+            "fontSize": 16,
+            "fontWeight": "500",
+          }
+        }
+      >
+        Change Password
+      </Text>
+      <RNSVGSvgView
+        align="xMidYMid"
+        bbHeight={16}
+        bbWidth={16}
+        className="caret-right-undefined__svg-icon-phosphor"
+        color="#94a3b8"
+        fill="currentColor"
+        focusable={false}
+        height={16}
+        meetOrSlice={0}
+        minX={0}
+        minY={0}
+        style={
+          [
+            {
+              "backgroundColor": "transparent",
+              "borderWidth": 0,
+            },
+            [
+              undefined,
+              undefined,
+              {},
+            ],
+            {
+              "flex": 0,
+              "height": 16,
+              "width": 16,
+            },
+          ]
+        }
+        testID="phosphor-react-native-caret-right-undefined"
+        vbHeight={256}
+        vbWidth={256}
+        width={16}
+      >
+        <RNSVGGroup
+          fill={
+            {
+              "type": 2,
+            }
+          }
+          propList={
+            [
+              "fill",
+            ]
+          }
+        >
+          <RNSVGPath
+            d="m181.66 133.66-80 80a8 8 0 0 1-11.32-11.32L164.69 128 90.34 53.66a8 8 0 0 1 11.32-11.32l80 80a8 8 0 0 1 0 11.32"
+            fill={
+              {
+                "payload": 4278190080,
+                "type": 0,
+              }
+            }
+          />
+        </RNSVGGroup>
+      </RNSVGSvgView>
+    </View>
+  </View>
+</View>
+`;

@@ -34,6 +34,7 @@ export const ProfileHeader = ({
         />
         <Pressable
           onPress={onPickImage}
+          testID="profile-avatar-button"
           style={{
             width: 120,
             height: 120,
@@ -69,6 +70,7 @@ export const ProfileHeader = ({
         </Pressable>
         <Pressable
           onPress={onPickImage}
+          testID="edit-avatar-button"
           style={{
             position: "absolute",
             bottom: 0,

@@ -1,0 +1,320 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FilterChips matches snapshot 1`] = `
+<RCTScrollView
+  horizontal={true}
+  showsHorizontalScrollIndicator={false}
+  style={
+    {
+      "marginBottom": 24,
+    }
+  }
+>
+  <View>
+    <View
+      style={
+        {
+          "flexDirection": "row",
+          "gap": 12,
+        }
+      }
+    >
+      <View
+        accessibilityState={
+          {
+            "busy": undefined,
+            "checked": undefined,
+            "disabled": undefined,
+            "expanded": undefined,
+            "selected": undefined,
+          }
+        }
+        accessibilityValue={
+          {
+            "max": undefined,
+            "min": undefined,
+            "now": undefined,
+            "text": undefined,
+          }
+        }
+        accessible={true}
+        collapsable={false}
+        focusable={true}
+        onBlur={[Function]}
+        onClick={[Function]}
+        onFocus={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          {
+            "backgroundColor": "#135bec",
+            "borderRadius": 20,
+            "paddingHorizontal": 20,
+            "paddingVertical": 10,
+            "shadowColor": "#135bec",
+            "shadowOffset": {
+              "height": 0,
+              "width": 0,
+            },
+            "shadowOpacity": 0.4,
+            "shadowRadius": 15,
+          }
+        }
+        testID="filter-chip-All"
+      >
+        <Text
+          style={
+            {
+              "color": "white",
+              "fontSize": 14,
+              "fontWeight": "600",
+            }
+          }
+        >
+          All
+        </Text>
+      </View>
+      <View
+        accessibilityState={
+          {
+            "busy": undefined,
+            "checked": undefined,
+            "disabled": undefined,
+            "expanded": undefined,
+            "selected": undefined,
+          }
+        }
+        accessibilityValue={
+          {
+            "max": undefined,
+            "min": undefined,
+            "now": undefined,
+            "text": undefined,
+          }
+        }
+        accessible={true}
+        collapsable={false}
+        focusable={true}
+        onBlur={[Function]}
+        onClick={[Function]}
+        onFocus={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          {
+            "backgroundColor": "#192233",
+            "borderRadius": 20,
+            "paddingHorizontal": 20,
+            "paddingVertical": 10,
+            "shadowColor": "transparent",
+            "shadowOffset": {
+              "height": 0,
+              "width": 0,
+            },
+            "shadowOpacity": 0.4,
+            "shadowRadius": 15,
+          }
+        }
+        testID="filter-chip-Anxiety"
+      >
+        <Text
+          style={
+            {
+              "color": "#92a4c9",
+              "fontSize": 14,
+              "fontWeight": "500",
+            }
+          }
+        >
+          Anxiety
+        </Text>
+      </View>
+      <View
+        accessibilityState={
+          {
+            "busy": undefined,
+            "checked": undefined,
+            "disabled": undefined,
+            "expanded": undefined,
+            "selected": undefined,
+          }
+        }
+        accessibilityValue={
+          {
+            "max": undefined,
+            "min": undefined,
+            "now": undefined,
+            "text": undefined,
+          }
+        }
+        accessible={true}
+        collapsable={false}
+        focusable={true}
+        onBlur={[Function]}
+        onClick={[Function]}
+        onFocus={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          {
+            "backgroundColor": "#192233",
+            "borderRadius": 20,
+            "paddingHorizontal": 20,
+            "paddingVertical": 10,
+            "shadowColor": "transparent",
+            "shadowOffset": {
+              "height": 0,
+              "width": 0,
+            },
+            "shadowOpacity": 0.4,
+            "shadowRadius": 15,
+          }
+        }
+        testID="filter-chip-Focus"
+      >
+        <Text
+          style={
+            {
+              "color": "#92a4c9",
+              "fontSize": 14,
+              "fontWeight": "500",
+            }
+          }
+        >
+          Focus
+        </Text>
+      </View>
+      <View
+        accessibilityState={
+          {
+            "busy": undefined,
+            "checked": undefined,
+            "disabled": undefined,
+            "expanded": undefined,
+            "selected": undefined,
+          }
+        }
+        accessibilityValue={
+          {
+            "max": undefined,
+            "min": undefined,
+            "now": undefined,
+            "text": undefined,
+          }
+        }
+        accessible={true}
+        collapsable={false}
+        focusable={true}
+        onBlur={[Function]}
+        onClick={[Function]}
+        onFocus={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          {
+            "backgroundColor": "#192233",
+            "borderRadius": 20,
+            "paddingHorizontal": 20,
+            "paddingVertical": 10,
+            "shadowColor": "transparent",
+            "shadowOffset": {
+              "height": 0,
+              "width": 0,
+            },
+            "shadowOpacity": 0.4,
+            "shadowRadius": 15,
+          }
+        }
+        testID="filter-chip-Sleep"
+      >
+        <Text
+          style={
+            {
+              "color": "#92a4c9",
+              "fontSize": 14,
+              "fontWeight": "500",
+            }
+          }
+        >
+          Sleep
+        </Text>
+      </View>
+      <View
+        accessibilityState={
+          {
+            "busy": undefined,
+            "checked": undefined,
+            "disabled": undefined,
+            "expanded": undefined,
+            "selected": undefined,
+          }
+        }
+        accessibilityValue={
+          {
+            "max": undefined,
+            "min": undefined,
+            "now": undefined,
+            "text": undefined,
+          }
+        }
+        accessible={true}
+        collapsable={false}
+        focusable={true}
+        onBlur={[Function]}
+        onClick={[Function]}
+        onFocus={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          {
+            "backgroundColor": "#192233",
+            "borderRadius": 20,
+            "paddingHorizontal": 20,
+            "paddingVertical": 10,
+            "shadowColor": "transparent",
+            "shadowOffset": {
+              "height": 0,
+              "width": 0,
+            },
+            "shadowOpacity": 0.4,
+            "shadowRadius": 15,
+          }
+        }
+        testID="filter-chip-Meditation"
+      >
+        <Text
+          style={
+            {
+              "color": "#92a4c9",
+              "fontSize": 14,
+              "fontWeight": "500",
+            }
+          }
+        >
+          Meditation
+        </Text>
+      </View>
+    </View>
+  </View>
+</RCTScrollView>
+`;

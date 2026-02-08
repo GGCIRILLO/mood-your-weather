@@ -22,6 +22,7 @@ export const FilterChips = ({
           <Pressable
             key={filter}
             onPress={() => onFilterChange(filter)}
+            testID={`filter-chip-${filter}`}
             style={{
               paddingHorizontal: 20,
               paddingVertical: 10,

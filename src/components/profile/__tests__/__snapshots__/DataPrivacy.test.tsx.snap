@@ -1,0 +1,657 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DataPrivacy matches snapshot when exporting 1`] = `
+<View
+  style={
+    {
+      "marginBottom": 40,
+    }
+  }
+>
+  <Text
+    style={
+      {
+        "color": "#94a3b8",
+        "fontSize": 12,
+        "fontWeight": "bold",
+        "letterSpacing": 1,
+        "marginBottom": 12,
+        "paddingHorizontal": 24,
+        "textTransform": "uppercase",
+      }
+    }
+  >
+    Data & Privacy
+  </Text>
+  <View
+    style={
+      {
+        "backgroundColor": "#192233",
+        "borderColor": "#1e293b",
+        "borderRadius": 20,
+        "borderWidth": 1,
+        "marginHorizontal": 16,
+        "overflow": "hidden",
+      }
+    }
+  >
+    <View
+      accessibilityState={
+        {
+          "busy": undefined,
+          "checked": undefined,
+          "disabled": true,
+          "expanded": undefined,
+          "selected": undefined,
+        }
+      }
+      accessibilityValue={
+        {
+          "max": undefined,
+          "min": undefined,
+          "now": undefined,
+          "text": undefined,
+        }
+      }
+      accessible={true}
+      collapsable={false}
+      focusable={true}
+      onBlur={[Function]}
+      onClick={[Function]}
+      onFocus={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        {
+          "alignItems": "center",
+          "borderBottomColor": "#1e293b",
+          "borderBottomWidth": 1,
+          "flexDirection": "row",
+          "justifyContent": "space-between",
+          "opacity": 0.5,
+          "padding": 16,
+        }
+      }
+    >
+      <View
+        style={
+          {
+            "alignItems": "center",
+            "flexDirection": "row",
+            "gap": 12,
+          }
+        }
+      >
+        <RNSVGSvgView
+          align="xMidYMid"
+          bbHeight={24}
+          bbWidth={24}
+          className="download-simple-undefined__svg-icon-phosphor"
+          color="#94a3b8"
+          fill="currentColor"
+          focusable={false}
+          height={24}
+          meetOrSlice={0}
+          minX={0}
+          minY={0}
+          style={
+            [
+              {
+                "backgroundColor": "transparent",
+                "borderWidth": 0,
+              },
+              [
+                undefined,
+                undefined,
+                {},
+              ],
+              {
+                "flex": 0,
+                "height": 24,
+                "width": 24,
+              },
+            ]
+          }
+          testID="phosphor-react-native-download-simple-undefined"
+          vbHeight={256}
+          vbWidth={256}
+          width={24}
+        >
+          <RNSVGGroup
+            fill={
+              {
+                "type": 2,
+              }
+            }
+            propList={
+              [
+                "fill",
+              ]
+            }
+          >
+            <RNSVGPath
+              d="M224 144v64a8 8 0 0 1-8 8H40a8 8 0 0 1-8-8v-64a8 8 0 0 1 16 0v56h160v-56a8 8 0 0 1 16 0m-101.66 5.66a8 8 0 0 0 11.32 0l40-40a8 8 0 0 0-11.32-11.32L136 124.69V32a8 8 0 0 0-16 0v92.69L93.66 98.34a8 8 0 0 0-11.32 11.32Z"
+              fill={
+                {
+                  "payload": 4278190080,
+                  "type": 0,
+                }
+              }
+            />
+          </RNSVGGroup>
+        </RNSVGSvgView>
+        <Text
+          style={
+            {
+              "color": "white",
+              "fontSize": 16,
+              "fontWeight": "500",
+            }
+          }
+        >
+          Exporting...
+        </Text>
+      </View>
+      <RNSVGSvgView
+        align="xMidYMid"
+        bbHeight={16}
+        bbWidth={16}
+        className="caret-right-undefined__svg-icon-phosphor"
+        color="#94a3b8"
+        fill="currentColor"
+        focusable={false}
+        height={16}
+        meetOrSlice={0}
+        minX={0}
+        minY={0}
+        style={
+          [
+            {
+              "backgroundColor": "transparent",
+              "borderWidth": 0,
+            },
+            [
+              undefined,
+              undefined,
+              {},
+            ],
+            {
+              "flex": 0,
+              "height": 16,
+              "width": 16,
+            },
+          ]
+        }
+        testID="phosphor-react-native-caret-right-undefined"
+        vbHeight={256}
+        vbWidth={256}
+        width={16}
+      >
+        <RNSVGGroup
+          fill={
+            {
+              "type": 2,
+            }
+          }
+          propList={
+            [
+              "fill",
+            ]
+          }
+        >
+          <RNSVGPath
+            d="m181.66 133.66-80 80a8 8 0 0 1-11.32-11.32L164.69 128 90.34 53.66a8 8 0 0 1 11.32-11.32l80 80a8 8 0 0 1 0 11.32"
+            fill={
+              {
+                "payload": 4278190080,
+                "type": 0,
+              }
+            }
+          />
+        </RNSVGGroup>
+      </RNSVGSvgView>
+    </View>
+    <View
+      accessibilityState={
+        {
+          "busy": undefined,
+          "checked": undefined,
+          "disabled": undefined,
+          "expanded": undefined,
+          "selected": undefined,
+        }
+      }
+      accessibilityValue={
+        {
+          "max": undefined,
+          "min": undefined,
+          "now": undefined,
+          "text": undefined,
+        }
+      }
+      accessible={true}
+      collapsable={false}
+      focusable={true}
+      onBlur={[Function]}
+      onClick={[Function]}
+      onFocus={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        {
+          "alignItems": "center",
+          "flexDirection": "row",
+          "gap": 12,
+          "padding": 16,
+        }
+      }
+    >
+      <RNSVGSvgView
+        align="xMidYMid"
+        bbHeight={24}
+        bbWidth={24}
+        className="sign-out-fill__svg-icon-phosphor"
+        color="#ef4444"
+        fill="currentColor"
+        focusable={false}
+        height={24}
+        meetOrSlice={0}
+        minX={0}
+        minY={0}
+        style={
+          [
+            {
+              "backgroundColor": "transparent",
+              "borderWidth": 0,
+            },
+            [
+              undefined,
+              undefined,
+              {},
+            ],
+            {
+              "flex": 0,
+              "height": 24,
+              "width": 24,
+            },
+          ]
+        }
+        testID="phosphor-react-native-sign-out-fill"
+        vbHeight={256}
+        vbWidth={256}
+        width={24}
+      >
+        <RNSVGGroup
+          fill={
+            {
+              "type": 2,
+            }
+          }
+          propList={
+            [
+              "fill",
+            ]
+          }
+        >
+          <RNSVGPath
+            d="M120 216a8 8 0 0 1-8 8H48a8 8 0 0 1-8-8V40a8 8 0 0 1 8-8h64a8 8 0 0 1 0 16H56v160h56a8 8 0 0 1 8 8m109.66-93.66-40-40A8 8 0 0 0 176 88v32h-64a8 8 0 0 0 0 16h64v32a8 8 0 0 0 13.66 5.66l40-40a8 8 0 0 0 0-11.32"
+            fill={
+              {
+                "payload": 4278190080,
+                "type": 0,
+              }
+            }
+          />
+        </RNSVGGroup>
+      </RNSVGSvgView>
+      <Text
+        style={
+          {
+            "color": "#ef4444",
+            "fontSize": 16,
+            "fontWeight": "500",
+          }
+        }
+      >
+        Log Out
+      </Text>
+    </View>
+  </View>
+</View>
+`;
+
+exports[`DataPrivacy matches snapshot when not exporting 1`] = `
+<View
+  style={
+    {
+      "marginBottom": 40,
+    }
+  }
+>
+  <Text
+    style={
+      {
+        "color": "#94a3b8",
+        "fontSize": 12,
+        "fontWeight": "bold",
+        "letterSpacing": 1,
+        "marginBottom": 12,
+        "paddingHorizontal": 24,
+        "textTransform": "uppercase",
+      }
+    }
+  >
+    Data & Privacy
+  </Text>
+  <View
+    style={
+      {
+        "backgroundColor": "#192233",
+        "borderColor": "#1e293b",
+        "borderRadius": 20,
+        "borderWidth": 1,
+        "marginHorizontal": 16,
+        "overflow": "hidden",
+      }
+    }
+  >
+    <View
+      accessibilityState={
+        {
+          "busy": undefined,
+          "checked": undefined,
+          "disabled": false,
+          "expanded": undefined,
+          "selected": undefined,
+        }
+      }
+      accessibilityValue={
+        {
+          "max": undefined,
+          "min": undefined,
+          "now": undefined,
+          "text": undefined,
+        }
+      }
+      accessible={true}
+      collapsable={false}
+      focusable={true}
+      onBlur={[Function]}
+      onClick={[Function]}
+      onFocus={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        {
+          "alignItems": "center",
+          "borderBottomColor": "#1e293b",
+          "borderBottomWidth": 1,
+          "flexDirection": "row",
+          "justifyContent": "space-between",
+          "opacity": 1,
+          "padding": 16,
+        }
+      }
+    >
+      <View
+        style={
+          {
+            "alignItems": "center",
+            "flexDirection": "row",
+            "gap": 12,
+          }
+        }
+      >
+        <RNSVGSvgView
+          align="xMidYMid"
+          bbHeight={24}
+          bbWidth={24}
+          className="download-simple-undefined__svg-icon-phosphor"
+          color="#94a3b8"
+          fill="currentColor"
+          focusable={false}
+          height={24}
+          meetOrSlice={0}
+          minX={0}
+          minY={0}
+          style={
+            [
+              {
+                "backgroundColor": "transparent",
+                "borderWidth": 0,
+              },
+              [
+                undefined,
+                undefined,
+                {},
+              ],
+              {
+                "flex": 0,
+                "height": 24,
+                "width": 24,
+              },
+            ]
+          }
+          testID="phosphor-react-native-download-simple-undefined"
+          vbHeight={256}
+          vbWidth={256}
+          width={24}
+        >
+          <RNSVGGroup
+            fill={
+              {
+                "type": 2,
+              }
+            }
+            propList={
+              [
+                "fill",
+              ]
+            }
+          >
+            <RNSVGPath
+              d="M224 144v64a8 8 0 0 1-8 8H40a8 8 0 0 1-8-8v-64a8 8 0 0 1 16 0v56h160v-56a8 8 0 0 1 16 0m-101.66 5.66a8 8 0 0 0 11.32 0l40-40a8 8 0 0 0-11.32-11.32L136 124.69V32a8 8 0 0 0-16 0v92.69L93.66 98.34a8 8 0 0 0-11.32 11.32Z"
+              fill={
+                {
+                  "payload": 4278190080,
+                  "type": 0,
+                }
+              }
+            />
+          </RNSVGGroup>
+        </RNSVGSvgView>
+        <Text
+          style={
+            {
+              "color": "white",
+              "fontSize": 16,
+              "fontWeight": "500",
+            }
+          }
+        >
+          Export All Data
+        </Text>
+      </View>
+      <RNSVGSvgView
+        align="xMidYMid"
+        bbHeight={16}
+        bbWidth={16}
+        className="caret-right-undefined__svg-icon-phosphor"
+        color="#94a3b8"
+        fill="currentColor"
+        focusable={false}
+        height={16}
+        meetOrSlice={0}
+        minX={0}
+        minY={0}
+        style={
+          [
+            {
+              "backgroundColor": "transparent",
+              "borderWidth": 0,
+            },
+            [
+              undefined,
+              undefined,
+              {},
+            ],
+            {
+              "flex": 0,
+              "height": 16,
+              "width": 16,
+            },
+          ]
+        }
+        testID="phosphor-react-native-caret-right-undefined"
+        vbHeight={256}
+        vbWidth={256}
+        width={16}
+      >
+        <RNSVGGroup
+          fill={
+            {
+              "type": 2,
+            }
+          }
+          propList={
+            [
+              "fill",
+            ]
+          }
+        >
+          <RNSVGPath
+            d="m181.66 133.66-80 80a8 8 0 0 1-11.32-11.32L164.69 128 90.34 53.66a8 8 0 0 1 11.32-11.32l80 80a8 8 0 0 1 0 11.32"
+            fill={
+              {
+                "payload": 4278190080,
+                "type": 0,
+              }
+            }
+          />
+        </RNSVGGroup>
+      </RNSVGSvgView>
+    </View>
+    <View
+      accessibilityState={
+        {
+          "busy": undefined,
+          "checked": undefined,
+          "disabled": undefined,
+          "expanded": undefined,
+          "selected": undefined,
+        }
+      }
+      accessibilityValue={
+        {
+          "max": undefined,
+          "min": undefined,
+          "now": undefined,
+          "text": undefined,
+        }
+      }
+      accessible={true}
+      collapsable={false}
+      focusable={true}
+      onBlur={[Function]}
+      onClick={[Function]}
+      onFocus={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        {
+          "alignItems": "center",
+          "flexDirection": "row",
+          "gap": 12,
+          "padding": 16,
+        }
+      }
+    >
+      <RNSVGSvgView
+        align="xMidYMid"
+        bbHeight={24}
+        bbWidth={24}
+        className="sign-out-fill__svg-icon-phosphor"
+        color="#ef4444"
+        fill="currentColor"
+        focusable={false}
+        height={24}
+        meetOrSlice={0}
+        minX={0}
+        minY={0}
+        style={
+          [
+            {
+              "backgroundColor": "transparent",
+              "borderWidth": 0,
+            },
+            [
+              undefined,
+              undefined,
+              {},
+            ],
+            {
+              "flex": 0,
+              "height": 24,
+              "width": 24,
+            },
+          ]
+        }
+        testID="phosphor-react-native-sign-out-fill"
+        vbHeight={256}
+        vbWidth={256}
+        width={24}
+      >
+        <RNSVGGroup
+          fill={
+            {
+              "type": 2,
+            }
+          }
+          propList={
+            [
+              "fill",
+            ]
+          }
+        >
+          <RNSVGPath
+            d="M120 216a8 8 0 0 1-8 8H48a8 8 0 0 1-8-8V40a8 8 0 0 1 8-8h64a8 8 0 0 1 0 16H56v160h56a8 8 0 0 1 8 8m109.66-93.66-40-40A8 8 0 0 0 176 88v32h-64a8 8 0 0 0 0 16h64v32a8 8 0 0 0 13.66 5.66l40-40a8 8 0 0 0 0-11.32"
+            fill={
+              {
+                "payload": 4278190080,
+                "type": 0,
+              }
+            }
+          />
+        </RNSVGGroup>
+      </RNSVGSvgView>
+      <Text
+        style={
+          {
+            "color": "#ef4444",
+            "fontSize": 16,
+            "fontWeight": "500",
+          }
+        }
+      >
+        Log Out
+      </Text>
+    </View>
+  </View>
+</View>
+`;

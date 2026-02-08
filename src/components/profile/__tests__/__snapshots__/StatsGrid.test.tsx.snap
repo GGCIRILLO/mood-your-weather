@@ -1,0 +1,181 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`StatsGrid matches snapshot 1`] = `
+<View
+  style={
+    {
+      "marginBottom": 32,
+      "paddingHorizontal": 16,
+    }
+  }
+>
+  <View
+    style={
+      {
+        "flexDirection": "row",
+        "gap": 12,
+      }
+    }
+  >
+    <View
+      style={
+        {
+          "alignItems": "center",
+          "backgroundColor": "#192233",
+          "borderColor": "rgba(19, 91, 236, 0.1)",
+          "borderRadius": 20,
+          "borderWidth": 1,
+          "flex": 1,
+          "padding": 16,
+        }
+      }
+    >
+      <Text
+        style={
+          {
+            "color": "white",
+            "fontSize": 24,
+            "fontWeight": "bold",
+          }
+        }
+      >
+        42
+      </Text>
+      <Text
+        style={
+          {
+            "color": "#92a4c9",
+            "fontSize": 12,
+            "fontWeight": "500",
+            "marginTop": 4,
+          }
+        }
+      >
+        Entries
+      </Text>
+    </View>
+    <View
+      style={
+        {
+          "alignItems": "center",
+          "backgroundColor": "#192233",
+          "borderColor": "rgba(19, 91, 236, 0.1)",
+          "borderRadius": 20,
+          "borderWidth": 1,
+          "flex": 1,
+          "padding": 16,
+        }
+      }
+    >
+      <Text
+        style={
+          {
+            "color": "#135bec",
+            "fontSize": 24,
+            "fontWeight": "bold",
+          }
+        }
+      >
+        7
+      </Text>
+      <Text
+        style={
+          {
+            "color": "#92a4c9",
+            "fontSize": 12,
+            "fontWeight": "500",
+            "marginTop": 4,
+          }
+        }
+      >
+        Day Streak
+      </Text>
+    </View>
+    <View
+      style={
+        {
+          "alignItems": "center",
+          "backgroundColor": "#192233",
+          "borderColor": "rgba(19, 91, 236, 0.1)",
+          "borderRadius": 20,
+          "borderWidth": 1,
+          "flex": 1,
+          "padding": 16,
+        }
+      }
+    >
+      <RNSVGSvgView
+        align="xMidYMid"
+        bbHeight={28}
+        bbWidth={28}
+        className="sun-fill__svg-icon-phosphor"
+        color="#fbbf24"
+        fill="currentColor"
+        focusable={false}
+        height={28}
+        meetOrSlice={0}
+        minX={0}
+        minY={0}
+        style={
+          [
+            {
+              "backgroundColor": "transparent",
+              "borderWidth": 0,
+            },
+            [
+              undefined,
+              {
+                "marginBottom": 4,
+              },
+              {},
+            ],
+            {
+              "flex": 0,
+              "height": 28,
+              "width": 28,
+            },
+          ]
+        }
+        testID="phosphor-react-native-sun-fill"
+        vbHeight={256}
+        vbWidth={256}
+        width={28}
+      >
+        <RNSVGGroup
+          fill={
+            {
+              "type": 2,
+            }
+          }
+          propList={
+            [
+              "fill",
+            ]
+          }
+        >
+          <RNSVGPath
+            d="M120 40V16a8 8 0 0 1 16 0v24a8 8 0 0 1-16 0m8 24a64 64 0 1 0 64 64 64.07 64.07 0 0 0-64-64m-69.66 5.66a8 8 0 0 0 11.32-11.32l-16-16a8 8 0 0 0-11.32 11.32Zm0 116.68-16 16a8 8 0 0 0 11.32 11.32l16-16a8 8 0 0 0-11.32-11.32M192 72a8 8 0 0 0 5.66-2.34l16-16a8 8 0 0 0-11.32-11.32l-16 16A8 8 0 0 0 192 72m5.66 114.34a8 8 0 0 0-11.32 11.32l16 16a8 8 0 0 0 11.32-11.32ZM48 128a8 8 0 0 0-8-8H16a8 8 0 0 0 0 16h24a8 8 0 0 0 8-8m80 80a8 8 0 0 0-8 8v24a8 8 0 0 0 16 0v-24a8 8 0 0 0-8-8m112-88h-24a8 8 0 0 0 0 16h24a8 8 0 0 0 0-16"
+            fill={
+              {
+                "payload": 4278190080,
+                "type": 0,
+              }
+            }
+          />
+        </RNSVGGroup>
+      </RNSVGSvgView>
+      <Text
+        style={
+          {
+            "color": "#92a4c9",
+            "fontSize": 12,
+            "fontWeight": "500",
+          }
+        }
+      >
+        Fav Weather
+      </Text>
+    </View>
+  </View>
+</View>
+`;

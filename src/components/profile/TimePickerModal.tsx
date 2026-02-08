@@ -63,7 +63,7 @@ export const TimePickerModal = ({
             <Text style={{ fontSize: 20, fontWeight: "bold", color: "white" }}>
               Set Reminder Time
             </Text>
-            <Pressable onPress={onClose}>
+            <Pressable onPress={onClose} testID="close-modal-button">
               <X size={24} color="#94a3b8" />
             </Pressable>
           </View>
@@ -79,6 +79,7 @@ export const TimePickerModal = ({
 
           <Pressable
             onPress={onClose}
+            testID="done-modal-button"
             style={{
               backgroundColor: "#135bec",
               padding: 16,

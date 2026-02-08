@@ -18,7 +18,7 @@ export const EMOJI_TO_ICON: Record<MoodEmojiType, any> = {
 
 export const EMOJI_TO_COLOR: Record<MoodEmojiType, string> = {
   sunny: "#fbbf24", // Amber 400
-  partly: "#ffffff", // White
+  partly: "#e5e7eb", // Gray 200 - Light gray for readability
   cloudy: "#9ca3af", // Gray 400
   rainy: "#60a5fa", // Blue 400
   stormy: "#a78bfa", // Purple 400

@@ -1,7 +1,10 @@
-
 import React from "react";
 import { View, Text, Pressable, StyleSheet } from "react-native";
-import { PlusCircleIcon, NotePencilIcon, ChartLineUpIcon } from "phosphor-react-native";
+import {
+  PlusCircleIcon,
+  NotePencilIcon,
+  ChartLineUpIcon,
+} from "phosphor-react-native";
 import { router } from "expo-router";
 
 export const QuickActionButtons = () => {
@@ -17,7 +20,7 @@ export const QuickActionButtons = () => {
         </Pressable>
 
         <Pressable
-          onPress={() => router.push("/mood-entry")}
+          onPress={() => router.push("/journal")}
           style={styles.secondaryButton}
         >
           <NotePencilIcon size={20} color="white" weight="bold" />
@@ -26,6 +29,7 @@ export const QuickActionButtons = () => {
 
         <Pressable
           style={styles.secondaryButton}
+          onPress={() => router.push("/insights")}
         >
           <ChartLineUpIcon size={20} color="white" weight="bold" />
           <Text className="text-white font-bold ml-1">Insights</Text>

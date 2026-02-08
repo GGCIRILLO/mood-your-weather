@@ -23,7 +23,10 @@ export const SecondaryActionButtons = () => {
           <Text className="text-white font-bold ml-1">Practice</Text>
         </Pressable>
 
-        <Pressable style={styles.button}>
+        <Pressable
+          style={styles.button}
+          onPress={() => router.push("/calendar")}
+        >
           <CalendarIcon size={20} color="white" weight="bold" />
           <Text className="text-white font-bold ml-1">Calendar</Text>
         </Pressable>

@@ -6,7 +6,7 @@ import {
   updateMood,
   deleteMood,
 } from "@/services/mood.service";
-import type { MoodEntry, MoodEmojiType } from "@/types";
+import type { MoodEmojiType } from "@/types";
 
 /**
  * Hook per recuperare i mood entries dell'utente
@@ -49,16 +49,24 @@ export const useMoods = (params?: {
  * Hook per recuperare i mood recenti (ultimi 7 giorni)
  */
 export const useRecentMoods = (limit: number = 7) => {
-  // Memoizza le date per evitare re-render continui
   const { startDate, endDate } = useMemo(() => {
+    // Arrotonda alla fine del giorno corrente in timezone locale
     const end = new Date();
-    const start = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+    end.setHours(23, 59, 59, 999);
+
+    // 7 giorni fa, inizio giornata
+    const start = new Date(end);
+    start.setDate(start.getDate() - 6); // -6 per includere oggi
+    start.setHours(0, 0, 0, 0);
+
     return {
       startDate: start.toISOString(),
       endDate: end.toISOString(),
     };
-  }, []); // Solo al mount
-
+  }, [
+    // Ricalcola solo quando cambia il giorno
+    new Date().toDateString(),
+  ]);
   return useMoods({
     startDate,
     endDate,
@@ -86,7 +94,6 @@ export const useCreateMood = () => {
       // Invalida tutte le query moods per ricaricare i dati aggiornati
       queryClient.invalidateQueries({ queryKey: ["moods"] });
       queryClient.invalidateQueries({ queryKey: ["challenges"] });
-      console.log("✅ Mood creato con successo");
     },
     onError: (error: any) => {
       console.error("❌ Errore creazione mood:", error.message);
@@ -116,7 +123,6 @@ export const useUpdateMood = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["moods"] });
-      console.log("✅ Mood aggiornato con successo");
     },
     onError: (error: any) => {
       console.error("❌ Errore aggiornamento mood:", error.message);

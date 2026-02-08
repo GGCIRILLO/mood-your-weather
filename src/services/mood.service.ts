@@ -67,7 +67,6 @@ export const createMood = async (moodData: {
       intensity: moodData.intensity,
       note: moodData.note,
       location: moodData.location,
-      timestamp: new Date().toISOString(),
     }),
   });
 

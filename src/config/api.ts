@@ -9,27 +9,27 @@ import Constants from "expo-constants";
  */
 export const getApiBaseUrl = (): string => {
   if (__DEV__) {
-    if (Platform.OS === 'android') {
+    if (Platform.OS === "android") {
       // Android emulator special IP to reach host machine
       return "http://10.0.2.2:8000";
-    } else if (Platform.OS === 'ios') {
+    } else if (Platform.OS === "ios") {
       // iOS simulator can use localhost
-      return "http://localhost:8000";
-    } else if (Platform.OS === 'web') {
+      return "http://127.0.0.1:8000";
+    } else if (Platform.OS === "web") {
       // Web can use localhost
       return "http://localhost:8000";
     } else {
       // Physical device - try to get IP from Expo's debugger host
       const { manifest } = Constants;
       if (manifest?.debuggerHost) {
-        const host = manifest.debuggerHost.split(':')[0];
+        const host = manifest.debuggerHost.split(":")[0];
         return `http://${host}:8000`;
       }
       // Fallback - update this with your Mac's IP if needed
       return "http://192.168.1.17:8000";
     }
   }
-  
+
   // Production URL - replace with your production API
   return "https://your-production-api.com";
 };

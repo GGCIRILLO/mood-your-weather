@@ -1,5 +1,11 @@
-import { useCallback } from "react";
-import { View, ScrollView, ImageBackground, StyleSheet } from "react-native";
+import { useCallback, useRef, useEffect } from "react";
+import {
+  View,
+  ScrollView,
+  ImageBackground,
+  StyleSheet,
+  Animated,
+} from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useFocusEffect } from "@react-navigation/native";
@@ -10,6 +16,7 @@ import type { MoodEmojiType } from "@/types";
 // Components
 import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
 import { DashboardGreeting } from "@/components/dashboard/DashboardGreeting";
+import { WeatherLocationCard } from "@/components/dashboard/WeatherLocationCard";
 import { MoodSphereSection } from "@/components/dashboard/MoodSphereSection";
 import { EmotionalForecastCard } from "@/components/dashboard/EmotionalForecastCard";
 import { QuickActionButtons } from "@/components/dashboard/QuickActionButtons";
@@ -22,6 +29,13 @@ export default function Dashboard() {
   const { user } = useAuth();
   const { moods, loading, error, refetch } = useRecentMoods(7);
 
+  // Animazioni per i componenti (8 elementi)
+  const componentAnims = useRef(
+    Array(8)
+      .fill(0)
+      .map(() => new Animated.Value(0)),
+  ).current;
+
   // Nome utente
   const userName = user?.displayName || user?.email?.split("@")[0] || "Alex";
 
@@ -33,6 +47,19 @@ export default function Dashboard() {
       }
     }, [refetch, user]),
   );
+
+  // Trigger animazioni quando la schermata si monta
+  useEffect(() => {
+    const animations = componentAnims.map((anim, index) =>
+      Animated.timing(anim, {
+        toValue: 1,
+        duration: 300,
+        delay: index * 50,
+        useNativeDriver: true,
+      }),
+    );
+    Animated.stagger(50, animations).start();
+  }, [componentAnims]);
 
   // Ottieni il mood più recente
   const latestMood = moods[0];
@@ -79,28 +106,142 @@ export default function Dashboard() {
         contentContainerStyle={{ paddingBottom: insets.bottom + 24 }}
         showsVerticalScrollIndicator={false}
       >
-        <DashboardHeader />
+        <Animated.View
+          style={{
+            opacity: componentAnims[0],
+            transform: [
+              {
+                translateY: componentAnims[0].interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [20, 0],
+                }),
+              },
+            ],
+          }}
+        >
+          <DashboardHeader />
+        </Animated.View>
 
-        <DashboardGreeting userName={userName} />
+        <Animated.View
+          style={{
+            opacity: componentAnims[1],
+            transform: [
+              {
+                translateY: componentAnims[1].interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [20, 0],
+                }),
+              },
+            ],
+          }}
+        >
+          <DashboardGreeting userName={userName} />
+        </Animated.View>
 
-        <MoodSphereSection
-          loading={loading}
-          error={error}
-          user={user}
-          currentMoodEmoji={currentMoodEmoji}
-          isEmpty={!isLatestMoodToday}
-        />
+        <Animated.View
+          style={{
+            opacity: componentAnims[2],
+            transform: [
+              {
+                translateY: componentAnims[2].interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [20, 0],
+                }),
+              },
+            ],
+          }}
+        >
+          <WeatherLocationCard />
+        </Animated.View>
 
-        <EmotionalForecastCard
-          latestMood={latestMood}
-          isEmpty={!isLatestMoodToday}
-        />
+        <Animated.View
+          style={{
+            opacity: componentAnims[3],
+            transform: [
+              {
+                translateY: componentAnims[3].interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [20, 0],
+                }),
+              },
+            ],
+          }}
+        >
+          <MoodSphereSection
+            loading={loading}
+            error={error}
+            user={user}
+            currentMoodEmoji={currentMoodEmoji}
+            isEmpty={!isLatestMoodToday}
+          />
+        </Animated.View>
 
-        <QuickActionButtons />
+        <Animated.View
+          style={{
+            opacity: componentAnims[4],
+            transform: [
+              {
+                translateY: componentAnims[4].interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [20, 0],
+                }),
+              },
+            ],
+          }}
+        >
+          <EmotionalForecastCard
+            latestMood={latestMood}
+            isEmpty={!isLatestMoodToday}
+          />
+        </Animated.View>
 
-        <RecentPatterns moods={moods} loading={loading} />
+        <Animated.View
+          style={{
+            opacity: componentAnims[5],
+            transform: [
+              {
+                translateY: componentAnims[5].interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [20, 0],
+                }),
+              },
+            ],
+          }}
+        >
+          <QuickActionButtons />
+        </Animated.View>
 
-        <SecondaryActionButtons />
+        <Animated.View
+          style={{
+            opacity: componentAnims[6],
+            transform: [
+              {
+                translateY: componentAnims[6].interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [20, 0],
+                }),
+              },
+            ],
+          }}
+        >
+          <RecentPatterns moods={moods} loading={loading} />
+        </Animated.View>
+
+        <Animated.View
+          style={{
+            opacity: componentAnims[7],
+            transform: [
+              {
+                translateY: componentAnims[7].interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [20, 0],
+                }),
+              },
+            ],
+          }}
+        >
+          <SecondaryActionButtons />
+        </Animated.View>
       </ScrollView>
     </View>
   );

@@ -1,0 +1,103 @@
+import { auth } from "../config/firebaseConfig";
+import { API_BASE_URL } from "../config/api";
+
+/**
+ * Weekly rhythm data structure
+ */
+export interface WeeklyRhythm {
+  monday: number;
+  tuesday: number;
+  wednesday: number;
+  thursday: number;
+  friday: number;
+  saturday: number;
+  sunday: number;
+}
+
+/**
+ * Mood pattern data structure
+ */
+export interface MoodPattern {
+  pattern_type: string; // "time_of_day", "weekday", "weather_correlation"
+  description: string;
+  confidence: number; // 0-1
+  occurrences: number;
+}
+
+/**
+ * User statistics response from backend
+ */
+export interface UserStats {
+  totalEntries: number;
+  currentStreak: number;
+  longestStreak: number;
+  dominantMood: string | null;
+  averageIntensity: number;
+  weeklyRhythm: WeeklyRhythm | null;
+  patterns: MoodPattern[];
+  mindfulMomentsCount: number;
+  unlockedBadges: string[];
+  lastUpdated: string; // ISO timestamp
+}
+
+/**
+ * Helper per ottenere il token ID dell'utente corrente
+ */
+const getAuthToken = async (): Promise<string | null> => {
+  const user = auth.currentUser;
+
+  if (!user) {
+    return null;
+  }
+
+  try {
+    const token = await user.getIdToken(false);
+    return token;
+  } catch (error: any) {
+    console.error("Error getting ID token:", error.code, error.message);
+    throw error;
+  }
+};
+
+/**
+ * Helper per gestire le risposte API
+ */
+const handleApiResponse = async (response: Response) => {
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.detail || `API Error: ${response.status}`);
+  }
+  return await response.json();
+};
+
+/**
+ * Fetch user statistics from backend
+ *
+ * GET /stats/user/{userId}
+ * Requires authentication
+ */
+export const getUserStats = async (): Promise<UserStats> => {
+  const token = await getAuthToken();
+  if (!token) throw new Error("User not authenticated");
+
+  const userId = auth.currentUser?.uid;
+  if (!userId) throw new Error("User ID not found");
+
+  const url = `${API_BASE_URL}/stats/user/${userId}`;
+
+  try {
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    const data = await handleApiResponse(response);
+    return data;
+  } catch (error: any) {
+    console.error("❌ Error fetching user stats:", error.message);
+    throw error;
+  }
+};

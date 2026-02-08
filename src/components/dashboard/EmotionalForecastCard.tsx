@@ -1,6 +1,5 @@
-
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { ThermometerSimpleIcon } from "phosphor-react-native";
 import { MoodEntry } from "@/types";
@@ -16,21 +15,29 @@ export const EmotionalForecastCard = ({
   isEmpty = false,
 }: EmotionalForecastCardProps) => {
   return (
-    <View className="px-4 mb-6">
-      <View style={styles.cardContainer}>
-        {/* Glass shine effect */}
-        <LinearGradient
-          colors={["rgba(255,255,255,0.1)", "transparent"]}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          className="absolute inset-0"
-          pointerEvents="none"
-        />
-        <View className="p-5">
+    <View className="px-6 mb-6">
+      <LinearGradient
+        colors={["rgba(255,255,255,0.15)", "rgba(255,255,255,0.05)"]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={{
+          borderRadius: 16,
+          borderWidth: 1,
+          borderColor: "rgba(255,255,255,0.2)",
+          shadowColor: "#000",
+          shadowOffset: { width: 0, height: 4 },
+          shadowOpacity: 0.3,
+          shadowRadius: 8,
+          elevation: 5,
+          overflow: "hidden",
+        }}
+      >
+        <View style={{ padding: 20 }}>
           {isEmpty ? (
             <View className="items-center py-4">
               <Text className="text-white text-lg font-medium text-center leading-relaxed italic opacity-90">
-                Your emotional sky is a blank canvas. Tap below to share your current inner weather.
+                Your emotional sky is a blank canvas. Tap below to share your
+                current inner weather.
               </Text>
             </View>
           ) : (
@@ -98,21 +105,7 @@ export const EmotionalForecastCard = ({
             </>
           )}
         </View>
-      </View>
+      </LinearGradient>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  cardContainer: {
-    backgroundColor: "rgba(255,255,255,0.3)",
-    borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.2)",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.3,
-    shadowRadius: 16,
-    borderRadius: 24,
-    overflow: "hidden",
-  },
-});

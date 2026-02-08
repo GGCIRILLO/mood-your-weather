@@ -4,6 +4,10 @@ import {
   signOut,
   sendPasswordResetEmail,
   onAuthStateChanged,
+  updateProfile,
+  updatePassword,
+  reauthenticateWithCredential,
+  EmailAuthProvider,
   User,
 } from "firebase/auth";
 import { auth } from "../config/firebaseConfig";
@@ -134,6 +138,47 @@ export const resetPassword = async (email: string) => {
     return { success: true };
   } catch (error: any) {
     console.error("Reset password error:", error);
+    return { success: false, error: getErrorMessage(error.code) };
+  }
+};
+
+// Update profile (name, photo)
+export const updateUserProfile = async (displayName: string, photoURL?: string) => {
+  try {
+    const user = auth.currentUser;
+    if (!user) throw new Error("No user logged in");
+
+    await updateProfile(user, {
+      displayName: displayName,
+      photoURL: photoURL,
+    });
+    return { success: true };
+  } catch (error: any) {
+    console.error("Update profile error:", error);
+    return { success: false, error: error.message };
+  }
+};
+
+// Update password
+export const updateUserPassword = async (newPassword: string, currentPassword?: string) => {
+  try {
+    const user = auth.currentUser;
+    if (!user) throw new Error("No user logged in");
+
+    if (currentPassword && user.email) {
+      const credential = EmailAuthProvider.credential(user.email, currentPassword);
+      await reauthenticateWithCredential(user, credential);
+    }
+
+    await updatePassword(user, newPassword);
+    return { success: true };
+  } catch (error: any) {
+    console.error("Update password error:", error);
+
+    if (error.code === 'auth/requires-recent-login') {
+      return { success: false, error: "Please provide your current password to confirm changes." };
+    }
+
     return { success: false, error: getErrorMessage(error.code) };
   }
 };

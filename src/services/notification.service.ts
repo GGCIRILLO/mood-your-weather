@@ -1,5 +1,6 @@
 import * as Notifications from "expo-notifications";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { router } from "expo-router";
 
 const NOTIFICATION_ID_KEY = "@mood_weather:notification_id";
 const NOTIFICATION_ENABLED_KEY = "@mood_weather:notifications_enabled";
@@ -14,6 +15,30 @@ Notifications.setNotificationHandler({
     shouldShowList: true,
   }),
 });
+
+/**
+ * Setup notification listeners for handling notification taps
+ * Call this once at app initialization
+ */
+export function setupNotificationListeners(): () => void {
+  const responseListener =
+    Notifications.addNotificationResponseReceivedListener((response) => {
+      console.log("Notification response:", response);
+
+      // Handle navigation based on notification data
+      const screen = response.notification.request.content.data.screen;
+
+      if (screen === "MoodEntry") {
+        // Navigate to the main tab screen (mood entry is on the home screen)
+        router.push("/(tabs)");
+      }
+    });
+
+  // Return cleanup function
+  return () => {
+    responseListener.remove();
+  };
+}
 
 /**
  * Request notification permissions

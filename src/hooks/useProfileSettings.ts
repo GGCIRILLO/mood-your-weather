@@ -8,7 +8,6 @@ import {
   updateUserProfile,
   updateUserPassword,
 } from "@/services/auth.service";
-import { storageService } from "@/services/storage.service";
 import {
   requestNotificationPermissions,
   scheduleDailyNotification,

@@ -1,7 +1,3 @@
-// ============================================
-// UI COMPONENTS - Input
-// ============================================
-
 import { useState } from "react";
 import { View, Text, TextInput, Pressable } from "react-native";
 import type { TextInputProps } from "react-native";

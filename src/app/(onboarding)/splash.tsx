@@ -1,7 +1,3 @@
-// ============================================
-// SPLASH SCREEN - Animazione meteo 2 secondi
-// ============================================
-
 import { useEffect } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { useRouter } from "expo-router";

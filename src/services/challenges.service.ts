@@ -41,7 +41,7 @@ const handleApiResponse = async (response: Response) => {
  * Get user's challenges progress
  * This includes current streak and unlocked badges
  */
-export const getChallenges = async (): Promise<ChallengesResponse> => {
+export const getChallenges = async (): Promise<ChallengesResponse | undefined> => {
   const token = await getAuthToken();
   if (!token) throw new Error("User not authenticated");
 
@@ -63,5 +63,6 @@ export const getChallenges = async (): Promise<ChallengesResponse> => {
     };
   } catch (error: any) {
     console.error("Error fetching challenges:", error.message);
+    return undefined;
   }
 };

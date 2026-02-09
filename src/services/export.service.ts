@@ -54,10 +54,8 @@ export async function exportToCSV(): Promise<void> {
 
     // Create file using new API
     const file = new File(Paths.cache, filename);
-    await file.create();
-    await file.write(csvContent);
-
-    console.log("File saved to:", file.uri);
+    file.create();
+    file.write(csvContent);
 
     // Check if sharing is available
     const isAvailable = await Sharing.isAvailableAsync();

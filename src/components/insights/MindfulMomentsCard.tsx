@@ -7,7 +7,7 @@ interface MindfulMomentsCardProps {
 
 export const MindfulMomentsCard = ({ count = 0 }: MindfulMomentsCardProps) => {
   return (
-    <View className="bg-[#192233] rounded-[1.5rem] border border-slate-800 p-6">
+    <View className="bg-[#192233] rounded-3xl border border-slate-800 p-6">
       <View className="flex-row items-center justify-between">
         <View style={{ flex: 1 }}>
           <Text className="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-2">

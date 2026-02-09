@@ -1,7 +1,3 @@
-// ============================================
-// ONBOARDING INTRO - Carousel con 4 slide
-// ============================================
-
 import { useState, useRef } from "react";
 import { View, Dimensions } from "react-native";
 import { useRouter } from "expo-router";

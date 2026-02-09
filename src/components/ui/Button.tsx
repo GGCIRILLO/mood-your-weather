@@ -1,7 +1,3 @@
-// ============================================
-// UI COMPONENTS - Button
-// ============================================
-
 import { Pressable, Text, ActivityIndicator, View } from "react-native";
 import type { PressableProps } from "react-native";
 

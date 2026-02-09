@@ -5,7 +5,6 @@ import {
   ImageBackground,
   TouchableOpacity,
   StyleSheet,
-  Dimensions,
 } from "react-native";
 import {
   ArrowRightIcon,

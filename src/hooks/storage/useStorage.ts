@@ -1,7 +1,3 @@
-// ============================================
-// CUSTOM HOOKS - Storage
-// ============================================
-
 import { useEffect, useState } from "react";
 import { storageService } from "@/services/storage.service";
 import type { User, MoodEntry, OnboardingState } from "@/types";

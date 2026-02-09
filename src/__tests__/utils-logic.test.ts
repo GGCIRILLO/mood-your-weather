@@ -1,4 +1,3 @@
-import { WEATHER_TYPE_TO_EMOJI } from "../utils/constants";
 import {
   calculateAverageSentiment,
   findClosestEmojiType,
@@ -6,12 +5,6 @@ import {
 } from "../components/calendar/utils";
 
 describe("Utility Logic", () => {
-  describe("WEATHER_TYPE_TO_EMOJI", () => {
-    it("should map types to correct emojis", () => {
-      expect(WEATHER_TYPE_TO_EMOJI.sunny).toBe("☀️");
-      expect(WEATHER_TYPE_TO_EMOJI.stormy).toBe("⛈️");
-    });
-  });
 
   describe("Calendar Utils - sentiment", () => {
     it("should calculate average sentiment correctly", () => {

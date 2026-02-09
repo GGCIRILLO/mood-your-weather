@@ -13,32 +13,37 @@ import {
 import { useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
-import { CloudIcon, EyeIcon, EyeSlashIcon } from "phosphor-react-native";
-import { signIn } from "@/services/auth.service";
+import { CloudIcon, ArrowLeft } from "phosphor-react-native";
+import { resetPassword } from "@/services/auth.service";
 
-export default function LoginScreen() {
+export default function ForgotPasswordScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
 
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const handleLogin = async () => {
-    if (!email || !password) {
-      Alert.alert("Errore", "Compila tutti i campi");
+  const handleResetPassword = async () => {
+    if (!email) {
+      Alert.alert("Errore", "Inserisci la tua email");
       return;
     }
 
     setLoading(true);
-    const response = await signIn(email, password);
+    const response = await resetPassword(email);
     setLoading(false);
 
     if (response.success) {
-      router.replace("/(tabs)/");
+      Alert.alert(
+        "Email Inviata",
+        "Controlla la tua casella di posta per le istruzioni su come reimpostare la password.",
+        [{ text: "OK", onPress: () => router.back() }],
+      );
     } else {
-      Alert.alert("Errore", response.error || "Login fallito");
+      Alert.alert(
+        "Errore",
+        response.error || "Impossibile inviare l'email di reset",
+      );
     }
   };
 
@@ -60,12 +65,6 @@ export default function LoginScreen() {
           { top: "33%", right: -80, width: 384, height: 384, opacity: 0.3 },
         ]}
       />
-      <View
-        style={[
-          styles.cloudDecor,
-          { bottom: 0, left: 40, width: 256, height: 256, opacity: 0.2 },
-        ]}
-      />
 
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -76,24 +75,32 @@ export default function LoginScreen() {
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
         >
-          {/* Status Bar Padding */}
-          <View style={{ height: insets.top }} />
+          {/* Back Button */}
+          <View style={{ paddingTop: insets.top + 16, paddingHorizontal: 24 }}>
+            <TouchableOpacity
+              onPress={() => router.back()}
+              className="w-10 h-10 items-center justify-center rounded-full bg-white/10"
+            >
+              <ArrowLeft size={24} color="#FFF" />
+            </TouchableOpacity>
+          </View>
 
-          <View className="px-8 justify-between flex-1 pt-24 pb-12">
+          <View className="px-8 justify-center flex-1 pb-12">
             {/* Branding Header */}
-            <View className="items-center">
+            <View className="items-center mb-10">
               <View className="rounded-full border-2 border-white/30 p-4 items-center justify-center mb-6 bg-white/5">
                 <CloudIcon size={36} color="#fff" weight="fill" />
               </View>
-              <Text className="font-semibold text-[30px] text-white tracking-tighter">
-                Mood Your Weather
+              <Text className="font-semibold text-[30px] text-white tracking-tighter text-center">
+                Reset Password
               </Text>
-              <Text className="font-light text-white/70 mt-2 text-sm">
-                Aligning your emotional horizon
+              <Text className="font-light text-white/70 mt-2 text-sm text-center px-4">
+                Enter your email address and we'll send you instructions to
+                reset your password.
               </Text>
             </View>
 
-            {/* Login Card */}
+            {/* Reset Card */}
             <View style={styles.card}>
               {/* Email Input */}
               <View className="mb-6">
@@ -113,41 +120,11 @@ export default function LoginScreen() {
                 />
               </View>
 
-              {/* Password Input */}
-              <View className="mb-6">
-                <Text className="text-xs font-medium text-white/50 mb-2 ml-1 tracking-widest">
-                  PASSWORD
-                </Text>
-                <View className="relative">
-                  <TextInput
-                    style={[styles.input, styles.passwordInput]}
-                    placeholder="••••••••"
-                    placeholderTextColor="rgba(255,255,255,0.3)"
-                    value={password}
-                    onChangeText={setPassword}
-                    secureTextEntry={!showPassword}
-                    autoCapitalize="none"
-                    autoComplete="password"
-                    autoCorrect={false}
-                  />
-                  <TouchableOpacity
-                    onPress={() => setShowPassword(!showPassword)}
-                    style={styles.eyeIcon}
-                  >
-                    {showPassword ? (
-                      <EyeIcon size={20} color="rgba(255,255,255,0.6)" />
-                    ) : (
-                      <EyeSlashIcon size={20} color="rgba(255,255,255,0.6)" />
-                    )}
-                  </TouchableOpacity>
-                </View>
-              </View>
-
-              {/* Login Button */}
+              {/* Action Button */}
               <TouchableOpacity
-                onPress={handleLogin}
+                onPress={handleResetPassword}
                 disabled={loading}
-                className="overflow-hidden mt-4 rounded-2xl"
+                className="overflow-hidden mt-2 rounded-2xl"
                 activeOpacity={0.8}
               >
                 <LinearGradient
@@ -157,34 +134,24 @@ export default function LoginScreen() {
                   end={{ x: 1, y: 1 }}
                 >
                   <Text className="font-semibold text-lg text-white tracking-wide">
-                    {loading ? "Loading..." : "Login"}
+                    {loading ? "Sending..." : "Send Reset Link"}
                   </Text>
                 </LinearGradient>
               </TouchableOpacity>
             </View>
 
-            {/* Footer Actions */}
-            <View className="items-center gap-4">
-              <TouchableOpacity
-                onPress={() => router.push("/(auth)/forgot-password")}
-              >
-                <Text className="text-white/60">
-                  Clouded memory?{" "}
-                  <Text className="font-semibold text-white">
-                    Reset Password
-                  </Text>
+            {/* Back to Login link */}
+            <TouchableOpacity
+              onPress={() => router.back()}
+              className="items-center mt-8"
+            >
+              <Text className="text-white/60">
+                Remember your password?{" "}
+                <Text className="font-semibold text-white underline">
+                  Back to Login
                 </Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity onPress={() => router.push("/(auth)/signup")}>
-                <Text className="text-white/60">
-                  New to the Sky?{" "}
-                  <Text className="font-semibold text-white underline">
-                    Create Account
-                  </Text>
-                </Text>
-              </TouchableOpacity>
-            </View>
+              </Text>
+            </TouchableOpacity>
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
@@ -221,15 +188,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     fontSize: 16,
     color: "#fff",
-  },
-  passwordInput: {
-    paddingRight: 50,
-  },
-  eyeIcon: {
-    position: "absolute",
-    right: 16,
-    top: "50%",
-    transform: [{ translateY: -10 }],
   },
   buttonGradient: {
     paddingVertical: 16,

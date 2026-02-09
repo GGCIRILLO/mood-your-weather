@@ -3,12 +3,6 @@ import * as Sharing from "expo-sharing";
 import { auth } from "../config/firebaseConfig";
 import { API_BASE_URL } from "../config/api";
 
-interface ExportResponse {
-  success: boolean;
-  url?: string;
-  message: string;
-}
-
 /**
  * Helper per ottenere il token ID dell'utente corrente
  */
@@ -26,18 +20,6 @@ const getAuthToken = async (): Promise<string | null> => {
     console.error("Error getting ID token:", error.code, error.message);
     throw error;
   }
-};
-
-/**
- * Helper per gestire le risposte API
- */
-const handleApiResponse = async (response: Response) => {
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => ({}));
-    throw new Error(errorData.detail || `API Error: ${response.status}`);
-  }
-  if (response.status === 204) return null;
-  return await response.json();
 };
 
 /**
@@ -95,53 +77,3 @@ export async function exportToCSV(): Promise<void> {
     throw error;
   }
 }
-
-/**
- * Export to Google Sheets
- */
-export async function exportToGoogleSheets(): Promise<ExportResponse> {
-  try {
-    const token = await getAuthToken();
-    if (!token) throw new Error("User not authenticated");
-
-    const userId = auth.currentUser?.uid;
-    if (!userId) throw new Error("User ID not found");
-
-    const response = await fetch(`${API_BASE_URL}/export/google-sheets`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ userId }),
-    });
-
-    return await handleApiResponse(response);
-  } catch (error) {
-    console.error("Google Sheets Export error:", error);
-    throw error;
-  }
-}
-
-/**
- * Get supported export formats
- */
-export async function getSupportedFormats() {
-  try {
-    const token = await getAuthToken();
-    if (!token) throw new Error("User not authenticated");
-
-    const response = await fetch(`${API_BASE_URL}/export/supported-formats`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    return await handleApiResponse(response);
-  } catch (error) {
-    console.error("Error fetching formats:", error);
-    throw error;
-  }
-}
-
-

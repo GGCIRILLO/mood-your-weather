@@ -9,6 +9,7 @@ import {
   reauthenticateWithCredential,
   EmailAuthProvider,
   User,
+  getAuth,
 } from "firebase/auth";
 import { auth } from "../config/firebaseConfig";
 import { API_BASE_URL } from "../config/api";
@@ -41,7 +42,6 @@ export const signUp = async (
 
     const data = await response.json();
 
-
     // Autentica con Firebase usando il custom token ricevuto
     const userCredential = await signInWithCustomToken(auth, data.token);
     const user = userCredential.user;
@@ -70,7 +70,6 @@ export const signIn = async (email: string, password: string) => {
     // Prima controlla se c'è già un utente autenticato in cache
     const currentUser = auth.currentUser;
     if (currentUser && currentUser.email === email) {
-
       // Verifica se ha ancora un token valido
       try {
         const token = await currentUser.getIdToken();
@@ -133,8 +132,10 @@ export const logout = async () => {
 
 // Reset password
 export const resetPassword = async (email: string) => {
+  const authFirebase = getAuth();
   try {
-    await sendPasswordResetEmail(auth, email);
+    await sendPasswordResetEmail(authFirebase, email);
+    console.log("Password reset email sent");
     return { success: true };
   } catch (error: any) {
     console.error("Reset password error:", error);
@@ -143,7 +144,10 @@ export const resetPassword = async (email: string) => {
 };
 
 // Update profile (name, photo)
-export const updateUserProfile = async (displayName: string, photoURL?: string) => {
+export const updateUserProfile = async (
+  displayName: string,
+  photoURL?: string,
+) => {
   try {
     const user = auth.currentUser;
     if (!user) throw new Error("No user logged in");
@@ -160,13 +164,19 @@ export const updateUserProfile = async (displayName: string, photoURL?: string) 
 };
 
 // Update password
-export const updateUserPassword = async (newPassword: string, currentPassword?: string) => {
+export const updateUserPassword = async (
+  newPassword: string,
+  currentPassword?: string,
+) => {
   try {
     const user = auth.currentUser;
     if (!user) throw new Error("No user logged in");
 
     if (currentPassword && user.email) {
-      const credential = EmailAuthProvider.credential(user.email, currentPassword);
+      const credential = EmailAuthProvider.credential(
+        user.email,
+        currentPassword,
+      );
       await reauthenticateWithCredential(user, credential);
     }
 
@@ -175,8 +185,11 @@ export const updateUserPassword = async (newPassword: string, currentPassword?: 
   } catch (error: any) {
     console.error("Update password error:", error);
 
-    if (error.code === 'auth/requires-recent-login') {
-      return { success: false, error: "Please provide your current password to confirm changes." };
+    if (error.code === "auth/requires-recent-login") {
+      return {
+        success: false,
+        error: "Please provide your current password to confirm changes.",
+      };
     }
 
     return { success: false, error: getErrorMessage(error.code) };

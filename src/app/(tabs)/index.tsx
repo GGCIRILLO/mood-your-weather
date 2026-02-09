@@ -140,6 +140,7 @@ export default function Dashboard() {
 
         <Animated.View
           style={{
+            zIndex: 3,
             opacity: componentAnims[2],
             transform: [
               {
@@ -156,6 +157,7 @@ export default function Dashboard() {
 
         <Animated.View
           style={{
+            zIndex: 2,
             opacity: componentAnims[3],
             transform: [
               {
@@ -178,6 +180,7 @@ export default function Dashboard() {
 
         <Animated.View
           style={{
+            zIndex: 1,
             opacity: componentAnims[4],
             transform: [
               {

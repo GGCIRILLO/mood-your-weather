@@ -18,16 +18,12 @@ import {
   restoreNotificationSettings,
   sendTestNotification,
 } from "@/services/notification.service";
-import { useExportToCSV, useExportToGoogleSheets } from "@/hooks/api/useExport";
+import { useExportToCSV } from "@/hooks/api/useExport";
 
 const PROFILE_IMAGE_KEY = "@mood_weather:profile_image";
 
 export const useProfileSettings = () => {
-  const { mutate: exportToCSV, isPending: isExportingCSV } = useExportToCSV();
-  const { mutate: exportToGoogleSheets, isPending: isExportingSheets } =
-    useExportToGoogleSheets();
-
-  const isExporting = isExportingCSV || isExportingSheets;
+  const { mutate: exportToCSV, isPending: isExporting } = useExportToCSV();
 
   // State for toggles and settings
   const [reduceMotion, setReduceMotion] = useState(false);
@@ -238,60 +234,32 @@ export const useProfileSettings = () => {
   };
 
   const handleExportData = async () => {
-    Alert.alert("Export Data", "Choose your export format:", [
-      { text: "Cancel", style: "cancel" },
-      {
-        text: "CSV File",
-        onPress: () => {
-          exportToCSV(undefined, {
-            onSuccess: () => {
-              Alert.alert(
-                "Success",
-                "Your data has been exported to CSV successfully!",
-              );
-            },
-            onError: (error: Error) => {
-              Alert.alert(
-                "Export Failed",
-                error.message || "Failed to export data. Please try again.",
-              );
-            },
-          });
-        },
-      },
-      {
-        text: "Google Sheets",
-        onPress: () => {
-          exportToGoogleSheets(undefined, {
-            onSuccess: (data) => {
-              if (data.url) {
+    Alert.alert(
+      "Export Data",
+      "Your mood entries will be exported as a CSV file.",
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Export",
+          onPress: () => {
+            exportToCSV(undefined, {
+              onSuccess: () => {
                 Alert.alert(
                   "Success",
-                  `Your data has been exported to Google Sheets!\n\nURL: ${data.url}`,
-                  [
-                    {
-                      text: "OK",
-                      style: "default",
-                    },
-                  ],
+                  "Your data has been exported to CSV successfully!",
                 );
-              } else {
+              },
+              onError: (error: Error) => {
                 Alert.alert(
-                  "Success",
-                  data.message || "Data exported to Google Sheets!",
+                  "Export Failed",
+                  error.message || "Failed to export data. Please try again.",
                 );
-              }
-            },
-            onError: (error: Error) => {
-              Alert.alert(
-                "Export Failed",
-                error.message || "Failed to export to Google Sheets.",
-              );
-            },
-          });
+              },
+            });
+          },
         },
-      },
-    ]);
+      ],
+    );
   };
 
   const handleClearData = async () => {

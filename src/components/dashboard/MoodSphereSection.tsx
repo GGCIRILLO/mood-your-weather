@@ -1,4 +1,3 @@
-
 import React from "react";
 import { View, Text, ActivityIndicator } from "react-native";
 import { MoodSphere } from "./MoodSphere";
@@ -20,7 +19,7 @@ export const MoodSphereSection = ({
   isEmpty = false,
 }: MoodSphereSectionProps) => {
   return (
-    <View className="flex-1 items-center justify-center py-8">
+    <View className="items-center justify-center">
       {loading ? (
         <ActivityIndicator size="large" color="white" />
       ) : error ? (

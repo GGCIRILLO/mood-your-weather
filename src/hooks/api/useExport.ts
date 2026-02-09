@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { exportToCSV, exportToGoogleSheets } from "@/services/export.service";
+import { exportToCSV } from "@/services/export.service";
 
 /**
  * Hook for exporting mood data to CSV
@@ -14,18 +14,3 @@ export const useExportToCSV = () => {
     },
   });
 };
-
-/**
- * Hook for exporting mood data to Google Sheets
- */
-export const useExportToGoogleSheets = () => {
-  return useMutation({
-    mutationFn: async () => {
-      return exportToGoogleSheets();
-    },
-    onError: (error: Error) => {
-      console.error("Export to Google Sheets failed:", error);
-    },
-  });
-};
-

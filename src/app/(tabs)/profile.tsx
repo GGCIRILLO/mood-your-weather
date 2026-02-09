@@ -60,7 +60,7 @@ export default function ProfileScreen() {
         <ScrollView
           style={{ flex: 1 }}
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ paddingBottom: 100 }}
+          contentContainerStyle={{ paddingBottom: 30 }}
         >
           {/* Header */}
           <View
@@ -134,19 +134,6 @@ export default function ProfileScreen() {
             onExportData={handleExportData}
             onLogout={handleLogout}
           />
-
-          {/* Footer */}
-          <View style={{ alignItems: "center", gap: 16, paddingBottom: 24 }}>
-            <View style={{ alignItems: "center" }}>
-              <Text style={{ color: "#94a3b8", fontSize: 14 }}>
-                {" "}
-                version 1.0.0
-              </Text>
-              <Text style={{ color: "#64748b", fontSize: 12 }}>
-                Designed with ❤️ LVM
-              </Text>
-            </View>
-          </View>
         </ScrollView>
 
         <ChangeNameModal

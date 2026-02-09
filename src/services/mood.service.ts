@@ -162,7 +162,28 @@ export const getJournalMoods = async (params?: {
       },
     });
 
-    return await handleApiResponse(response);
+    const data = await handleApiResponse(response);
+
+    // Mappa i dati per assicurare che mood.id sia presente (mappa entryId -> id)
+    return {
+      items: data.items.map((item: any) => ({
+        mood: {
+          id: item.mood.entryId || item.mood.id,
+          userId: item.mood.userId,
+          timestamp: item.mood.timestamp,
+          emojis: item.mood.emojis,
+          intensity: item.mood.intensity,
+          note: item.mood.note,
+          externalWeather: item.mood.externalWeather,
+          location: item.mood.location,
+        },
+        nlpAnalysis: item.nlpAnalysis,
+      })),
+      total: data.total,
+      limit: data.limit,
+      offset: data.offset,
+      hasMore: data.hasMore,
+    };
   } catch (error: any) {
     console.error("Error fetching journal moods:", error.message);
     throw error;

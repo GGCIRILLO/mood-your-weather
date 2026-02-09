@@ -302,107 +302,96 @@ export default function JournalScreen() {
           {/* Entry Feed */}
           <View style={{ paddingTop: 20 }}>
             {loading ? (
-              <Fragment key="loading">
-                <View
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: "center",
+                  alignItems: "center",
+                  paddingVertical: 60,
+                }}
+              >
+                <ActivityIndicator size="large" color="#6366F1" />
+                <Text
                   style={{
-                    flex: 1,
-                    justifyContent: "center",
-                    alignItems: "center",
-                    paddingVertical: 60,
+                    color: "#94a3b8",
+                    fontSize: 16,
+                    marginTop: 16,
                   }}
                 >
-                  <ActivityIndicator size="large" color="#6366F1" />
-                  <Text
-                    style={{
-                      color: "#94a3b8",
-                      fontSize: 16,
-                      marginTop: 16,
-                    }}
-                  >
-                    Loading your reflections...
-                  </Text>
-                </View>
-              </Fragment>
+                  Loading your reflections...
+                </Text>
+              </View>
             ) : error ? (
-              <Fragment key="error">
-                <View
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: "center",
+                  alignItems: "center",
+                  paddingVertical: 60,
+                  paddingHorizontal: 20,
+                }}
+              >
+                <Text
                   style={{
-                    flex: 1,
-                    justifyContent: "center",
-                    alignItems: "center",
-                    paddingVertical: 60,
-                    paddingHorizontal: 20,
+                    color: "#ef4444",
+                    fontSize: 18,
+                    fontWeight: "600",
+                    marginBottom: 8,
                   }}
                 >
-                  <Text
-                    style={{
-                      color: "#ef4444",
-                      fontSize: 18,
-                      fontWeight: "600",
-                      marginBottom: 8,
-                    }}
-                  >
-                    Error loading reflections
-                  </Text>
-                  <Text
-                    style={{
-                      color: "#94a3b8",
-                      fontSize: 14,
-                      textAlign: "center",
-                    }}
-                  >
-                    {error}
-                  </Text>
-                </View>
-              </Fragment>
+                  Error loading reflections
+                </Text>
+                <Text
+                  style={{
+                    color: "#94a3b8",
+                    fontSize: 14,
+                    textAlign: "center",
+                  }}
+                >
+                  {error}
+                </Text>
+              </View>
             ) : filteredEntries.length === 0 ? (
-              <Fragment key="empty">
-                <EmptyState
-                  type={getEmptyStateType()}
-                  searchQuery={searchQuery}
-                  onClearFilters={handleClearFilters}
-                />
-              </Fragment>
+              <EmptyState
+                type={getEmptyStateType()}
+                searchQuery={searchQuery}
+                onClearFilters={handleClearFilters}
+              />
             ) : (
-              <Fragment key="entries">
-                {filteredEntries.map((entry) => {
-                  const animValue =
-                    entryAnimsMap.get(entry.id) || new Animated.Value(1);
-                  return (
-                    <View key={entry.id}>
-                      <Animated.View
-                        key={entry.id}
-                        style={{
-                          opacity: animValue,
-                          transform: [
-                            {
-                              translateY: animValue.interpolate({
-                                inputRange: [0, 1],
-                                outputRange: [20, 0],
-                              }),
-                            },
-                          ],
-                        }}
-                      >
-                        <JournalEntryCard
-                          key={entry.id}
-                          date={entry.date}
-                          emojis={entry.emojis}
-                          intensity={entry.intensity}
-                          note={entry.note}
-                          externalWeather={entry.externalWeather}
-                          location={entry.location}
-                          time={entry.time}
-                          searchQuery={searchQuery}
-                          nlpSentiment={entry.nlpSentiment}
-                          nlpScore={entry.nlpScore}
-                          nlpMagnitude={entry.nlpMagnitude}
-                        />
-                      </Animated.View>
-                    </View>
-                  );
-                })}
-              </Fragment>
+              filteredEntries.map((entry, index) => {
+                const animValue =
+                  entryAnimsMap.get(entry.id) || new Animated.Value(1);
+                return (
+                  <Animated.View
+                    key={`entry-${entry.id}-${index}`}
+                    style={{
+                      opacity: animValue,
+                      transform: [
+                        {
+                          translateY: animValue.interpolate({
+                            inputRange: [0, 1],
+                            outputRange: [20, 0],
+                          }),
+                        },
+                      ],
+                    }}
+                  >
+                    <JournalEntryCard
+                      date={entry.date}
+                      emojis={entry.emojis}
+                      intensity={entry.intensity}
+                      note={entry.note}
+                      externalWeather={entry.externalWeather}
+                      location={entry.location}
+                      time={entry.time}
+                      searchQuery={searchQuery}
+                      nlpSentiment={entry.nlpSentiment}
+                      nlpScore={entry.nlpScore}
+                      nlpMagnitude={entry.nlpMagnitude}
+                    />
+                  </Animated.View>
+                );
+              })
             )}
           </View>
         </ScrollView>

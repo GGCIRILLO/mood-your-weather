@@ -80,7 +80,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
   };
 
   return (
-    <View className="flex-1 justify-center items-center px-8 py-20">
+    <View key={type} className="flex-1 justify-center items-center px-8 py-20">
       {renderContent()}
     </View>
   );

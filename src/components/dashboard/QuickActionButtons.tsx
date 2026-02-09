@@ -41,6 +41,7 @@ export const QuickActionButtons = () => {
 
 const styles = StyleSheet.create({
   primaryButton: {
+    flex: 1,
     backgroundColor: "rgba(19, 91, 236, 0.8)",
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.1)",
@@ -56,6 +57,7 @@ const styles = StyleSheet.create({
     borderRadius: 9999,
   },
   secondaryButton: {
+    flex: 1,
     backgroundColor: "rgba(0,0,0,0.4)",
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.1)",

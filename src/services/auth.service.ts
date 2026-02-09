@@ -196,6 +196,53 @@ export const updateUserPassword = async (
   }
 };
 
+// Delete account
+export const deleteAccount = async () => {
+  try {
+    const user = auth.currentUser;
+    if (!user) throw new Error("No user logged in");
+
+    const userId = user.uid;
+    const token = await user.getIdToken();
+
+    // Call backend to delete user data and Firebase Auth user
+    const response = await fetch(`${API_BASE_URL}/auth/user/${userId}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(
+        errorData.detail || "Failed to delete account from server",
+      );
+    }
+
+    // Sign out locally and clear storage
+    await signOut(auth);
+    await storageService.removeAuthToken();
+
+    return { success: true };
+  } catch (error: any) {
+    console.error("Delete account error:", error);
+
+    if (error.code === "auth/requires-recent-login") {
+      return {
+        success: false,
+        error:
+          "Please logout and login again to delete your account for security reasons.",
+      };
+    }
+
+    return {
+      success: false,
+      error: error.message || "Errore durante la cancellazione dell'account",
+    };
+  }
+};
+
 // Auth state listener
 export const onAuthStateChange = (callback: (user: User | null) => void) => {
   return onAuthStateChanged(auth, callback);

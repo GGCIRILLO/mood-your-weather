@@ -71,7 +71,7 @@ export default function ForgotPasswordScreen() {
         className="flex-1"
       >
         <ScrollView
-          contentContainerClassName="flex-grow"
+          contentContainerStyle={{ flexGrow: 1 }}
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
         >

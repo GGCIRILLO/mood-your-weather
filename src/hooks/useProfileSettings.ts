@@ -19,11 +19,14 @@ import {
   sendTestNotification,
 } from "@/services/notification.service";
 import { useExportToCSV } from "@/hooks/api/useExport";
+import { useDeleteAccount } from "@/hooks/api/useUser";
 
 const PROFILE_IMAGE_KEY = "@mood_weather:profile_image";
 
 export const useProfileSettings = () => {
   const { mutate: exportToCSV, isPending: isExporting } = useExportToCSV();
+  const { mutate: deleteAccountMutation, isPending: isDeleting } =
+    useDeleteAccount();
 
   // State for toggles and settings
   const [reduceMotion, setReduceMotion] = useState(false);
@@ -262,18 +265,30 @@ export const useProfileSettings = () => {
     );
   };
 
-  const handleClearData = async () => {
+  const handleDeleteAccount = async () => {
     Alert.alert(
-      "Delete All Data",
-      "This will permanently delete all your mood entries. This action cannot be undone.",
+      "Delete EVERYTHING?",
+      "This will permanently delete your account, all your moods, and settings. This action is irreversible.",
       [
         { text: "Cancel", style: "cancel" },
         {
-          text: "Delete",
+          text: "Delete Account",
           style: "destructive",
-          onPress: async () => {
-            await storageService.clearAll();
-            router.replace("/(onboarding)/splash");
+          onPress: () => {
+            deleteAccountMutation(undefined, {
+              onSuccess: () => {
+                Alert.alert(
+                  "Account Deleted",
+                  "Your account has been successfully removed.",
+                );
+              },
+              onError: (error: Error) => {
+                Alert.alert(
+                  "Error",
+                  error.message || "Failed to delete account",
+                );
+              },
+            });
           },
         },
       ],
@@ -294,6 +309,7 @@ export const useProfileSettings = () => {
     currentPassword,
     isLoading,
     isExporting,
+    isDeleting,
     // Setters
     setReduceMotion,
     setShowTimePicker,
@@ -302,7 +318,7 @@ export const useProfileSettings = () => {
     setNewName,
     setNewPassword,
     setCurrentPassword,
-    // Handersl
+    // Handlers
     handlePickImage,
     handleTimeChange,
     formatTime,
@@ -312,6 +328,6 @@ export const useProfileSettings = () => {
     handleUpdatePassword,
     handleLogout,
     handleExportData,
-    handleClearData,
+    handleDeleteAccount,
   };
 };

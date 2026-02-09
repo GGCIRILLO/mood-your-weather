@@ -49,6 +49,8 @@ export default function ProfileScreen() {
     handleUpdatePassword,
     handleLogout,
     handleExportData,
+    handleDeleteAccount,
+    isDeleting,
   } = useProfileSettings();
 
   return (
@@ -131,8 +133,10 @@ export default function ProfileScreen() {
 
           <DataPrivacy
             isExporting={isExporting}
+            isDeleting={isDeleting}
             onExportData={handleExportData}
             onLogout={handleLogout}
+            onDeleteAccount={handleDeleteAccount}
           />
         </ScrollView>
 

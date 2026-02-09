@@ -88,7 +88,7 @@ export default function SignupScreen() {
         className="flex-1"
       >
         <ScrollView
-          contentContainerClassName="flex-grow"
+          contentContainerStyle={{ flexGrow: 1 }}
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
         >
@@ -160,7 +160,7 @@ export default function SignupScreen() {
                     onChangeText={setPassword}
                     secureTextEntry={!showPassword}
                     autoCapitalize="none"
-                    autoComplete="password"
+                    autoComplete="off"
                     autoCorrect={false}
                   />
                   <TouchableOpacity
@@ -189,7 +189,7 @@ export default function SignupScreen() {
                   onChangeText={setConfirmPassword}
                   secureTextEntry={!showPassword}
                   autoCapitalize="none"
-                  autoComplete="password"
+                  autoComplete="off"
                   autoCorrect={false}
                 />
               </View>

@@ -150,7 +150,6 @@ export function OnboardingSlideTwo({ onNext }: OnboardingSlideTwoProps) {
               }}
             />
             <View className="h-2.5 w-2.5 rounded-full bg-white/20" />
-            <View className="h-2.5 w-2.5 rounded-full bg-white/20" />
           </View>
 
           {/* Next Button */}

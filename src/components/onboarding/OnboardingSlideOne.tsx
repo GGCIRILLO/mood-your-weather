@@ -4,6 +4,8 @@ import {
   ImageBackground,
   TouchableOpacity,
   StyleSheet,
+  ScrollView,
+  useWindowDimensions,
 } from "react-native";
 import { ArrowRightIcon } from "phosphor-react-native";
 import { images } from "../../../assets";
@@ -14,6 +16,9 @@ interface OnboardingSlideOneProps {
 }
 
 export function OnboardingSlideOne({ onNext }: OnboardingSlideOneProps) {
+  const { width, height } = useWindowDimensions();
+  const isLandscape = width > height;
+
   return (
     <View className="flex-1">
       {/* Immersive Background Layer */}
@@ -31,7 +36,15 @@ export function OnboardingSlideOne({ onNext }: OnboardingSlideOneProps) {
       </ImageBackground>
 
       {/* Foreground UI Layer */}
-      <View className="flex-1 justify-end px-6 pb-8">
+      <ScrollView
+        contentContainerStyle={{
+          flexGrow: 1,
+          justifyContent: "flex-end",
+          paddingHorizontal: 24,
+          paddingBottom: isLandscape ? 24 : 32,
+        }}
+        showsVerticalScrollIndicator={false}
+      >
         {/* Glassmorphic Card */}
         <View
           style={{
@@ -40,18 +53,36 @@ export function OnboardingSlideOne({ onNext }: OnboardingSlideOneProps) {
             shadowOffset: { width: 0, height: 8 },
             shadowOpacity: 0.2,
             shadowRadius: 32,
-            borderRadius: 40,
-            padding: 24,
+            borderRadius: isLandscape ? 32 : 40,
+            padding: isLandscape ? 20 : 24,
             borderWidth: 1,
             borderColor: "rgba(255,255,255,0.1)",
+            maxWidth: isLandscape ? 600 : undefined,
+            alignSelf: "center",
+            width: "100%",
           }}
         >
           {/* Text Content */}
-          <View className="gap-3 mb-6">
-            <Text className="text-3xl font-bold leading-tight tracking-tight text-white">
+          <View style={{ gap: 12, marginBottom: 24 }}>
+            <Text
+              style={{
+                fontSize: isLandscape ? 24 : 30,
+                fontWeight: "bold",
+                lineHeight: isLandscape ? 32 : 40,
+                letterSpacing: -0.5,
+                color: "white",
+              }}
+            >
               Your Emotions Are Like Weather
             </Text>
-            <Text className="text-white/80 text-lg font-medium leading-relaxed">
+            <Text
+              style={{
+                color: "rgba(255,255,255,0.8)",
+                fontSize: isLandscape ? 16 : 18,
+                fontWeight: "500",
+                lineHeight: isLandscape ? 22 : 28,
+              }}
+            >
               Sometimes stormy, sometimes sunny, always changing. Swipe to
               explore the forecast.
             </Text>
@@ -102,7 +133,7 @@ export function OnboardingSlideOne({ onNext }: OnboardingSlideOneProps) {
             </TouchableOpacity>
           </View>
         </View>
-      </View>
+      </ScrollView>
     </View>
   );
 }
